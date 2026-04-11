@@ -210,11 +210,11 @@ export default function Pricing() {
             </h2>
           </div>
 
-          <div className="grid lg:grid-cols-3 gap-6 max-w-6xl mx-auto items-start">
+          <div className="grid lg:grid-cols-3 gap-6 max-w-6xl mx-auto items-stretch">
             {plans.map((plan, i) => (
               <div
                 key={i}
-                className={`p-3 rounded-xl border-2 relative ${
+                className={`p-3 rounded-xl border-2 relative flex flex-col ${
                   plan.highlighted
                     ? "border-[#ff4f01] bg-white shadow-xl lg:scale-[1.03]"
                     : "border-[#bebebe] bg-white/50"
@@ -245,8 +245,8 @@ export default function Pricing() {
                   </div>
                   <p className="text-sm text-[rgb(119,119,125)] mt-3 leading-6">{plan.desc}</p>
                 </div>
-                <div className="p-6">
-                  <ul className="flex flex-col gap-2.5 mb-6">
+                <div className="p-6 flex flex-col flex-1">
+                  <ul className="flex flex-col gap-2.5 flex-1">
                     {plan.features.map((f, j) => (
                       <li key={j} className="text-[rgb(119,119,125)] text-sm flex items-start gap-2">
                         <i className="ri-check-line text-[#ff4f01] mt-0.5 shrink-0" />
@@ -254,12 +254,14 @@ export default function Pricing() {
                       </li>
                     ))}
                   </ul>
-                  <a href="#" className="btn btn-primary w-full text-center block">
-                    Start Free Trial
-                  </a>
-                  <p className="text-center text-xs text-[rgb(119,119,125)] mt-2">
-                    All prices in CAD. Cancel anytime.
-                  </p>
+                  <div className="mt-6">
+                    <a href="#" className="btn btn-primary w-full text-center block">
+                      Start Free Trial
+                    </a>
+                    <p className="text-center text-xs text-[rgb(119,119,125)] mt-2">
+                      All prices in CAD. Cancel anytime.
+                    </p>
+                  </div>
                 </div>
               </div>
             ))}

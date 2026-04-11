@@ -27,49 +27,92 @@ const benefits = [
 
 const pricingPlans = [
   {
-    name: "Graphics Plan",
-    price: "$699",
-    period: "/ month",
+    name: "Nolimit Graphics",
+    price: "CAD 1,040",
+    originalPrice: "CAD 2,080",
+    promo: "Save CAD 1,040 per month for the first 4 months",
+    desc: "Unlimited graphic design for marketing materials, branding assets, and digital campaigns.",
     features: [
-      "Unlimited graphic design requests",
-      "Unlimited revisions",
-      "Dedicated designer",
-      "Fast turnaround",
-      "Source files included",
-      "Pause or cancel anytime",
+      "Unlimited Requests",
+      "Unlimited Revisions",
+      "Unlimited Brands",
+      "No Contract Required",
+      "24 Hour Turnaround",
+      "3 Active Requests",
+      "Unlimited Team Members",
+      "Dedicated Design Team",
+      "Dedicated Project Manager",
+      "Free Premium Stock Images",
+      "Source Files Included",
+      "Print & Digital Designs",
+      "Custom Illustrations",
+      "Basic GIF Creation",
+      "Landing Page Designs",
+      "Website, App & UI Designs",
+      "Canva Design Support",
+      "Nolimit360 Design Management",
     ],
-    cta: "Start Graphics Plan",
+    cta: "Start Free Trial",
     highlighted: false,
+    badge: "",
   },
   {
-    name: "Video Plan",
-    price: "$799",
-    period: "/ month",
+    name: "Nolimit Graphics + Video",
+    price: "CAD 1,263.50",
+    originalPrice: "CAD 2,527",
+    promo: "Save CAD 1,263 per month for the first 4 months",
+    desc: "Unlimited graphic design plus unlimited video design for one flat monthly price.",
     features: [
-      "Unlimited video editing",
-      "Motion graphics",
-      "Short-form video",
-      "Marketing videos",
-      "Unlimited revisions",
-      "Dedicated video team",
+      "Unlimited Requests",
+      "Unlimited Revisions",
+      "Unlimited Brands",
+      "No Contract",
+      "24 Hour Turnaround",
+      "5 Active Requests",
+      "Unlimited Team Members",
+      "Dedicated Graphic + Video Design Team",
+      "Dedicated Project Manager",
+      "Free Stock Images, Videos & Audio",
+      "Source Files Included",
+      "Print & Digital Designs",
+      "Custom Illustrations & GIFs",
+      "Website, App & UI Designs",
+      "Canva Design Support",
+      "Nolimit360 Design Management",
     ],
-    cta: "Start Video Plan",
+    cta: "Start Free Trial",
     highlighted: true,
+    badge: "Best Value",
   },
   {
-    name: "Graphics + Video Plan",
-    price: "$999",
-    period: "/ month",
+    name: "Nolimit Video",
+    price: "CAD 1,040",
+    originalPrice: "CAD 2,080",
+    promo: "Save CAD 1,040 per month for the first 4 months",
+    desc: "Unlimited video editing, animation, and motion graphics for your marketing content.",
     features: [
-      "Unlimited graphic design",
-      "Unlimited video design",
-      "Priority turnaround",
-      "Dedicated creative teams",
-      "Unlimited revisions",
-      "Source files included",
+      "Unlimited Requests",
+      "Unlimited Revisions",
+      "Unlimited Brands",
+      "No Contract",
+      "24 Hour Turnaround",
+      "2 Active Requests",
+      "Unlimited Team Members",
+      "Dedicated Video Design Team",
+      "Dedicated Project Manager",
+      "Free Stock Images, Videos & Audio",
+      "Source Files Included",
+      "Video Editing",
+      "Motion Graphics",
+      "Animation",
+      "GIF Creation",
+      "Template Customization",
+      "UI/UX Animations",
+      "Nolimit360 Design Management",
     ],
-    cta: "Start Full Plan",
+    cta: "Start Free Trial",
     highlighted: false,
+    badge: "",
   },
 ];
 
@@ -231,45 +274,58 @@ export default function Index() {
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+          <div className="grid lg:grid-cols-3 gap-6 max-w-6xl mx-auto items-stretch">
             {pricingPlans.map((plan, i) => (
               <div
                 key={i}
-                className={`p-3 rounded-xl border-2 ${
+                className={`p-3 rounded-xl border-2 relative flex flex-col ${
                   plan.highlighted
-                    ? "border-[#ff4f01] bg-white shadow-lg scale-[1.02]"
+                    ? "border-[#ff4f01] bg-white shadow-xl lg:scale-[1.03]"
                     : "border-[#bebebe] bg-white/50"
                 } transition-all duration-300`}
               >
-                <div className="p-5 border-b border-[#bebebe]">
-                  <h4
+                {plan.badge && (
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#ff4f01] text-white text-xs font-bold px-4 py-1 rounded-full uppercase tracking-wider">
+                    {plan.badge}
+                  </div>
+                )}
+                <div className="p-6 border-b border-[#bebebe]">
+                  <span
                     className={`inline-block px-5 py-2 rounded-full font-medium text-sm ${
-                      plan.highlighted
-                        ? "bg-[#ff4f01] text-white"
-                        : "bg-[#000000] text-white"
+                      plan.highlighted ? "bg-[#ff4f01] text-white" : "bg-[#000000] text-white"
                     }`}
                   >
                     {plan.name}
-                  </h4>
-                  <p className="text-[38px] font-medium font-bricolage text-[#ff4f01] mt-4">
-                    {plan.price}
-                    <span className="text-base text-[rgb(119,119,125)] font-normal">
-                      {plan.period}
-                    </span>
-                  </p>
+                  </span>
+                  <div className="mt-4">
+                    <p className="text-[36px] font-medium font-bricolage text-[#ff4f01]">
+                      {plan.price}
+                      <span className="text-base text-[rgb(119,119,125)] font-normal"> / month</span>
+                    </p>
+                    <p className="text-sm text-[rgb(119,119,125)] line-through mt-1">
+                      {plan.originalPrice} / month
+                    </p>
+                    <p className="text-xs text-[#ff4f01] font-medium mt-1">{plan.promo}</p>
+                  </div>
+                  <p className="text-sm text-[rgb(119,119,125)] mt-3 leading-6">{plan.desc}</p>
                 </div>
-                <div className="p-5">
-                  <ul className="flex flex-col gap-3 mb-6">
+                <div className="p-6 flex flex-col flex-1">
+                  <ul className="flex flex-col gap-2.5 flex-1">
                     {plan.features.map((f, j) => (
-                      <li key={j} className="text-[rgb(119,119,125)] text-base flex items-start gap-2">
-                        <i className="ri-check-line text-[#ff4f01] mt-1 shrink-0" />
+                      <li key={j} className="text-[rgb(119,119,125)] text-sm flex items-start gap-2">
+                        <i className="ri-check-line text-[#ff4f01] mt-0.5 shrink-0" />
                         {f}
                       </li>
                     ))}
                   </ul>
-                  <a href="#" className="btn btn-primary w-full text-center block">
-                    {plan.cta}
-                  </a>
+                  <div className="mt-6">
+                    <a href="#" className="btn btn-primary w-full text-center block">
+                      {plan.cta}
+                    </a>
+                    <p className="text-center text-xs text-[rgb(119,119,125)] mt-2">
+                      All prices in CAD. Cancel anytime.
+                    </p>
+                  </div>
                 </div>
               </div>
             ))}
