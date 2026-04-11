@@ -1,0 +1,173 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 30 100% 96%;
+    --foreground: 0 0% 6%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 6%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 6%;
+    --primary: 20 100% 50%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 0%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 240 1% 48%;
+    --accent: 0 0% 96%;
+    --accent-foreground: 0 0% 6%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 75%;
+    --input: 0 0% 90%;
+    --ring: 20 100% 50%;
+    --radius: 0.625rem;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    color: #101010;
+    background: #fff6ec;
+    font-weight: 400;
+    line-height: 1.875;
+    font-size: 16px;
+    font-family: "Manrope", sans-serif;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: #101010;
+    font-family: "Bricolage Grotesque", sans-serif;
+  }
+}
+
+@layer components {
+  .container-custom {
+    max-width: 80rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .btn {
+    cursor: pointer;
+    display: inline-block;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 20px;
+    margin: 0 5px 10px 0;
+    overflow: visible;
+    border-radius: 50px;
+    padding: 17px 34px;
+    text-align: center;
+    text-transform: none;
+    transition: all 0.5s;
+    box-shadow: 0 4px 0 0 rgba(0, 0, 0, 0.25);
+  }
+
+  .btn-primary {
+    background-color: #ff4f01;
+    color: #000000;
+    border: 2px solid #ff4f01;
+  }
+
+  .btn-primary:hover {
+    background-color: #070707;
+    color: #ffffff;
+    border-color: #070707;
+  }
+
+  .btn-dark {
+    background-color: #070707;
+    color: #ffffff;
+    border: 2px solid #070707;
+  }
+
+  .btn-dark:hover {
+    background-color: transparent;
+    color: #ff4f01;
+    border-color: #ff4f01;
+  }
+
+  .btn-outline {
+    background-color: transparent;
+    color: #101010;
+    border: 2px solid #bebebe;
+  }
+
+  .btn-outline:hover {
+    border-color: #ff4f01;
+    color: #ff4f01;
+  }
+}
+
+@layer utilities {
+  .font-bricolage {
+    font-family: "Bricolage Grotesque", sans-serif;
+  }
+
+  .font-manrope {
+    font-family: "Manrope", sans-serif;
+  }
+}
+
+/* Logo slider animation */
+.logo-slider {
+  mask: linear-gradient(90deg, transparent, white 20%, white 80%, transparent);
+  -webkit-mask: linear-gradient(90deg, transparent, white 20%, white 80%, transparent);
+  overflow: hidden;
+}
+
+.logos-slide {
+  display: flex;
+  animation: slide 35s infinite linear;
+}
+
+.logos-slide img {
+  max-width: 130px;
+  height: auto;
+  margin: 0 40px;
+  object-fit: contain;
+}
+
+@keyframes slide {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Sticky header animation */
+.is-sticky {
+  animation: slideDown 0.35s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}

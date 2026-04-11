@@ -1,0 +1,446 @@
+Build NoLimit Designs Homepage (Based on Kimp Layout)
+
+Use the existing UI components and styling already present in this project.
+
+Do NOT redesign the visual style.
+Reuse the same:
+
+• typography
+• colors
+• grid spacing
+• card styles
+• button styles
+• layout containers
+
+The page should follow the exact structure and section order from the Kimp homepage screenshot, but branded for NoLimit Designs.
+
+SECTION 1 — HERO
+
+Large gradient hero section.
+
+Left side:
+
+Headline
+
+Unlimited Graphic & Video Design.
+A Simple Monthly Subscription.
+
+Subheadline
+
+NoLimit Designs gives businesses access to professional designers without the cost of hiring in-house or managing freelancers. Submit unlimited design requests and get consistent, high-quality creative work delivered quickly.
+
+Primary CTA
+
+Start Your Subscription
+
+Secondary CTA
+
+See Pricing
+
+Small micro text
+
+Cancel anytime • No long-term contracts
+
+Right side
+
+Dashboard illustration showing design projects and creative workflow.
+
+Add mascot style illustration (similar style positioning to Kimp but different character).
+
+SECTION 2 — TRUSTED BY BUSINESSES
+
+Light background with client logo strip.
+
+Headline
+
+Trusted by Businesses Across Multiple Industries
+
+Subtext
+
+Companies rely on NoLimit Designs to scale their creative production with consistent, professional designs.
+
+Add row of brand logos.
+
+SECTION 3 — BENEFITS GRID
+
+Headline
+
+Discover the Benefits of NoLimit Designs
+
+Create 6 feature cards.
+
+Card 1
+
+Unlimited Design Requests
+
+Submit as many design tasks as you want. Your team works through them one at a time.
+
+Card 2
+
+Dedicated Design Team
+
+Work with experienced designers who understand your brand.
+
+Card 3
+
+Fast Turnaround
+
+Most design requests are delivered within 1–2 business days.
+
+Card 4
+
+Unlimited Revisions
+
+Refine designs until they meet your exact expectations.
+
+Card 5
+
+Scalable Creative Production
+
+Produce more marketing assets without increasing your team size.
+
+Card 6
+
+High-Quality Creative Work
+
+Professional designs built to strengthen your brand.
+
+Place an illustrated character graphic in the center similar to Kimp layout.
+
+SECTION 4 — PRICING SECTION
+
+Headline
+
+Design Without Limits
+
+Subheadline
+
+Choose the subscription that fits your creative needs.
+
+Create three pricing cards.
+
+Graphics Plan
+
+Price
+
+$699 / month
+
+Includes
+
+Unlimited graphic design requests
+Unlimited revisions
+Dedicated designer
+Fast turnaround
+Source files included
+Pause or cancel anytime
+
+Button
+
+Start Graphics Plan
+
+Video Plan
+
+Price
+
+$799 / month
+
+Includes
+
+Unlimited video editing
+Motion graphics
+Short-form video
+Marketing videos
+Unlimited revisions
+Dedicated video team
+
+Button
+
+Start Video Plan
+
+Graphics + Video Plan
+
+Price
+
+$999 / month
+
+Includes
+
+Unlimited graphic design
+Unlimited video design
+Priority turnaround
+Dedicated creative teams
+Unlimited revisions
+Source files included
+
+Button
+
+Start Full Plan
+
+SECTION 5 — HOW THE SUBSCRIPTION WORKS
+
+Headline
+
+A Design Workflow Built for Speed
+
+Create three illustrated cards.
+
+Step 1
+
+Submit Your Design Requests
+
+Add unlimited design tasks through your dashboard and prioritize them.
+
+Step 2
+
+Designers Start Creating
+
+Your design team begins working on your highest priority request.
+
+Step 3
+
+Review and Request Revisions
+
+Provide feedback and request changes until the design is perfect.
+
+Below add small stat highlights.
+
+Example:
+
+1000+ designs delivered monthly
+Fast turnaround times
+Growing global client base
+
+SECTION 6 — DESIGN SERVICES GRID
+
+Headline
+
+Unlock Unlimited Creative Possibilities
+
+Create colorful grid cards.
+
+Graphic Design
+
+Social media graphics
+Advertising creatives
+Website visuals
+Email graphics
+
+Brand Identity
+
+Logo design
+Brand guidelines
+Brand assets
+
+Presentations
+
+Pitch decks
+Sales presentations
+
+Video & Motion
+
+Video editing
+Animated explainers
+Social media videos
+
+Web & App Graphics
+
+Landing page design
+UI assets
+Web visuals
+
+Button
+
+Explore All Services
+
+SECTION 7 — CREATIVE MANAGEMENT FEATURES
+
+Headline
+
+Effortless Design Management
+
+Create 6 feature cards.
+
+Structured Request Workflow
+
+Organize and prioritize your creative projects.
+
+Queue Management
+
+Track all design requests in a single dashboard.
+
+Brand Consistency
+
+Designers follow your brand guidelines and style.
+
+Dedicated Creative Team
+
+Work with designers familiar with your brand.
+
+Direct Communication
+
+Collaborate easily with your design team.
+
+Reliable Support
+
+Customer support whenever you need assistance.
+
+SECTION 8 — GLOBAL TRUST SECTION
+
+Dark gradient background.
+
+Headline
+
+Trusted by Brands Worldwide
+
+Large stat display
+
+5000+ Designs Delivered
+
+Below show ratings badges.
+
+Google rating
+Trustpilot rating
+Clutch rating
+
+SECTION 9 — TESTIMONIALS
+
+Headline
+
+What Our Clients Say
+
+Create testimonial cards.
+
+Example testimonial
+
+"NoLimit Designs completely transformed our marketing workflow. We now produce high-quality creative assets consistently without hiring additional designers."
+
+Second testimonial
+
+"The turnaround time and attention to detail have been outstanding."
+
+Third testimonial
+
+"Our team can focus on strategy while NoLimit Designs handles all creative work."
+
+SECTION 10 — BLOG PREVIEW
+
+Headline
+
+Design Tips & Marketing Insights
+
+Display three blog cards.
+
+Example posts
+
+How Subscription Design Services Work
+Design Trends Businesses Should Follow
+Scaling Marketing with Unlimited Design
+
+Button
+
+Visit the Blog
+
+SECTION 11 — FAQ
+
+Headline
+
+Frequently Asked Questions
+
+Accordion style list.
+
+Questions
+
+What does unlimited design mean?
+
+How quickly are designs delivered?
+
+How many design requests can I submit?
+
+Can I pause my subscription?
+
+Who owns the design files?
+
+Is there a minimum commitment?
+
+Button
+
+View All FAQs
+
+SECTION 12 — FINAL CTA
+
+Dark gradient section similar to hero.
+
+Headline
+
+Your Creative Team Is Ready
+
+Text
+
+Start producing high-quality graphics and videos without hiring in-house designers.
+
+Primary CTA
+
+Start Your Subscription
+
+Secondary CTA
+
+View Pricing
+
+Include mascot illustration near the CTA.
+
+FOOTER
+
+Footer with multiple columns.
+
+Company
+
+About
+Careers
+Contact
+
+Services
+
+Graphic Design
+Video Design
+Branding
+
+Resources
+
+Blog
+FAQ
+Guides
+
+Legal
+
+Privacy Policy
+Terms of Service
+
+Bottom line
+
+© NoLimit Designs
+
+COMPONENTS TO GENERATE
+
+HeroSection
+ClientLogoStrip
+BenefitsGrid
+PricingCards
+WorkflowSteps
+ServicesGrid
+FeatureCards
+StatsSection
+TestimonialsCarousel
+BlogPreview
+FAQAccordion
+FinalCTA
+Footer
+
+SEO METADATA
+
+Title
+
+Unlimited Graphic & Video Design Subscription | NoLimit Designs
+
+Description
+
+NoLimit Designs provides unlimited graphic design and video design services for businesses through a simple monthly subscription.
