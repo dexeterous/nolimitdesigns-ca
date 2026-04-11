@@ -1,19 +1,17 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Login() {
-  const navigate = useNavigate();
-  const [form, setForm] = useState({ email: "", password: "" });
-  const [showPassword, setShowPassword] = useState(false);
+  const { login, isAuthenticated } = useAuth();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+  const handleLogin = async () => {
+    await login();
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    navigate("/client/dashboard");
-  };
+  if (isAuthenticated) {
+    window.location.href = "/client/dashboard";
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-[#fff6ec] flex">
@@ -55,10 +53,10 @@ export default function Login() {
 
       {/* Right Panel */}
       <div className="flex-1 flex items-center justify-center p-6 lg:p-12">
-        <div className="w-full max-w-md">
+        <div className="w-full max-w-md text-center">
           <div className="lg:hidden mb-8">
             <a href="/">
-              <img src="/nolimit-logo.png" alt="NoLimit Designs" className="h-8 w-auto" />
+              <img src="/nolimit-logo.png" alt="NoLimit Designs" className="h-8 w-auto mx-auto" />
             </a>
           </div>
 
@@ -72,79 +70,17 @@ export default function Login() {
             </Link>
           </p>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div>
-              <label className="block text-sm font-medium text-[#101010] mb-1.5">Email</label>
-              <div className="relative">
-                <i className="ri-mail-line absolute left-4 top-1/2 -translate-y-1/2 text-[rgb(119,119,125)]" />
-                <input
-                  type="email"
-                  name="email"
-                  value={form.email}
-                  onChange={handleChange}
-                  placeholder="john@company.com"
-                  required
-                  className="w-full pl-11 pr-4 py-3 rounded-xl border border-[#bebebe] bg-white text-[#101010] placeholder:text-[rgb(119,119,125)]/50 focus:outline-none focus:border-[#ff4f01] transition-colors"
-                />
-              </div>
-            </div>
+          <button
+            onClick={handleLogin}
+            className="btn btn-primary w-full text-center !mb-0"
+          >
+            <i className="ri-login-box-line mr-2" />
+            Sign In with SSO
+          </button>
 
-            <div>
-              <div className="flex justify-between items-center mb-1.5">
-                <label className="block text-sm font-medium text-[#101010]">Password</label>
-                <a href="#" className="text-sm text-[#ff4f01] hover:underline">Forgot password?</a>
-              </div>
-              <div className="relative">
-                <i className="ri-lock-line absolute left-4 top-1/2 -translate-y-1/2 text-[rgb(119,119,125)]" />
-                <input
-                  type={showPassword ? "text" : "password"}
-                  name="password"
-                  value={form.password}
-                  onChange={handleChange}
-                  placeholder="Enter your password"
-                  required
-                  className="w-full pl-11 pr-11 py-3 rounded-xl border border-[#bebebe] bg-white text-[#101010] placeholder:text-[rgb(119,119,125)]/50 focus:outline-none focus:border-[#ff4f01] transition-colors"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-[rgb(119,119,125)] hover:text-[#ff4f01] transition-colors cursor-pointer"
-                >
-                  <i className={showPassword ? "ri-eye-off-line" : "ri-eye-line"} />
-                </button>
-              </div>
-            </div>
-
-            <button type="submit" className="btn btn-primary w-full text-center !mb-0">
-              Sign In
-            </button>
-
-            <div className="relative my-6">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-[#bebebe]" />
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="bg-[#fff6ec] px-4 text-[rgb(119,119,125)]">or continue with</span>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3">
-              <button
-                type="button"
-                className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl border border-[#bebebe] bg-white hover:border-[#ff4f01] transition-all text-sm font-medium text-[#101010] cursor-pointer"
-              >
-                <i className="ri-google-fill text-lg" />
-                Google
-              </button>
-              <button
-                type="button"
-                className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl border border-[#bebebe] bg-white hover:border-[#ff4f01] transition-all text-sm font-medium text-[#101010] cursor-pointer"
-              >
-                <i className="ri-microsoft-fill text-lg" />
-                Microsoft
-              </button>
-            </div>
-          </form>
+          <p className="text-center text-xs text-[rgb(119,119,125)] mt-6">
+            Secure single sign-on authentication
+          </p>
         </div>
       </div>
     </div>

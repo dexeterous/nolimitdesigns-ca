@@ -1,35 +1,17 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-
-const plans = [
-  { id: "graphics", name: "Nolimit Graphics", price: "CAD 1,040/mo" },
-  { id: "graphics-video", name: "Nolimit Graphics + Video", price: "CAD 1,263.50/mo" },
-  { id: "video", name: "Nolimit Video", price: "CAD 1,040/mo" },
-];
+import { Link } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Register() {
-  const navigate = useNavigate();
-  const [form, setForm] = useState({
-    fullName: "",
-    email: "",
-    company: "",
-    password: "",
-    confirmPassword: "",
-    plan: "graphics-video",
-    agreeTerms: false,
-  });
-  const [showPassword, setShowPassword] = useState(false);
+  const { login, isAuthenticated } = useAuth();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const target = e.target;
-    const value = target instanceof HTMLInputElement && target.type === "checkbox" ? target.checked : target.value;
-    setForm({ ...form, [target.name]: value });
+  const handleRegister = async () => {
+    await login();
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    navigate("/client/dashboard");
-  };
+  if (isAuthenticated) {
+    window.location.href = "/client/dashboard";
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-[#fff6ec] flex">
@@ -82,13 +64,12 @@ export default function Register() {
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#ff4f01]/5 rounded-full blur-3xl" />
       </div>
 
-      {/* Right Panel - Form */}
+      {/* Right Panel - Registration */}
       <div className="flex-1 flex items-center justify-center p-6 lg:p-12">
-        <div className="w-full max-w-md">
-          {/* Mobile logo */}
+        <div className="w-full max-w-md text-center">
           <div className="lg:hidden mb-8">
             <a href="/">
-              <img src="/nolimit-logo.png" alt="NoLimit Designs" className="h-8 w-auto" />
+              <img src="/nolimit-logo.png" alt="NoLimit Designs" className="h-8 w-auto mx-auto" />
             </a>
           </div>
 
@@ -102,152 +83,35 @@ export default function Register() {
             </Link>
           </p>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Full Name */}
-            <div>
-              <label className="block text-sm font-medium text-[#101010] mb-1.5">Full Name</label>
-              <div className="relative">
-                <i className="ri-user-line absolute left-4 top-1/2 -translate-y-1/2 text-[rgb(119,119,125)]" />
-                <input
-                  type="text"
-                  name="fullName"
-                  value={form.fullName}
-                  onChange={handleChange}
-                  placeholder="John Smith"
-                  required
-                  className="w-full pl-11 pr-4 py-3 rounded-xl border border-[#bebebe] bg-white text-[#101010] placeholder:text-[rgb(119,119,125)]/50 focus:outline-none focus:border-[#ff4f01] transition-colors"
-                />
-              </div>
-            </div>
-
-            {/* Email */}
-            <div>
-              <label className="block text-sm font-medium text-[#101010] mb-1.5">Work Email</label>
-              <div className="relative">
-                <i className="ri-mail-line absolute left-4 top-1/2 -translate-y-1/2 text-[rgb(119,119,125)]" />
-                <input
-                  type="email"
-                  name="email"
-                  value={form.email}
-                  onChange={handleChange}
-                  placeholder="john@company.com"
-                  required
-                  className="w-full pl-11 pr-4 py-3 rounded-xl border border-[#bebebe] bg-white text-[#101010] placeholder:text-[rgb(119,119,125)]/50 focus:outline-none focus:border-[#ff4f01] transition-colors"
-                />
-              </div>
-            </div>
-
-            {/* Company */}
-            <div>
-              <label className="block text-sm font-medium text-[#101010] mb-1.5">Company Name</label>
-              <div className="relative">
-                <i className="ri-building-line absolute left-4 top-1/2 -translate-y-1/2 text-[rgb(119,119,125)]" />
-                <input
-                  type="text"
-                  name="company"
-                  value={form.company}
-                  onChange={handleChange}
-                  placeholder="Acme Inc."
-                  required
-                  className="w-full pl-11 pr-4 py-3 rounded-xl border border-[#bebebe] bg-white text-[#101010] placeholder:text-[rgb(119,119,125)]/50 focus:outline-none focus:border-[#ff4f01] transition-colors"
-                />
-              </div>
-            </div>
-
-            {/* Password */}
-            <div>
-              <label className="block text-sm font-medium text-[#101010] mb-1.5">Password</label>
-              <div className="relative">
-                <i className="ri-lock-line absolute left-4 top-1/2 -translate-y-1/2 text-[rgb(119,119,125)]" />
-                <input
-                  type={showPassword ? "text" : "password"}
-                  name="password"
-                  value={form.password}
-                  onChange={handleChange}
-                  placeholder="Create a strong password"
-                  required
-                  minLength={8}
-                  className="w-full pl-11 pr-11 py-3 rounded-xl border border-[#bebebe] bg-white text-[#101010] placeholder:text-[rgb(119,119,125)]/50 focus:outline-none focus:border-[#ff4f01] transition-colors"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-[rgb(119,119,125)] hover:text-[#ff4f01] transition-colors cursor-pointer"
+          <div className="bg-white rounded-2xl border border-[#e5e5e5] p-8 mb-6">
+            <div className="space-y-4 mb-6">
+              {[
+                { id: "graphics", name: "Nolimit Graphics", price: "CAD 1,040/mo" },
+                { id: "graphics-video", name: "Nolimit Graphics + Video", price: "CAD 1,263.50/mo" },
+                { id: "video", name: "Nolimit Video", price: "CAD 1,040/mo" },
+              ].map((plan) => (
+                <div
+                  key={plan.id}
+                  className="flex items-center justify-between p-3 rounded-xl border border-[#e5e5e5] bg-[#f9f9f9]"
                 >
-                  <i className={showPassword ? "ri-eye-off-line" : "ri-eye-line"} />
-                </button>
-              </div>
+                  <span className="text-sm font-medium text-[#101010]">{plan.name}</span>
+                  <span className="text-sm font-medium text-[#ff4f01]">{plan.price}</span>
+                </div>
+              ))}
             </div>
 
-            {/* Plan Selection */}
-            <div>
-              <label className="block text-sm font-medium text-[#101010] mb-1.5">Select Plan</label>
-              <div className="space-y-2">
-                {plans.map((plan) => (
-                  <label
-                    key={plan.id}
-                    className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all duration-300 ${
-                      form.plan === plan.id
-                        ? "border-[#ff4f01] bg-[#ff4f01]/5"
-                        : "border-[#bebebe] bg-white hover:border-[#ff4f01]/50"
-                    }`}
-                  >
-                    <input
-                      type="radio"
-                      name="plan"
-                      value={plan.id}
-                      checked={form.plan === plan.id}
-                      onChange={handleChange}
-                      className="sr-only"
-                    />
-                    <div
-                      className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${
-                        form.plan === plan.id ? "border-[#ff4f01]" : "border-[#bebebe]"
-                      }`}
-                    >
-                      {form.plan === plan.id && (
-                        <div className="w-2.5 h-2.5 rounded-full bg-[#ff4f01]" />
-                      )}
-                    </div>
-                    <div className="flex-1">
-                      <span className="text-sm font-medium text-[#101010]">{plan.name}</span>
-                    </div>
-                    <span className="text-sm font-medium text-[#ff4f01]">{plan.price}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
-
-            {/* Terms */}
-            <label className="flex items-start gap-3 cursor-pointer">
-              <input
-                type="checkbox"
-                name="agreeTerms"
-                checked={form.agreeTerms}
-                onChange={handleChange}
-                required
-                className="mt-1 w-4 h-4 rounded border-[#bebebe] text-[#ff4f01] focus:ring-[#ff4f01] cursor-pointer"
-              />
-              <span className="text-sm text-[rgb(119,119,125)]">
-                I agree to the{" "}
-                <a href="#" className="text-[#ff4f01] hover:underline">Terms of Service</a>{" "}
-                and{" "}
-                <a href="#" className="text-[#ff4f01] hover:underline">Privacy Policy</a>
-              </span>
-            </label>
-
-            {/* Submit */}
             <button
-              type="submit"
+              onClick={handleRegister}
               className="btn btn-primary w-full text-center !mb-0"
             >
-              Start Free Trial
+              <i className="ri-user-add-line mr-2" />
+              Get Started — Sign Up
             </button>
+          </div>
 
-            <p className="text-center text-xs text-[rgb(119,119,125)]">
-              No credit card required • Cancel anytime
-            </p>
-          </form>
+          <p className="text-center text-xs text-[rgb(119,119,125)]">
+            No credit card required • Cancel anytime
+          </p>
         </div>
       </div>
     </div>

@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DashboardLayout } from "@/components/DashboardLayout";
+import { client } from "@/lib/api";
+import { toast } from "sonner";
 
 const categories = [
   "Social Media Graphics", "Logo Design", "Brand Identity", "Presentation Design",
@@ -8,17 +10,16 @@ const categories = [
   "Illustration", "Video Editing", "Motion Graphics", "Other",
 ];
 
-const brands = ["TechCo", "FoodBrand", "EcoGoods", "Add New Brand..."];
-
 export default function ClientSubmitRequest() {
   const navigate = useNavigate();
+  const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({
     title: "",
     category: "",
-    brand: "",
+    brand_name: "",
     priority: "Medium",
     description: "",
-    includeSource: false,
+    include_source: false,
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -27,9 +28,36 @@ export default function ClientSubmitRequest() {
     setForm({ ...form, [target.name]: value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    navigate("/client/requests");
+    if (!form.title || !form.category) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      await client.entities.design_requests.create({
+        data: {
+          title: form.title,
+          category: form.category,
+          brand_name: form.brand_name || null,
+          priority: form.priority,
+          status: "Queue",
+          description: form.description || null,
+          include_source: form.include_source,
+          designer_name: null,
+          due_date: null,
+        },
+      });
+      toast.success("Request submitted successfully!");
+      navigate("/client/requests");
+    } catch (err) {
+      console.error("Failed to submit request:", err);
+      toast.error("Failed to submit request. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -73,19 +101,15 @@ export default function ClientSubmitRequest() {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-[#101010] mb-1.5">Brand *</label>
-              <select
-                name="brand"
-                value={form.brand}
+              <label className="block text-sm font-medium text-[#101010] mb-1.5">Brand Name</label>
+              <input
+                type="text"
+                name="brand_name"
+                value={form.brand_name}
                 onChange={handleChange}
-                required
-                className="w-full px-4 py-3 rounded-xl border border-[#e5e5e5] bg-[#f9f9f9] text-sm text-[#101010] focus:outline-none focus:border-[#ff4f01] cursor-pointer"
-              >
-                <option value="">Select brand</option>
-                {brands.map((b) => (
-                  <option key={b} value={b}>{b}</option>
-                ))}
-              </select>
+                placeholder="e.g., TechCo"
+                className="w-full px-4 py-3 rounded-xl border border-[#e5e5e5] bg-[#f9f9f9] text-sm text-[#101010] placeholder:text-[rgb(119,119,125)]/50 focus:outline-none focus:border-[#ff4f01] transition-colors"
+              />
             </div>
           </div>
 
@@ -124,24 +148,12 @@ export default function ClientSubmitRequest() {
             />
           </div>
 
-          {/* File Upload */}
-          <div>
-            <label className="block text-sm font-medium text-[#101010] mb-1.5">Attachments</label>
-            <div className="border-2 border-dashed border-[#e5e5e5] rounded-xl p-8 text-center hover:border-[#ff4f01]/50 transition-colors cursor-pointer">
-              <i className="ri-upload-cloud-2-line text-4xl text-[rgb(119,119,125)] mb-2 inline-block" />
-              <p className="text-sm text-[#101010] font-medium">Drop files here or click to upload</p>
-              <p className="text-xs text-[rgb(119,119,125)] mt-1">
-                Reference images, brand assets, example links (PNG, JPG, PDF, up to 50MB)
-              </p>
-            </div>
-          </div>
-
           {/* Include Source */}
           <label className="flex items-center gap-3 cursor-pointer">
             <input
               type="checkbox"
-              name="includeSource"
-              checked={form.includeSource}
+              name="include_source"
+              checked={form.include_source}
               onChange={handleChange}
               className="w-4 h-4 rounded border-[#bebebe] text-[#ff4f01] focus:ring-[#ff4f01] cursor-pointer"
             />
@@ -150,8 +162,21 @@ export default function ClientSubmitRequest() {
 
           {/* Actions */}
           <div className="flex items-center gap-3 pt-2">
-            <button type="submit" className="btn btn-primary !mb-0 !py-3 !px-8">
-              <i className="ri-send-plane-line mr-1" /> Create Request
+            <button
+              type="submit"
+              disabled={submitting}
+              className="btn btn-primary !mb-0 !py-3 !px-8 disabled:opacity-50"
+            >
+              {submitting ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2 inline-block"></div>
+                  Submitting...
+                </>
+              ) : (
+                <>
+                  <i className="ri-send-plane-line mr-1" /> Create Request
+                </>
+              )}
             </button>
             <button
               type="button"

@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface NavItem {
   label: string;
@@ -16,22 +17,11 @@ const clientNav: NavItem[] = [
   { label: "Dashboard", href: "/client/dashboard", icon: "ri-dashboard-line" },
   { label: "Requests", href: "/client/requests", icon: "ri-file-list-3-line" },
   { label: "Submit Request", href: "/client/submit-request", icon: "ri-add-circle-line" },
-  { label: "Files", href: "/client/files", icon: "ri-folder-line" },
-  { label: "Brands", href: "/client/brands", icon: "ri-palette-line" },
-  { label: "Team", href: "/client/team", icon: "ri-group-line" },
-  { label: "Activity", href: "/client/activity", icon: "ri-time-line" },
-  { label: "Settings", href: "/client/settings", icon: "ri-settings-3-line" },
 ];
 
 const adminNav: NavItem[] = [
   { label: "Dashboard", href: "/admin/dashboard", icon: "ri-dashboard-line" },
-  { label: "Requests", href: "/admin/requests", icon: "ri-file-list-3-line" },
-  { label: "Clients", href: "/admin/clients", icon: "ri-user-line" },
-  { label: "Designers", href: "/admin/designers", icon: "ri-brush-line" },
-  { label: "Files", href: "/admin/files", icon: "ri-folder-line" },
-  { label: "Workload", href: "/admin/workload", icon: "ri-bar-chart-line" },
-  { label: "Reports", href: "/admin/reports", icon: "ri-line-chart-line" },
-  { label: "Settings", href: "/admin/settings", icon: "ri-settings-3-line" },
+  { label: "All Requests", href: "/admin/requests", icon: "ri-file-list-3-line" },
 ];
 
 const clientBottomNav: NavItem[] = [
@@ -41,8 +31,49 @@ const clientBottomNav: NavItem[] = [
 
 export function DashboardLayout({ children, type }: DashboardLayoutProps) {
   const location = useLocation();
+  const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const navItems = type === "client" ? clientNav : adminNav;
+  const { user, loading, isAuthenticated, login, logout } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#f5f5f5]">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#ff4f01] mx-auto mb-4"></div>
+          <p className="text-[rgb(119,119,125)]">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#f5f5f5]">
+        <div className="text-center bg-white rounded-2xl p-10 border border-[#e5e5e5] max-w-md">
+          <i className="ri-lock-line text-5xl text-[#ff4f01] mb-4 inline-block" />
+          <h2 className="font-bricolage font-semibold text-2xl text-[#101010] mb-2">Sign In Required</h2>
+          <p className="text-[rgb(119,119,125)] mb-6">Please sign in to access your dashboard.</p>
+          <button
+            onClick={() => login()}
+            className="btn btn-primary !mb-0 !py-3 !px-8"
+          >
+            <i className="ri-login-box-line mr-2" /> Sign In
+          </button>
+          <p className="mt-4">
+            <a href="/" className="text-sm text-[#ff4f01] hover:underline">← Back to Home</a>
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  const handleLogout = async () => {
+    await logout();
+    navigate("/");
+  };
+
+  const userInitial = user?.name ? user.name.charAt(0).toUpperCase() : user?.email ? user.email.charAt(0).toUpperCase() : "U";
 
   return (
     <div className="min-h-screen bg-[#f5f5f5] flex">
@@ -103,6 +134,17 @@ export function DashboardLayout({ children, type }: DashboardLayoutProps) {
               );
             })}
           </div>
+
+          {/* Switch view link */}
+          <div className="mt-6 pt-4 border-t border-white/10">
+            <Link
+              to={type === "client" ? "/admin/dashboard" : "/client/dashboard"}
+              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white/40 hover:text-white/70 transition-colors"
+            >
+              <i className={`${type === "client" ? "ri-shield-line" : "ri-user-line"} text-lg`} />
+              {type === "client" ? "Admin View" : "Client View"}
+            </Link>
+          </div>
         </nav>
 
         {/* Bottom Nav */}
@@ -118,24 +160,23 @@ export function DashboardLayout({ children, type }: DashboardLayoutProps) {
                 {item.label}
               </a>
             ))}
-          <Link
-            to="/login"
-            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-red-400/80 hover:text-red-400 hover:bg-red-400/5 transition-all"
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-red-400/80 hover:text-red-400 hover:bg-red-400/5 transition-all cursor-pointer"
           >
             <i className="ri-logout-box-line text-lg" />
             Logout
-          </Link>
+          </button>
         </div>
 
         {/* User */}
         <div className="p-4 border-t border-white/10">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-full bg-[#ff4f01] flex items-center justify-center text-white text-sm font-bold">
-              J
+              {userInitial}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm text-white font-medium truncate">John Smith</p>
-              <p className="text-xs text-white/40 truncate">john@company.com</p>
+              <p className="text-sm text-white font-medium truncate">{user?.name || "User"}</p>
             </div>
           </div>
         </div>
@@ -164,9 +205,6 @@ export function DashboardLayout({ children, type }: DashboardLayoutProps) {
           <div className="flex items-center gap-3">
             <button className="relative w-9 h-9 rounded-lg bg-[#f5f5f5] flex items-center justify-center hover:bg-[#e5e5e5] transition-colors cursor-pointer">
               <i className="ri-notification-3-line text-[#101010]" />
-              <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-[#ff4f01] rounded-full text-[10px] text-white flex items-center justify-center font-bold">
-                3
-              </span>
             </button>
           </div>
         </header>

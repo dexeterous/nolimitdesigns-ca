@@ -1,0 +1,37 @@
+{
+    "title": "request_comments",
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "integer",
+            "description": "Primary key, auto-increment"
+        },
+        "user_id": {
+            "type": "string",
+            "description": "Commenter user ID"
+        },
+        "request_id": {
+            "type": "integer",
+            "description": "Associated design request ID"
+        },
+        "content": {
+            "type": "string",
+            "description": "Comment content"
+        },
+        "author_name": {
+            "type": "string",
+            "description": "Display name of commenter"
+        },
+        "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Creation timestamp"
+        }
+    },
+    "required": [
+        "id",
+        "user_id",
+        "request_id",
+        "content"
+    ]
+}

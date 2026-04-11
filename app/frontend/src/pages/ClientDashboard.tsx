@@ -1,42 +1,80 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { DashboardLayout } from "@/components/DashboardLayout";
+import { client } from "@/lib/api";
 
-const stats = [
-  { label: "Active Requests", value: "12", icon: "ri-file-list-3-line", color: "bg-[#ff4f01]" },
-  { label: "In Progress", value: "5", icon: "ri-loader-4-line", color: "bg-[#7c3aed]" },
-  { label: "Completed", value: "48", icon: "ri-check-double-line", color: "bg-[#22c55e]" },
-  { label: "Pending Feedback", value: "3", icon: "ri-chat-3-line", color: "bg-[#0ea5e9]" },
-];
-
-const recentRequests = [
-  { id: "REQ-001", title: "Social Media Campaign Graphics", brand: "TechCo", status: "In Progress", designer: "Sarah M.", updated: "2 hours ago" },
-  { id: "REQ-002", title: "Email Newsletter Header", brand: "FoodBrand", status: "Review", designer: "Alex K.", updated: "4 hours ago" },
-  { id: "REQ-003", title: "Landing Page Redesign", brand: "TechCo", status: "Queued", designer: "Unassigned", updated: "1 day ago" },
-  { id: "REQ-004", title: "Product Packaging Label", brand: "EcoGoods", status: "Completed", designer: "Maria L.", updated: "1 day ago" },
-  { id: "REQ-005", title: "Brand Guidelines Update", brand: "TechCo", status: "In Progress", designer: "Sarah M.", updated: "2 days ago" },
-];
-
-const activityFeed = [
-  { icon: "ri-upload-2-line", text: "Sarah M. uploaded files for Social Media Campaign Graphics", time: "2 hours ago", color: "text-[#7c3aed]" },
-  { icon: "ri-chat-3-line", text: "You requested revisions on Email Newsletter Header", time: "4 hours ago", color: "text-[#0ea5e9]" },
-  { icon: "ri-check-line", text: "Product Packaging Label was marked as completed", time: "1 day ago", color: "text-[#22c55e]" },
-  { icon: "ri-add-circle-line", text: "You submitted Landing Page Redesign", time: "1 day ago", color: "text-[#ff4f01]" },
-  { icon: "ri-upload-2-line", text: "Alex K. uploaded files for Brand Guidelines Update", time: "2 days ago", color: "text-[#7c3aed]" },
-];
+interface DesignRequest {
+  id: number;
+  title: string;
+  category: string;
+  brand_name: string;
+  priority: string;
+  status: string;
+  designer_name: string;
+  updated_at: string;
+  created_at: string;
+}
 
 const statusColors: Record<string, string> = {
-  Queued: "bg-[#f5f5f5] text-[#666]",
+  Queue: "bg-[#f5f5f5] text-[#666]",
   "In Progress": "bg-[#7c3aed]/10 text-[#7c3aed]",
+  "Internal Review": "bg-[#f59e0b]/10 text-[#f59e0b]",
+  "Client Review": "bg-[#0ea5e9]/10 text-[#0ea5e9]",
   Review: "bg-[#0ea5e9]/10 text-[#0ea5e9]",
   Completed: "bg-[#22c55e]/10 text-[#22c55e]",
 };
 
 export default function ClientDashboard() {
+  const [requests, setRequests] = useState<DesignRequest[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadRequests();
+  }, []);
+
+  const loadRequests = async () => {
+    try {
+      const response = await client.entities.design_requests.query({
+        sort: "-created_at",
+        limit: 10,
+      });
+      setRequests(response?.data?.items || []);
+    } catch (err) {
+      console.error("Failed to load requests:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const activeCount = requests.filter((r) => r.status !== "Completed").length;
+  const inProgressCount = requests.filter((r) => r.status === "In Progress").length;
+  const completedCount = requests.filter((r) => r.status === "Completed").length;
+  const reviewCount = requests.filter((r) => r.status === "Review" || r.status === "Client Review").length;
+
+  const stats = [
+    { label: "Active Requests", value: String(activeCount), icon: "ri-file-list-3-line", color: "bg-[#ff4f01]" },
+    { label: "In Progress", value: String(inProgressCount), icon: "ri-loader-4-line", color: "bg-[#7c3aed]" },
+    { label: "Completed", value: String(completedCount), icon: "ri-check-double-line", color: "bg-[#22c55e]" },
+    { label: "Pending Review", value: String(reviewCount), icon: "ri-chat-3-line", color: "bg-[#0ea5e9]" },
+  ];
+
+  const formatTime = (dateStr: string) => {
+    if (!dateStr) return "—";
+    const date = new Date(dateStr);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffHrs = Math.floor(diffMs / (1000 * 60 * 60));
+    if (diffHrs < 1) return "Just now";
+    if (diffHrs < 24) return `${diffHrs}h ago`;
+    const diffDays = Math.floor(diffHrs / 24);
+    return `${diffDays}d ago`;
+  };
+
   return (
     <DashboardLayout type="client">
       <div className="mb-6">
         <h1 className="text-2xl font-bold font-bricolage text-[#101010]">Dashboard</h1>
-        <p className="text-sm text-[rgb(119,119,125)]">Welcome back, John. Here's your design activity overview.</p>
+        <p className="text-sm text-[rgb(119,119,125)]">Here's your design activity overview.</p>
       </div>
 
       {/* Stat Cards */}
@@ -54,15 +92,28 @@ export default function ClientDashboard() {
         ))}
       </div>
 
-      <div className="grid lg:grid-cols-[1fr_340px] gap-6">
-        {/* Recent Requests */}
-        <div className="bg-white rounded-xl border border-[#e5e5e5]">
-          <div className="flex items-center justify-between p-5 border-b border-[#e5e5e5]">
-            <h2 className="text-lg font-semibold font-bricolage text-[#101010]">Recent Requests</h2>
-            <Link to="/client/requests" className="text-sm text-[#ff4f01] font-medium hover:underline">
-              View All
+      {/* Recent Requests */}
+      <div className="bg-white rounded-xl border border-[#e5e5e5]">
+        <div className="flex items-center justify-between p-5 border-b border-[#e5e5e5]">
+          <h2 className="text-lg font-semibold font-bricolage text-[#101010]">Recent Requests</h2>
+          <Link to="/client/requests" className="text-sm text-[#ff4f01] font-medium hover:underline">
+            View All
+          </Link>
+        </div>
+        {loading ? (
+          <div className="p-10 text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#ff4f01] mx-auto mb-3"></div>
+            <p className="text-sm text-[rgb(119,119,125)]">Loading requests...</p>
+          </div>
+        ) : requests.length === 0 ? (
+          <div className="p-10 text-center">
+            <i className="ri-file-list-3-line text-4xl text-[rgb(119,119,125)] mb-3 inline-block" />
+            <p className="text-sm text-[rgb(119,119,125)] mb-4">No design requests yet.</p>
+            <Link to="/client/submit-request" className="btn btn-primary !mb-0 !py-2 !px-5 text-sm">
+              <i className="ri-add-line mr-1" /> Submit Your First Request
             </Link>
           </div>
+        ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
@@ -75,54 +126,34 @@ export default function ClientDashboard() {
                 </tr>
               </thead>
               <tbody>
-                {recentRequests.map((req) => (
+                {requests.slice(0, 5).map((req) => (
                   <tr key={req.id} className="border-b border-[#f0f0f0] last:border-b-0 hover:bg-[#fafafa] transition-colors">
                     <td className="px-5 py-3.5">
                       <div>
                         <p className="text-sm font-medium text-[#101010]">{req.title}</p>
-                        <p className="text-xs text-[rgb(119,119,125)]">{req.id}</p>
+                        <p className="text-xs text-[rgb(119,119,125)]">REQ-{String(req.id).padStart(3, "0")}</p>
                       </div>
                     </td>
                     <td className="px-5 py-3.5">
-                      <span className="text-sm text-[#101010]">{req.brand}</span>
+                      <span className="text-sm text-[#101010]">{req.brand_name || "—"}</span>
                     </td>
                     <td className="px-5 py-3.5">
-                      <span className={`inline-block px-2.5 py-1 rounded-full text-xs font-medium ${statusColors[req.status]}`}>
+                      <span className={`inline-block px-2.5 py-1 rounded-full text-xs font-medium ${statusColors[req.status] || "bg-[#f5f5f5] text-[#666]"}`}>
                         {req.status}
                       </span>
                     </td>
                     <td className="px-5 py-3.5">
-                      <span className="text-sm text-[rgb(119,119,125)]">{req.designer}</span>
+                      <span className="text-sm text-[rgb(119,119,125)]">{req.designer_name || "Unassigned"}</span>
                     </td>
                     <td className="px-5 py-3.5">
-                      <span className="text-xs text-[rgb(119,119,125)]">{req.updated}</span>
+                      <span className="text-xs text-[rgb(119,119,125)]">{formatTime(req.updated_at || req.created_at)}</span>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-        </div>
-
-        {/* Activity Feed */}
-        <div className="bg-white rounded-xl border border-[#e5e5e5]">
-          <div className="p-5 border-b border-[#e5e5e5]">
-            <h2 className="text-lg font-semibold font-bricolage text-[#101010]">Activity</h2>
-          </div>
-          <div className="p-5 space-y-5">
-            {activityFeed.map((item, i) => (
-              <div key={i} className="flex gap-3">
-                <div className={`w-8 h-8 rounded-full bg-[#f5f5f5] flex items-center justify-center shrink-0`}>
-                  <i className={`${item.icon} ${item.color} text-sm`} />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm text-[#101010] leading-5">{item.text}</p>
-                  <p className="text-xs text-[rgb(119,119,125)] mt-1">{item.time}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        )}
       </div>
     </DashboardLayout>
   );

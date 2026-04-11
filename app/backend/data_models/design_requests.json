@@ -1,0 +1,68 @@
+{
+    "title": "design_requests",
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "integer",
+            "description": "Primary key, auto-increment"
+        },
+        "user_id": {
+            "type": "string",
+            "description": "Client user ID who created the request"
+        },
+        "title": {
+            "type": "string",
+            "description": "Request title"
+        },
+        "category": {
+            "type": "string",
+            "description": "Design category"
+        },
+        "brand_name": {
+            "type": "string",
+            "description": "Associated brand name"
+        },
+        "priority": {
+            "type": "string",
+            "description": "Priority level: Low, Medium, High, Urgent"
+        },
+        "status": {
+            "type": "string",
+            "description": "Status: Queue, In Progress, Internal Review, Client Review, Completed"
+        },
+        "description": {
+            "type": "string",
+            "description": "Detailed description of the request"
+        },
+        "designer_name": {
+            "type": "string",
+            "description": "Assigned designer name"
+        },
+        "include_source": {
+            "type": "boolean",
+            "description": "Whether to include source files"
+        },
+        "due_date": {
+            "type": "string",
+            "description": "Due date string"
+        },
+        "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Creation timestamp"
+        },
+        "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Last update timestamp"
+        }
+    },
+    "required": [
+        "id",
+        "user_id",
+        "title",
+        "category",
+        "priority",
+        "status"
+    ]
+}

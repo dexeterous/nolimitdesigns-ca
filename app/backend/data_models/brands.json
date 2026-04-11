@@ -1,0 +1,44 @@
+{
+    "title": "brands",
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "integer",
+            "description": "Primary key, auto-increment"
+        },
+        "user_id": {
+            "type": "string",
+            "description": "Owner user ID"
+        },
+        "name": {
+            "type": "string",
+            "description": "Brand name"
+        },
+        "logo_url": {
+            "type": "string",
+            "description": "Brand logo URL"
+        },
+        "color_primary": {
+            "type": "string",
+            "description": "Primary brand color hex"
+        },
+        "color_secondary": {
+            "type": "string",
+            "description": "Secondary brand color hex"
+        },
+        "guidelines": {
+            "type": "string",
+            "description": "Brand guidelines text"
+        },
+        "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Creation timestamp"
+        }
+    },
+    "required": [
+        "id",
+        "user_id",
+        "name"
+    ]
+}
