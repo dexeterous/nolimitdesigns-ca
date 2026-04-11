@@ -4,19 +4,62 @@ import { DashboardLayout } from "@/components/DashboardLayout";
 import { client } from "@/lib/api";
 import { toast } from "sonner";
 
-const categories = [
-  "Social Media Graphics", "Logo Design", "Brand Identity", "Presentation Design",
-  "Email Graphics", "Web Design", "Packaging Design", "Print Design",
-  "Illustration", "Video Editing", "Motion Graphics", "Other",
+const categoryGroups = [
+  {
+    label: "Social Media",
+    items: ["Social Media Post", "Social Media Story", "Social Media Carousel", "Social Media Ad", "Social Media Cover/Banner"],
+  },
+  {
+    label: "Branding",
+    items: ["Logo Design", "Brand Identity", "Brand Guidelines", "Business Card", "Letterhead & Stationery"],
+  },
+  {
+    label: "Marketing",
+    items: ["Flyer / Brochure", "Poster", "Infographic", "Email Graphics", "Banner Ad", "Landing Page Design"],
+  },
+  {
+    label: "Presentation & Documents",
+    items: ["Presentation Design", "eBook / Report", "Resume / CV", "Menu Design"],
+  },
+  {
+    label: "Video & Motion",
+    items: ["Video Editing", "Motion Graphics", "GIF Animation", "Video Thumbnail"],
+  },
+  {
+    label: "Web & App",
+    items: ["Web Design", "App UI Design", "Icon Design", "Illustration"],
+  },
+  {
+    label: "Print",
+    items: ["Packaging Design", "T-Shirt / Merch Design", "Signage", "Print Design"],
+  },
+  {
+    label: "Other",
+    items: ["Custom Request"],
+  },
 ];
 
+const allCategories = categoryGroups.flatMap((g) => g.items);
+
 const dimensionSuggestions: Record<string, string[]> = {
-  "Social Media Graphics": ["1080x1080 (Instagram Post)", "1200x628 (Facebook Post)", "1080x1920 (Story)", "1500x500 (Twitter Header)"],
+  "Social Media Post": ["1080x1080 (Square)", "1200x628 (Facebook)", "1080x566 (Twitter)"],
+  "Social Media Story": ["1080x1920 (Story)"],
+  "Social Media Carousel": ["1080x1080 (Square Slides)", "1080x1350 (Portrait Slides)"],
+  "Social Media Ad": ["1080x1080 (Feed Ad)", "1200x628 (Link Ad)", "1080x1920 (Story Ad)"],
+  "Social Media Cover/Banner": ["1500x500 (Twitter)", "820x312 (Facebook)", "1584x396 (LinkedIn)"],
   "Logo Design": ["1000x1000 (Square)", "2000x500 (Horizontal)", "500x2000 (Vertical)"],
   "Presentation Design": ["1920x1080 (16:9)", "1024x768 (4:3)"],
   "Email Graphics": ["600x200 (Header)", "600x400 (Hero)", "600x600 (Square)"],
   "Web Design": ["1440x900 (Desktop)", "768x1024 (Tablet)", "375x812 (Mobile)"],
+  "Landing Page Design": ["1440x900 (Desktop)", "375x812 (Mobile)"],
   "Print Design": ["8.5x11 in (Letter)", "11x17 in (Tabloid)", "3.5x2 in (Business Card)"],
+  "Flyer / Brochure": ["8.5x11 in (Letter)", "5.5x8.5 in (Half Letter)", "A4 (210x297mm)"],
+  "Poster": ["18x24 in", "24x36 in", "A3 (297x420mm)"],
+  "Business Card": ["3.5x2 in (Standard)", "3.5x2 in (Rounded)"],
+  "Banner Ad": ["728x90 (Leaderboard)", "300x250 (Medium Rectangle)", "160x600 (Wide Skyscraper)"],
+  "Video Thumbnail": ["1280x720 (YouTube)", "1920x1080 (HD)"],
+  "Packaging Design": ["Custom dimensions required"],
+  "T-Shirt / Merch Design": ["4500x5400 (Front Print)", "4500x5400 (Back Print)"],
 };
 
 interface Brand {
@@ -34,6 +77,7 @@ export default function ClientSubmitRequest() {
   const [aiSuggestion, setAiSuggestion] = useState("");
   const [uploadingRef, setUploadingRef] = useState(false);
   const [refFiles, setRefFiles] = useState<{ name: string; key: string }[]>([]);
+  const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
   const [form, setForm] = useState({
     title: "",
     category: "",
@@ -41,7 +85,9 @@ export default function ClientSubmitRequest() {
     priority: "Medium",
     description: "",
     dimensions: "",
+    reference_links: "",
     include_source: false,
+    due_date: "",
   });
 
   useEffect(() => {
@@ -145,16 +191,20 @@ export default function ClientSubmitRequest() {
         priority: form.priority,
         status: "Queue",
         include_source: form.include_source,
+        revision_count: 0,
       };
       if (form.brand_name) requestData.brand_name = form.brand_name;
-      if (form.description) {
-        let desc = form.description;
-        if (form.dimensions) desc += `\n\nDimensions: ${form.dimensions}`;
-        if (refFiles.length > 0) {
-          desc += `\n\nReference files: ${refFiles.map((f) => f.name).join(", ")}`;
-        }
-        requestData.description = desc;
+      if (form.description) requestData.description = form.description;
+      if (form.dimensions) requestData.dimensions = form.dimensions;
+      if (form.due_date) requestData.due_date = form.due_date;
+
+      // Build reference links string
+      const refLinksArr: string[] = [];
+      if (form.reference_links.trim()) refLinksArr.push(form.reference_links.trim());
+      if (refFiles.length > 0) {
+        refLinksArr.push(...refFiles.map((f) => f.name));
       }
+      if (refLinksArr.length > 0) requestData.reference_links = refLinksArr.join(", ");
 
       await client.entities.design_requests.create({ data: requestData });
       toast.success("Request submitted successfully!");
@@ -194,23 +244,50 @@ export default function ClientSubmitRequest() {
 
           {/* Category & Brand */}
           <div className="grid sm:grid-cols-2 gap-4">
-            <div>
+            <div className="relative">
               <label className="block text-sm font-medium text-[#101010] mb-1.5">Design Category *</label>
-              <select
-                name="category"
-                value={form.category}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-3 rounded-xl border border-[#e5e5e5] bg-[#f9f9f9] text-sm text-[#101010] focus:outline-none focus:border-[#ff4f01] cursor-pointer"
+              <button
+                type="button"
+                onClick={() => setShowCategoryDropdown(!showCategoryDropdown)}
+                className="w-full px-4 py-3 rounded-xl border border-[#e5e5e5] bg-[#f9f9f9] text-sm text-left focus:outline-none focus:border-[#ff4f01] cursor-pointer flex items-center justify-between"
               >
-                <option value="">Select category</option>
-                {categories.map((cat) => (
-                  <option key={cat} value={cat}>{cat}</option>
-                ))}
-              </select>
+                <span className={form.category ? "text-[#101010]" : "text-[rgb(119,119,125)]/50"}>
+                  {form.category || "Select category"}
+                </span>
+                <i className={`ri-arrow-${showCategoryDropdown ? "up" : "down"}-s-line text-[rgb(119,119,125)]`} />
+              </button>
+
+              {showCategoryDropdown && (
+                <div className="absolute z-20 top-full left-0 right-0 mt-1 bg-white border border-[#e5e5e5] rounded-xl shadow-lg max-h-80 overflow-y-auto">
+                  {categoryGroups.map((group) => (
+                    <div key={group.label}>
+                      <div className="px-4 py-2 text-[10px] font-bold uppercase tracking-wider text-[rgb(119,119,125)] bg-[#fafafa] sticky top-0">
+                        {group.label}
+                      </div>
+                      {group.items.map((item) => (
+                        <button
+                          key={item}
+                          type="button"
+                          onClick={() => {
+                            setForm({ ...form, category: item, dimensions: "" });
+                            setShowCategoryDropdown(false);
+                          }}
+                          className={`w-full text-left px-4 py-2.5 text-sm hover:bg-[#f5f5f5] transition-colors cursor-pointer ${
+                            form.category === item ? "text-[#ff4f01] font-medium bg-[#ff4f01]/5" : "text-[#101010]"
+                          }`}
+                        >
+                          {item}
+                        </button>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              )}
+              {/* Hidden input for form validation */}
+              <input type="hidden" name="category" value={form.category} required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-[#101010] mb-1.5">Brand</label>
+              <label className="block text-sm font-medium text-[#101010] mb-1.5">Brand Profile</label>
               {brands.length > 0 ? (
                 <select
                   name="brand_name"
@@ -220,7 +297,9 @@ export default function ClientSubmitRequest() {
                 >
                   <option value="">Select brand</option>
                   {brands.map((brand) => (
-                    <option key={brand.id} value={brand.name}>{brand.name}</option>
+                    <option key={brand.id} value={brand.name}>
+                      {brand.name}
+                    </option>
                   ))}
                 </select>
               ) : (
@@ -237,12 +316,14 @@ export default function ClientSubmitRequest() {
           </div>
 
           {/* Dimensions */}
-          {suggestedDimensions.length > 0 && (
-            <div>
-              <label className="block text-sm font-medium text-[#101010] mb-1.5">
-                Dimensions
-                <span className="text-xs text-[rgb(119,119,125)] ml-2">AI Suggested for {form.category}</span>
-              </label>
+          <div>
+            <label className="block text-sm font-medium text-[#101010] mb-1.5">
+              Dimensions / Size
+              {suggestedDimensions.length > 0 && (
+                <span className="text-xs text-[rgb(119,119,125)] ml-2">Suggested for {form.category}</span>
+              )}
+            </label>
+            {suggestedDimensions.length > 0 && (
               <div className="flex flex-wrap gap-2 mb-2">
                 {suggestedDimensions.map((dim) => (
                   <button
@@ -259,34 +340,47 @@ export default function ClientSubmitRequest() {
                   </button>
                 ))}
               </div>
-              <input
-                type="text"
-                value={form.dimensions}
-                onChange={(e) => setForm({ ...form, dimensions: e.target.value })}
-                placeholder="Or enter custom dimensions"
-                className="w-full px-4 py-3 rounded-xl border border-[#e5e5e5] bg-[#f9f9f9] text-sm text-[#101010] placeholder:text-[rgb(119,119,125)]/50 focus:outline-none focus:border-[#ff4f01] transition-colors"
-              />
-            </div>
-          )}
+            )}
+            <input
+              type="text"
+              name="dimensions"
+              value={form.dimensions}
+              onChange={handleChange}
+              placeholder="e.g., 1080x1080px, A4, 3.5x2 inches"
+              className="w-full px-4 py-3 rounded-xl border border-[#e5e5e5] bg-[#f9f9f9] text-sm text-[#101010] placeholder:text-[rgb(119,119,125)]/50 focus:outline-none focus:border-[#ff4f01] transition-colors"
+            />
+          </div>
 
-          {/* Priority */}
-          <div>
-            <label className="block text-sm font-medium text-[#101010] mb-1.5">Priority</label>
-            <div className="flex gap-2">
-              {["Low", "Medium", "High", "Urgent"].map((p) => (
-                <button
-                  key={p}
-                  type="button"
-                  onClick={() => setForm({ ...form, priority: p })}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all cursor-pointer ${
-                    form.priority === p
-                      ? "bg-[#ff4f01] text-white"
-                      : "bg-[#f5f5f5] text-[rgb(119,119,125)] hover:bg-[#e5e5e5]"
-                  }`}
-                >
-                  {p}
-                </button>
-              ))}
+          {/* Priority & Due Date */}
+          <div className="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-[#101010] mb-1.5">Priority</label>
+              <div className="flex gap-2">
+                {["Low", "Medium", "High", "Urgent"].map((p) => (
+                  <button
+                    key={p}
+                    type="button"
+                    onClick={() => setForm({ ...form, priority: p })}
+                    className={`flex-1 px-3 py-2 rounded-lg text-sm font-medium transition-all cursor-pointer ${
+                      form.priority === p
+                        ? "bg-[#ff4f01] text-white"
+                        : "bg-[#f5f5f5] text-[rgb(119,119,125)] hover:bg-[#e5e5e5]"
+                    }`}
+                  >
+                    {p}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-[#101010] mb-1.5">Due Date</label>
+              <input
+                type="date"
+                name="due_date"
+                value={form.due_date}
+                onChange={handleChange}
+                className="w-full px-4 py-2.5 rounded-xl border border-[#e5e5e5] bg-[#f9f9f9] text-sm text-[#101010] focus:outline-none focus:border-[#ff4f01] cursor-pointer"
+              />
             </div>
           </div>
 
@@ -308,7 +402,7 @@ export default function ClientSubmitRequest() {
               name="description"
               value={form.description}
               onChange={handleChange}
-              placeholder="Describe your design request in detail. Include dimensions, colors, text content, and any specific requirements..."
+              placeholder="Describe your design request in detail. Include colors, text content, target audience, and any specific requirements..."
               required
               rows={6}
               className="w-full px-4 py-3 rounded-xl border border-[#e5e5e5] bg-[#f9f9f9] text-sm text-[#101010] placeholder:text-[rgb(119,119,125)]/50 focus:outline-none focus:border-[#ff4f01] transition-colors resize-none"
@@ -325,6 +419,22 @@ export default function ClientSubmitRequest() {
               <p className="text-sm text-[#101010] leading-6 whitespace-pre-wrap">{aiSuggestion}</p>
             </div>
           )}
+
+          {/* Reference Links */}
+          <div>
+            <label className="block text-sm font-medium text-[#101010] mb-1.5">
+              Reference Links
+              <span className="text-xs text-[rgb(119,119,125)] ml-2">URLs for inspiration or examples</span>
+            </label>
+            <textarea
+              name="reference_links"
+              value={form.reference_links}
+              onChange={handleChange}
+              placeholder="Paste URLs to reference designs, inspiration boards, competitor examples, etc. (one per line)"
+              rows={3}
+              className="w-full px-4 py-3 rounded-xl border border-[#e5e5e5] bg-[#f9f9f9] text-sm text-[#101010] placeholder:text-[rgb(119,119,125)]/50 focus:outline-none focus:border-[#ff4f01] transition-colors resize-none"
+            />
+          </div>
 
           {/* Reference Files */}
           <div>

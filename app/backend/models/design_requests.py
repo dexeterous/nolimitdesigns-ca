@@ -1,5 +1,5 @@
 from core.database import Base
-from sqlalchemy import Boolean, Column, DateTime, Integer, String
+from sqlalchemy import Boolean, Column, Integer, String
 
 
 class Design_requests(Base):
@@ -17,5 +17,6 @@ class Design_requests(Base):
     designer_name = Column(String, nullable=True)
     include_source = Column(Boolean, nullable=True)
     due_date = Column(String, nullable=True)
-    created_at = Column(DateTime(timezone=True), nullable=True)
-    updated_at = Column(DateTime(timezone=True), nullable=True)
+    revision_count = Column(Integer, nullable=True)
+    dimensions = Column(String, nullable=True)
+    reference_links = Column(String, nullable=True)

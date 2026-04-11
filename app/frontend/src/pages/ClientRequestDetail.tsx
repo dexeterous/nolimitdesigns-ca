@@ -15,6 +15,9 @@ interface DesignRequest {
   designer_name: string;
   due_date: string;
   include_source: boolean;
+  revision_count: number;
+  dimensions: string;
+  reference_links: string;
   created_at: string;
   updated_at: string;
 }
@@ -41,9 +44,21 @@ interface DesignFile {
   created_at: string;
 }
 
+interface StatusHistory {
+  id: number;
+  request_id: number;
+  from_status: string;
+  to_status: string;
+  changed_by: string;
+  note: string;
+  created_at: string;
+}
+
 const statusColors: Record<string, string> = {
   Queue: "bg-[#f5f5f5] text-[#666]",
+  Requests: "bg-[#f5f5f5] text-[#666]",
   "In Progress": "bg-[#7c3aed]/10 text-[#7c3aed]",
+  "In Review": "bg-[#0ea5e9]/10 text-[#0ea5e9]",
   Review: "bg-[#0ea5e9]/10 text-[#0ea5e9]",
   "Client Review": "bg-[#0ea5e9]/10 text-[#0ea5e9]",
   Completed: "bg-[#22c55e]/10 text-[#22c55e]",
@@ -56,17 +71,30 @@ const priorityColors: Record<string, string> = {
   Urgent: "text-[#ef4444]",
 };
 
-const statusTimeline = ["Queue", "In Progress", "Review", "Completed"];
+const statusTimeline = ["Requests", "In Progress", "In Review", "Completed"];
+
+const mapStatus = (status: string): string => {
+  switch (status) {
+    case "Queue": return "Requests";
+    case "Review":
+    case "Client Review":
+    case "Internal Review":
+      return "In Review";
+    default: return status;
+  }
+};
 
 export default function ClientRequestDetail() {
   const { id } = useParams<{ id: string }>();
   const [request, setRequest] = useState<DesignRequest | null>(null);
   const [comments, setComments] = useState<Comment[]>([]);
   const [files, setFiles] = useState<DesignFile[]>([]);
+  const [statusHistory, setStatusHistory] = useState<StatusHistory[]>([]);
   const [loading, setLoading] = useState(true);
   const [newComment, setNewComment] = useState("");
   const [submittingComment, setSubmittingComment] = useState(false);
   const [uploadingFile, setUploadingFile] = useState(false);
+  const [activeTab, setActiveTab] = useState<"comments" | "history">("comments");
 
   useEffect(() => {
     if (id) loadData();
@@ -74,7 +102,7 @@ export default function ClientRequestDetail() {
 
   const loadData = async () => {
     try {
-      const [reqRes, commentsRes, filesRes] = await Promise.all([
+      const [reqRes, commentsRes, filesRes, historyRes] = await Promise.all([
         client.entities.design_requests.get({ id: id! }),
         client.entities.request_comments.query({
           query: { request_id: Number(id) },
@@ -86,10 +114,16 @@ export default function ClientRequestDetail() {
           sort: "-created_at",
           limit: 50,
         }),
+        client.entities.status_history.query({
+          query: { request_id: Number(id) },
+          sort: "-created_at",
+          limit: 50,
+        }),
       ]);
       setRequest(reqRes?.data || null);
       setComments(commentsRes?.data?.items || []);
       setFiles(filesRes?.data?.items || []);
+      setStatusHistory(historyRes?.data?.items || []);
     } catch (err) {
       console.error("Failed to load request:", err);
       toast.error("Failed to load request details");
@@ -113,7 +147,6 @@ export default function ClientRequestDetail() {
       });
       setNewComment("");
       toast.success("Comment added");
-      // Reload comments
       const commentsRes = await client.entities.request_comments.query({
         query: { request_id: Number(id) },
         sort: "-created_at",
@@ -125,6 +158,43 @@ export default function ClientRequestDetail() {
       toast.error("Failed to add comment");
     } finally {
       setSubmittingComment(false);
+    }
+  };
+
+  const handleRequestRevision = async () => {
+    if (!request) return;
+    const revisionNote = prompt("Describe the revision you need:");
+    if (!revisionNote) return;
+
+    try {
+      // Add comment
+      await client.entities.request_comments.create({
+        data: {
+          request_id: Number(id),
+          comment: `🔄 Revision requested: ${revisionNote}`,
+          author_name: "Client",
+        },
+      });
+      // Update revision count
+      await client.entities.design_requests.update({
+        id: id!,
+        data: { revision_count: (request.revision_count || 0) + 1 },
+      });
+      // Add status history
+      await client.entities.status_history.create({
+        data: {
+          request_id: Number(id),
+          from_status: request.status,
+          to_status: "In Progress",
+          changed_by: "Client",
+          note: `Revision requested: ${revisionNote}`,
+        },
+      });
+      toast.success("Revision requested!");
+      loadData();
+    } catch (err) {
+      console.error("Failed to request revision:", err);
+      toast.error("Failed to request revision");
     }
   };
 
@@ -159,7 +229,6 @@ export default function ClientRequestDetail() {
         });
       }
       toast.success("File(s) uploaded successfully!");
-      // Reload files
       const filesRes = await client.entities.design_files.query({
         query: { request_id: Number(id) },
         sort: "-created_at",
@@ -214,6 +283,17 @@ export default function ClientRequestDetail() {
     return "ri-file-line text-[#0ea5e9]";
   };
 
+  const historyIcon = (toStatus: string) => {
+    switch (toStatus) {
+      case "In Progress": return "ri-play-circle-line text-[#7c3aed]";
+      case "In Review":
+      case "Review":
+      case "Client Review": return "ri-eye-line text-[#0ea5e9]";
+      case "Completed": return "ri-check-double-line text-[#22c55e]";
+      default: return "ri-file-list-3-line text-[#9ca3af]";
+    }
+  };
+
   if (loading) {
     return (
       <DashboardLayout type="client">
@@ -239,7 +319,8 @@ export default function ClientRequestDetail() {
     );
   }
 
-  const currentStepIndex = statusTimeline.indexOf(request.status);
+  const mappedStatus = mapStatus(request.status);
+  const currentStepIndex = statusTimeline.indexOf(mappedStatus);
 
   return (
     <DashboardLayout type="client">
@@ -256,8 +337,8 @@ export default function ClientRequestDetail() {
           <div>
             <h1 className="text-2xl font-bold font-bricolage text-[#101010]">{request.title}</h1>
             <div className="flex items-center gap-3 mt-2 flex-wrap">
-              <span className={`inline-block px-2.5 py-1 rounded-full text-xs font-medium ${statusColors[request.status] || "bg-[#f5f5f5] text-[#666]"}`}>
-                {request.status}
+              <span className={`inline-block px-2.5 py-1 rounded-full text-xs font-medium ${statusColors[mappedStatus] || "bg-[#f5f5f5] text-[#666]"}`}>
+                {mappedStatus}
               </span>
               <span className={`text-sm font-medium ${priorityColors[request.priority] || ""}`}>
                 <i className="ri-flag-line mr-1" />{request.priority}
@@ -270,12 +351,21 @@ export default function ClientRequestDetail() {
               <span className="text-xs text-[rgb(119,119,125)]">
                 <i className="ri-folder-line mr-1" />{request.category}
               </span>
+              {(request.revision_count || 0) > 0 && (
+                <span className="text-xs bg-[#f59e0b]/10 text-[#f59e0b] px-2.5 py-1 rounded-full font-medium">
+                  <i className="ri-loop-left-line mr-1" />{request.revision_count} revision{request.revision_count > 1 ? "s" : ""}
+                </span>
+              )}
             </div>
           </div>
-          <div className="text-right text-sm text-[rgb(119,119,125)]">
-            <p>Created: {formatDate(request.created_at)}</p>
-            {request.designer_name && (
-              <p className="mt-1">Designer: <span className="text-[#101010] font-medium">{request.designer_name}</span></p>
+          <div className="flex items-center gap-2">
+            {mappedStatus !== "Completed" && (
+              <button
+                onClick={handleRequestRevision}
+                className="btn btn-outline !mb-0 !py-2 !px-4 text-sm"
+              >
+                <i className="ri-loop-left-line mr-1" /> Request Revision
+              </button>
             )}
           </div>
         </div>
@@ -313,69 +403,173 @@ export default function ClientRequestDetail() {
       </div>
 
       <div className="grid lg:grid-cols-3 gap-6">
-        {/* Left Column - Description & Comments */}
+        {/* Left Column - Description, Comments & History */}
         <div className="lg:col-span-2 space-y-6">
           {/* Description */}
           {request.description && (
             <div className="bg-white rounded-xl border border-[#e5e5e5] p-6">
               <h2 className="text-lg font-semibold font-bricolage text-[#101010] mb-3">Description</h2>
               <p className="text-sm text-[rgb(119,119,125)] leading-7 whitespace-pre-wrap">{request.description}</p>
+              {request.dimensions && (
+                <div className="mt-3 pt-3 border-t border-[#f0f0f0]">
+                  <span className="text-xs font-medium text-[#101010]">Dimensions: </span>
+                  <span className="text-xs text-[rgb(119,119,125)]">{request.dimensions}</span>
+                </div>
+              )}
+              {request.reference_links && (
+                <div className="mt-2">
+                  <span className="text-xs font-medium text-[#101010]">Reference Links: </span>
+                  <span className="text-xs text-[#ff4f01]">{request.reference_links}</span>
+                </div>
+              )}
             </div>
           )}
 
-          {/* Comments */}
-          <div className="bg-white rounded-xl border border-[#e5e5e5] p-6">
-            <h2 className="text-lg font-semibold font-bricolage text-[#101010] mb-4">
-              Comments & Feedback
-              <span className="text-sm font-normal text-[rgb(119,119,125)] ml-2">({comments.length})</span>
-            </h2>
+          {/* Tabs: Comments & History */}
+          <div className="bg-white rounded-xl border border-[#e5e5e5]">
+            <div className="flex border-b border-[#e5e5e5]">
+              <button
+                onClick={() => setActiveTab("comments")}
+                className={`flex-1 py-3 text-sm font-medium text-center transition-colors cursor-pointer ${
+                  activeTab === "comments"
+                    ? "text-[#ff4f01] border-b-2 border-[#ff4f01]"
+                    : "text-[rgb(119,119,125)] hover:text-[#101010]"
+                }`}
+              >
+                <i className="ri-chat-3-line mr-1" />
+                Comments ({comments.length})
+              </button>
+              <button
+                onClick={() => setActiveTab("history")}
+                className={`flex-1 py-3 text-sm font-medium text-center transition-colors cursor-pointer ${
+                  activeTab === "history"
+                    ? "text-[#ff4f01] border-b-2 border-[#ff4f01]"
+                    : "text-[rgb(119,119,125)] hover:text-[#101010]"
+                }`}
+              >
+                <i className="ri-history-line mr-1" />
+                Revision History ({statusHistory.length})
+              </button>
+            </div>
 
-            {/* Comment Form */}
-            <form onSubmit={handleAddComment} className="mb-6">
-              <textarea
-                value={newComment}
-                onChange={(e) => setNewComment(e.target.value)}
-                placeholder="Add a comment or feedback..."
-                rows={3}
-                className="w-full px-4 py-3 rounded-xl border border-[#e5e5e5] bg-[#f9f9f9] text-sm text-[#101010] placeholder:text-[rgb(119,119,125)]/50 focus:outline-none focus:border-[#ff4f01] transition-colors resize-none"
-              />
-              <div className="flex justify-end mt-2">
-                <button
-                  type="submit"
-                  disabled={submittingComment || !newComment.trim()}
-                  className="btn btn-primary !mb-0 !py-2 !px-5 text-sm disabled:opacity-50"
-                >
-                  {submittingComment ? "Sending..." : "Add Comment"}
-                </button>
-              </div>
-            </form>
-
-            {/* Comments List */}
-            {comments.length === 0 ? (
-              <p className="text-sm text-[rgb(119,119,125)] text-center py-4">No comments yet. Be the first to add feedback.</p>
-            ) : (
-              <div className="space-y-4">
-                {comments.map((comment) => (
-                  <div key={comment.id} className="flex gap-3">
-                    <div className="w-8 h-8 rounded-full bg-[#ff4f01]/20 flex items-center justify-center text-xs font-bold text-[#ff4f01] shrink-0">
-                      {(comment.author_name || "U").charAt(0).toUpperCase()}
+            <div className="p-6">
+              {/* Comments Tab */}
+              {activeTab === "comments" && (
+                <>
+                  <form onSubmit={handleAddComment} className="mb-6">
+                    <textarea
+                      value={newComment}
+                      onChange={(e) => setNewComment(e.target.value)}
+                      placeholder="Add a comment or feedback..."
+                      rows={3}
+                      className="w-full px-4 py-3 rounded-xl border border-[#e5e5e5] bg-[#f9f9f9] text-sm text-[#101010] placeholder:text-[rgb(119,119,125)]/50 focus:outline-none focus:border-[#ff4f01] transition-colors resize-none"
+                    />
+                    <div className="flex justify-end mt-2">
+                      <button
+                        type="submit"
+                        disabled={submittingComment || !newComment.trim()}
+                        className="btn btn-primary !mb-0 !py-2 !px-5 text-sm disabled:opacity-50"
+                      >
+                        {submittingComment ? "Sending..." : "Add Comment"}
+                      </button>
                     </div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="text-sm font-medium text-[#101010]">{comment.author_name || "User"}</span>
-                        <span className="text-xs text-[rgb(119,119,125)]">{formatDate(comment.created_at)}</span>
+                  </form>
+
+                  {comments.length === 0 ? (
+                    <p className="text-sm text-[rgb(119,119,125)] text-center py-4">No comments yet.</p>
+                  ) : (
+                    <div className="space-y-4">
+                      {comments.map((comment) => (
+                        <div key={comment.id} className="flex gap-3">
+                          <div className="w-8 h-8 rounded-full bg-[#ff4f01]/20 flex items-center justify-center text-xs font-bold text-[#ff4f01] shrink-0">
+                            {(comment.author_name || "U").charAt(0).toUpperCase()}
+                          </div>
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className="text-sm font-medium text-[#101010]">{comment.author_name || "User"}</span>
+                              <span className="text-xs text-[rgb(119,119,125)]">{formatDate(comment.created_at)}</span>
+                            </div>
+                            <p className="text-sm text-[rgb(119,119,125)] leading-6">{comment.comment}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </>
+              )}
+
+              {/* History Tab */}
+              {activeTab === "history" && (
+                <>
+                  {statusHistory.length === 0 ? (
+                    <p className="text-sm text-[rgb(119,119,125)] text-center py-4">No status changes recorded yet.</p>
+                  ) : (
+                    <div className="relative">
+                      {/* Timeline line */}
+                      <div className="absolute left-4 top-0 bottom-0 w-px bg-[#e5e5e5]" />
+                      <div className="space-y-4">
+                        {statusHistory.map((entry) => (
+                          <div key={entry.id} className="flex gap-4 relative">
+                            <div className="w-8 h-8 rounded-full bg-white border-2 border-[#e5e5e5] flex items-center justify-center shrink-0 z-10">
+                              <i className={`${historyIcon(entry.to_status)} text-sm`} />
+                            </div>
+                            <div className="flex-1 pb-4">
+                              <div className="flex items-center gap-2 mb-1">
+                                <span className="text-sm font-medium text-[#101010]">
+                                  {entry.from_status} → {entry.to_status}
+                                </span>
+                              </div>
+                              <p className="text-xs text-[rgb(119,119,125)]">
+                                by {entry.changed_by} • {formatDate(entry.created_at)}
+                              </p>
+                              {entry.note && (
+                                <p className="text-sm text-[rgb(119,119,125)] mt-1 bg-[#f9f9f9] rounded-lg p-3">{entry.note}</p>
+                              )}
+                            </div>
+                          </div>
+                        ))}
                       </div>
-                      <p className="text-sm text-[rgb(119,119,125)] leading-6">{comment.comment}</p>
                     </div>
-                  </div>
-                ))}
-              </div>
-            )}
+                  )}
+                </>
+              )}
+            </div>
           </div>
         </div>
 
-        {/* Right Column - Files & Details */}
+        {/* Right Column - Info, Team & Files */}
         <div className="space-y-6">
+          {/* Team / Collaboration Info */}
+          <div className="bg-white rounded-xl border border-[#e5e5e5] p-5">
+            <h3 className="text-sm font-semibold text-[#101010] mb-3">Your Team</h3>
+            <div className="space-y-3">
+              {/* Designer */}
+              <div className="flex items-center gap-3 p-3 rounded-lg bg-[#f9f9f9]">
+                <div className="w-9 h-9 rounded-full bg-[#7c3aed]/20 flex items-center justify-center">
+                  <i className="ri-brush-line text-[#7c3aed] text-sm" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-xs text-[rgb(119,119,125)]">Designer</p>
+                  <p className="text-sm font-medium text-[#101010]">{request.designer_name || "Pending Assignment"}</p>
+                </div>
+                {request.designer_name && (
+                  <div className="w-2 h-2 rounded-full bg-[#22c55e]" title="Active" />
+                )}
+              </div>
+              {/* Project Manager */}
+              <div className="flex items-center gap-3 p-3 rounded-lg bg-[#f9f9f9]">
+                <div className="w-9 h-9 rounded-full bg-[#ff4f01]/20 flex items-center justify-center">
+                  <i className="ri-user-star-line text-[#ff4f01] text-sm" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-xs text-[rgb(119,119,125)]">Project Manager</p>
+                  <p className="text-sm font-medium text-[#101010]">Dedicated PM</p>
+                </div>
+                <div className="w-2 h-2 rounded-full bg-[#22c55e]" title="Active" />
+              </div>
+            </div>
+          </div>
+
           {/* Request Info */}
           <div className="bg-white rounded-xl border border-[#e5e5e5] p-5">
             <h3 className="text-sm font-semibold text-[#101010] mb-3">Request Details</h3>
@@ -389,8 +583,8 @@ export default function ClientRequestDetail() {
                 <span className="text-[#101010]">{request.category}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-[rgb(119,119,125)]">Designer</span>
-                <span className="text-[#101010]">{request.designer_name || "Unassigned"}</span>
+                <span className="text-[rgb(119,119,125)]">Revisions</span>
+                <span className="text-[#101010] font-medium">{request.revision_count || 0}</span>
               </div>
               {request.due_date && (
                 <div className="flex justify-between">
@@ -401,6 +595,10 @@ export default function ClientRequestDetail() {
               <div className="flex justify-between">
                 <span className="text-[rgb(119,119,125)]">Source Files</span>
                 <span className="text-[#101010]">{request.include_source ? "Included" : "Not included"}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-[rgb(119,119,125)]">Created</span>
+                <span className="text-[#101010]">{formatDate(request.created_at)}</span>
               </div>
             </div>
           </div>
@@ -450,6 +648,7 @@ export default function ClientRequestDetail() {
                         <span>{formatFileSize(file.file_size)}</span>
                         {file.is_final && <span className="text-[#22c55e] font-medium">Final</span>}
                         {file.is_source && <span className="text-[#7c3aed] font-medium">Source</span>}
+                        {file.version > 1 && <span className="text-[#f59e0b] font-medium">v{file.version}</span>}
                       </div>
                     </div>
                     <button

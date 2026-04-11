@@ -247,6 +247,35 @@ export function DashboardLayout({ children, type }: DashboardLayoutProps) {
 
         </nav>
 
+        {/* Your Team Section */}
+        {type === "client" && (
+          <div className="px-3 py-3 border-t border-white/10">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-white/30 px-3 mb-2">Your Team</p>
+            <div className="space-y-1">
+              <div className="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-white/5">
+                <div className="w-7 h-7 rounded-full bg-[#7c3aed]/30 flex items-center justify-center">
+                  <i className="ri-brush-line text-[#a78bfa] text-xs" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-[10px] text-white/40">Designer</p>
+                  <p className="text-xs text-white/80 font-medium truncate">Dedicated Designer</p>
+                </div>
+                <div className="w-1.5 h-1.5 rounded-full bg-[#22c55e]" />
+              </div>
+              <div className="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-white/5">
+                <div className="w-7 h-7 rounded-full bg-[#ff4f01]/30 flex items-center justify-center">
+                  <i className="ri-user-star-line text-[#ff8a50] text-xs" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-[10px] text-white/40">Project Manager</p>
+                  <p className="text-xs text-white/80 font-medium truncate">Dedicated PM</p>
+                </div>
+                <div className="w-1.5 h-1.5 rounded-full bg-[#22c55e]" />
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Bottom Nav */}
         <div className="p-3 border-t border-white/10">
           {type === "client" &&

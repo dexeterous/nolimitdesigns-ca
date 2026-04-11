@@ -15,13 +15,16 @@ interface DesignRequest {
   status: string;
   designer_name: string;
   due_date: string;
+  revision_count: number;
   updated_at: string;
   created_at: string;
 }
 
 const statusColors: Record<string, string> = {
+  Requests: "bg-[#f5f5f5] text-[#666]",
   Queue: "bg-[#f5f5f5] text-[#666]",
   "In Progress": "bg-[#7c3aed]/10 text-[#7c3aed]",
+  "In Review": "bg-[#0ea5e9]/10 text-[#0ea5e9]",
   Review: "bg-[#0ea5e9]/10 text-[#0ea5e9]",
   "Client Review": "bg-[#0ea5e9]/10 text-[#0ea5e9]",
   Completed: "bg-[#22c55e]/10 text-[#22c55e]",
@@ -34,10 +37,35 @@ const priorityColors: Record<string, string> = {
   Urgent: "text-[#ef4444]",
 };
 
-const kanbanColumns: string[] = ["Queue", "In Progress", "Review", "Completed"];
+const kanbanColumns = [
+  { key: "Requests", label: "Requests", icon: "ri-file-list-3-line", color: "#9ca3af" },
+  { key: "In Progress", label: "In Progress", icon: "ri-loader-4-line", color: "#7c3aed" },
+  { key: "In Review", label: "In Review", icon: "ri-eye-line", color: "#0ea5e9" },
+  { key: "Completed", label: "Completed", icon: "ri-check-double-line", color: "#22c55e" },
+];
+
+// Map old statuses to Kimp360-style columns
+const statusToColumn = (status: string): string => {
+  switch (status) {
+    case "Queue":
+    case "Requests":
+      return "Requests";
+    case "In Progress":
+      return "In Progress";
+    case "Review":
+    case "In Review":
+    case "Client Review":
+    case "Internal Review":
+      return "In Review";
+    case "Completed":
+      return "Completed";
+    default:
+      return "Requests";
+  }
+};
 
 export default function ClientRequests() {
-  const [viewMode, setViewMode] = useState<ViewMode>("list");
+  const [viewMode, setViewMode] = useState<ViewMode>("kanban");
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [requests, setRequests] = useState<DesignRequest[]>([]);
@@ -78,7 +106,8 @@ export default function ClientRequests() {
     const matchesSearch =
       req.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (req.brand_name || "").toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesStatus = statusFilter === "All" || req.status === statusFilter;
+    const matchesStatus =
+      statusFilter === "All" || statusToColumn(req.status) === statusFilter || req.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
 
@@ -125,9 +154,9 @@ export default function ClientRequests() {
             className="px-3 py-2 rounded-lg border border-[#e5e5e5] bg-[#f9f9f9] text-sm text-[#101010] focus:outline-none focus:border-[#ff4f01] cursor-pointer"
           >
             <option value="All">All Statuses</option>
-            <option value="Queue">Queue</option>
+            <option value="Requests">Requests</option>
             <option value="In Progress">In Progress</option>
-            <option value="Review">Review</option>
+            <option value="In Review">In Review</option>
             <option value="Completed">Completed</option>
           </select>
           <div className="flex items-center bg-[#f5f5f5] rounded-lg p-0.5 ml-auto">
@@ -179,6 +208,7 @@ export default function ClientRequests() {
                       <th className="text-left text-xs font-medium text-[rgb(119,119,125)] uppercase tracking-wider px-5 py-3">Priority</th>
                       <th className="text-left text-xs font-medium text-[rgb(119,119,125)] uppercase tracking-wider px-5 py-3">Status</th>
                       <th className="text-left text-xs font-medium text-[rgb(119,119,125)] uppercase tracking-wider px-5 py-3">Designer</th>
+                      <th className="text-left text-xs font-medium text-[rgb(119,119,125)] uppercase tracking-wider px-5 py-3">Revisions</th>
                       <th className="text-left text-xs font-medium text-[rgb(119,119,125)] uppercase tracking-wider px-5 py-3">Updated</th>
                       <th className="text-left text-xs font-medium text-[rgb(119,119,125)] uppercase tracking-wider px-5 py-3">Actions</th>
                     </tr>
@@ -200,12 +230,18 @@ export default function ClientRequests() {
                           </span>
                         </td>
                         <td className="px-5 py-3.5">
-                          <span className={`inline-block px-2.5 py-1 rounded-full text-xs font-medium ${statusColors[req.status] || "bg-[#f5f5f5] text-[#666]"}`}>
-                            {req.status}
+                          <span className={`inline-block px-2.5 py-1 rounded-full text-xs font-medium ${statusColors[req.status] || statusColors[statusToColumn(req.status)] || "bg-[#f5f5f5] text-[#666]"}`}>
+                            {statusToColumn(req.status)}
                           </span>
                         </td>
                         <td className="px-5 py-3.5">
                           <span className="text-sm text-[rgb(119,119,125)]">{req.designer_name || "Unassigned"}</span>
+                        </td>
+                        <td className="px-5 py-3.5">
+                          <span className="inline-flex items-center gap-1 text-xs text-[rgb(119,119,125)]">
+                            <i className="ri-loop-left-line" />
+                            {req.revision_count || 0}
+                          </span>
                         </td>
                         <td className="px-5 py-3.5 text-xs text-[rgb(119,119,125)]">{formatTime(req.updated_at || req.created_at)}</td>
                         <td className="px-5 py-3.5">
@@ -238,30 +274,90 @@ export default function ClientRequests() {
           {viewMode === "kanban" && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {kanbanColumns.map((column) => {
-                const columnRequests = filteredRequests.filter((r) => r.status === column);
+                const columnRequests = filteredRequests.filter(
+                  (r) => statusToColumn(r.status) === column.key
+                );
                 return (
-                  <div key={column} className="bg-[#f9f9f9] rounded-xl p-3">
+                  <div key={column.key} className="bg-[#f9f9f9] rounded-xl p-3">
+                    {/* Column Header */}
                     <div className="flex items-center justify-between mb-3 px-1">
-                      <h3 className="text-sm font-semibold text-[#101010]">{column}</h3>
-                      <span className="text-xs bg-white rounded-full px-2 py-0.5 text-[rgb(119,119,125)] font-medium">
+                      <div className="flex items-center gap-2">
+                        <div
+                          className="w-6 h-6 rounded-md flex items-center justify-center"
+                          style={{ backgroundColor: `${column.color}15` }}
+                        >
+                          <i className={`${column.icon} text-xs`} style={{ color: column.color }} />
+                        </div>
+                        <h3 className="text-sm font-semibold text-[#101010]">{column.label}</h3>
+                      </div>
+                      <span
+                        className="text-xs rounded-full px-2 py-0.5 font-medium"
+                        style={{ backgroundColor: `${column.color}15`, color: column.color }}
+                      >
                         {columnRequests.length}
                       </span>
                     </div>
-                    <div className="space-y-2">
+
+                    {/* Column Cards */}
+                    <div className="space-y-2 min-h-[100px]">
+                      {columnRequests.length === 0 && (
+                        <div className="text-center py-8 text-xs text-[rgb(119,119,125)]">
+                          No requests
+                        </div>
+                      )}
                       {columnRequests.map((req) => (
                         <Link
                           key={req.id}
                           to={`/client/requests/${req.id}`}
-                          className="block bg-white rounded-lg p-3.5 border border-[#e5e5e5] hover:border-[#ff4f01]/30 hover:shadow-sm transition-all"
+                          className="block bg-white rounded-xl p-4 border border-[#e5e5e5] hover:border-[#ff4f01]/30 hover:shadow-md transition-all group"
                         >
-                          <p className="text-sm font-medium text-[#101010] mb-2">{req.title}</p>
-                          <div className="flex items-center gap-2 mb-2">
-                            <span className="text-xs bg-[#f5f5f5] px-2 py-0.5 rounded text-[rgb(119,119,125)]">{req.brand_name || "—"}</span>
-                            <span className={`text-xs font-medium ${priorityColors[req.priority] || ""}`}>{req.priority}</span>
+                          {/* Card Header */}
+                          <div className="flex items-start justify-between mb-2">
+                            <p className="text-sm font-medium text-[#101010] group-hover:text-[#ff4f01] transition-colors leading-tight flex-1 mr-2">
+                              {req.title}
+                            </p>
+                            <span className={`text-[10px] font-bold shrink-0 ${priorityColors[req.priority] || ""}`}>
+                              {req.priority}
+                            </span>
                           </div>
-                          <div className="flex items-center justify-between">
-                            <span className="text-xs text-[rgb(119,119,125)]">{req.designer_name || "Unassigned"}</span>
-                            <span className="text-xs text-[rgb(119,119,125)]">{req.due_date || "—"}</span>
+
+                          {/* Card Meta */}
+                          <div className="flex items-center gap-1.5 flex-wrap mb-3">
+                            {req.brand_name && (
+                              <span className="text-[10px] bg-[#f5f5f5] px-2 py-0.5 rounded-full text-[rgb(119,119,125)] flex items-center gap-1">
+                                <i className="ri-palette-line" />
+                                {req.brand_name}
+                              </span>
+                            )}
+                            <span className="text-[10px] bg-[#f5f5f5] px-2 py-0.5 rounded-full text-[rgb(119,119,125)]">
+                              {req.category}
+                            </span>
+                          </div>
+
+                          {/* Card Footer */}
+                          <div className="flex items-center justify-between pt-2 border-t border-[#f0f0f0]">
+                            <div className="flex items-center gap-2">
+                              {/* Designer Avatar */}
+                              <div className="w-5 h-5 rounded-full bg-[#ff4f01]/20 flex items-center justify-center">
+                                <span className="text-[8px] font-bold text-[#ff4f01]">
+                                  {(req.designer_name || "U").charAt(0).toUpperCase()}
+                                </span>
+                              </div>
+                              <span className="text-[10px] text-[rgb(119,119,125)]">
+                                {req.designer_name || "Unassigned"}
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              {(req.revision_count || 0) > 0 && (
+                                <span className="text-[10px] text-[rgb(119,119,125)] flex items-center gap-0.5">
+                                  <i className="ri-loop-left-line" />
+                                  {req.revision_count}
+                                </span>
+                              )}
+                              <span className="text-[10px] text-[rgb(119,119,125)]">
+                                {formatTime(req.updated_at || req.created_at)}
+                              </span>
+                            </div>
                           </div>
                         </Link>
                       ))}
