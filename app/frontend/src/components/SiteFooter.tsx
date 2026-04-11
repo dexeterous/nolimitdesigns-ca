@@ -57,9 +57,9 @@ export function SiteFooter() {
           <div>
             <h4 className="text-lg font-semibold mb-5 text-[#101010]">Services</h4>
             <ul className="flex flex-col gap-3">
-              <li><a href="#services" className="text-[rgb(119,119,125)] hover:text-[#ff4f01] transition-colors">Graphic Design</a></li>
-              <li><a href="#services" className="text-[rgb(119,119,125)] hover:text-[#ff4f01] transition-colors">Video Design</a></li>
-              <li><a href="#services" className="text-[rgb(119,119,125)] hover:text-[#ff4f01] transition-colors">Branding</a></li>
+              <li><a href="/graphic-design-services" className="text-[rgb(119,119,125)] hover:text-[#ff4f01] transition-colors">Graphic Design</a></li>
+              <li><a href="/video-design-services" className="text-[rgb(119,119,125)] hover:text-[#ff4f01] transition-colors">Video Design</a></li>
+              <li><a href="/#services" className="text-[rgb(119,119,125)] hover:text-[#ff4f01] transition-colors">Branding</a></li>
             </ul>
           </div>
 
@@ -96,7 +96,7 @@ export function SiteFooter() {
             <li><a href="#portfolio" className="text-[rgb(119,119,125)] hover:text-[#ff4f01] transition-colors">Portfolio</a></li>
             <li><a href="#how-it-works" className="text-[rgb(119,119,125)] hover:text-[#ff4f01] transition-colors">How It Works</a></li>
             <li><a href="#about" className="text-[rgb(119,119,125)] hover:text-[#ff4f01] transition-colors">About</a></li>
-            <li><a href="#pricing" className="text-[rgb(119,119,125)] hover:text-[#ff4f01] transition-colors">Pricing</a></li>
+            <li><a href="/pricing" className="text-[rgb(119,119,125)] hover:text-[#ff4f01] transition-colors">Pricing</a></li>
             <li><a href="#contact" className="text-[rgb(119,119,125)] hover:text-[#ff4f01] transition-colors">Contact</a></li>
           </ul>
         </div>

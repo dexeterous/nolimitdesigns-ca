@@ -129,7 +129,7 @@ export function SiteHeader() {
               </li>
 
               {[
-                { label: "Pricing", href: "/#pricing" },
+                { label: "Pricing", href: "/pricing" },
                 { label: "How It Works", href: "/#how-it-works" },
                 { label: "Portfolio", href: "/#portfolio" },
                 { label: "About", href: "/#about" },

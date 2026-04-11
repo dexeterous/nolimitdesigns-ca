@@ -1,0 +1,406 @@
+Build the Pricing page for Nolimit Designs (nolimitdesigns.ca).
+
+This page is part of an existing marketing website already designed in v0.dev.
+The homepage, layout system, typography, color palette, and reusable components already exist.
+
+Critical requirement
+
+Reuse existing components from the homepage wherever possible instead of creating new ones.
+Maintain the same:
+
+• design tokens
+• typography scale
+• card components
+• grid system
+• spacing
+• buttons
+• icons
+• section layouts
+• responsive breakpoints
+
+Only create new components if absolutely necessary.
+
+Page Route
+
+/pricing
+
+SEO Metadata
+
+Title
+Unlimited Graphic & Video Design Pricing | Nolimit Designs
+
+Description
+Flat-rate pricing for unlimited graphic design and video design. Dedicated creative team, fast turnaround, unlimited revisions, and no contracts.
+
+Keywords
+unlimited design subscription, graphic design service, video editing subscription, design team, design outsourcing
+
+Navigation
+
+Reuse the existing Navbar component from the homepage.
+
+Menu structure:
+
+Home
+Services
+ Nolimit Graphics
+ Nolimit Video
+Nolimit360
+Pricing
+Our Work
+Industries
+FAQ
+More
+ About
+ Contact
+
+Right side buttons:
+
+Start Free Trial
+Sign In
+
+Page Sections
+
+Structure the page using reusable sections.
+
+PricingHero
+PromoBanner
+PricingCards
+EnterpriseCTA
+CanvaCTA
+DesignTypesTabs
+ScalingSection
+PerksGrid
+FAQAccordion
+EmailCTA
+PartnersSection
+Footer
+
+All of these sections should reuse existing homepage components where possible.
+
+Hero Section
+
+Reuse the Hero section style from the homepage.
+
+Headline
+Unlimited Design. Simple Pricing.
+
+Subheadline
+Budgeting for design shouldn't be complicated. Nolimit Designs offers transparent flat-rate pricing so you can submit unlimited graphic and video design requests handled by your dedicated creative team.
+
+Primary Button
+View Pricing
+
+Secondary Button
+Book a Demo
+
+Promo Banner
+
+Reusable banner component.
+
+Content:
+
+Limited Time Offer
+Save 50% on your first 4 months
+
+Place above the pricing cards.
+
+Pricing Cards
+
+Reuse the existing card component from the homepage.
+
+Display 3 pricing plans in a responsive grid.
+
+Desktop: 3 columns
+Tablet: 2 columns
+Mobile: stacked
+
+Highlight the middle plan as Best Value.
+
+Plan 1
+
+Plan Name
+Nolimit Graphics
+
+Price
+CAD 1,040 / month
+
+Original Price
+CAD 2080 / month
+
+Promo Text
+Save CAD 1040 per month for the first 4 months
+
+Description
+Unlimited graphic design for marketing materials, branding assets, and digital campaigns.
+
+Features
+
+Unlimited Requests
+Unlimited Revisions
+Unlimited Brands
+No Contract Required
+24 Hour Turnaround
+3 Active Requests
+Unlimited Team Members
+Dedicated Design Team
+Dedicated Project Manager
+Free Premium Stock Images
+Source Files Included
+Print & Digital Designs
+Custom Illustrations
+Basic GIF Creation
+Landing Page Designs
+Website, App & UI Designs
+Canva Design Support
+Nolimit360 Design Management
+
+CTA
+Start Free Trial
+
+Plan 2 (Featured)
+
+Plan Name
+Nolimit Graphics + Video
+
+Badge
+Best Value
+
+Price
+CAD 1,263.50 / month
+
+Original Price
+CAD 2527 / month
+
+Promo
+Save CAD 1263 per month for the first 4 months
+
+Description
+Unlimited graphic design plus unlimited video design for one flat monthly price.
+
+Features
+
+Unlimited Requests
+Unlimited Revisions
+Unlimited Brands
+No Contract
+24 Hour Turnaround
+5 Active Requests
+Unlimited Team Members
+Dedicated Graphic + Video Design Team
+Dedicated Project Manager
+Free Stock Images, Videos & Audio
+Source Files Included
+Print & Digital Designs
+Custom Illustrations & GIFs
+Website, App & UI Designs
+Canva Design Support
+Nolimit360 Design Management
+
+CTA
+Start Free Trial
+
+Plan 3
+
+Plan Name
+Nolimit Video
+
+Price
+CAD 1,040 / month
+
+Original Price
+CAD 2080 / month
+
+Promo
+Save CAD 1040 per month for the first 4 months
+
+Description
+Unlimited video editing, animation, and motion graphics for your marketing content.
+
+Features
+
+Unlimited Requests
+Unlimited Revisions
+Unlimited Brands
+No Contract
+24 Hour Turnaround
+2 Active Requests
+Unlimited Team Members
+Dedicated Video Design Team
+Dedicated Project Manager
+Free Stock Images, Videos & Audio
+Source Files Included
+Video Editing
+Motion Graphics
+Animation
+GIF Creation
+Template Customization
+UI/UX Animations
+Nolimit360 Design Management
+
+CTA
+Start Free Trial
+
+Enterprise Section
+
+Reuse CTA section style from homepage.
+
+Headline
+Need an Enterprise Design Solution?
+
+Text
+If your company needs a customized design workflow or high-volume creative production, Nolimit can build a tailored solution for your organization.
+
+Button
+Book a Call
+
+Canva Designs Section
+
+Headline
+Need Custom Canva Designs?
+
+Text
+We offer unlimited design subscriptions specifically for Canva graphics and Canva video templates so your team can easily edit and reuse designs.
+
+CTA
+View Canva Pricing
+
+Design Types Tabs
+
+Create a tabbed component using existing tab or toggle components from the homepage.
+
+Tabs:
+
+Graphics
+Videos
+
+Graphics Tab
+
+Title
+Create Unlimited Graphic or Video Design
+
+Subtitle
+Our designers can help with nearly every type of graphic design your business needs.
+
+Graphics examples
+
+Amazon Graphics
+Advanced Infographics
+App Designs
+Background Removal
+Billboards
+Blog Images
+Book Covers
+Book Layouts
+Brochures
+Business Cards
+Corporate Reports
+Custom Illustrations
+Display Ads
+Ecommerce Graphics
+Email Marketing Graphics
+Event Invitations
+Flyers & Posters
+Icons
+Landing Pages
+Logos
+Packaging Designs
+Podcast Covers
+Presentation Decks
+Product Mockups
+Promotional Materials
+Social Media Posts & Ads
+Stationery Sets
+Tradeshow Banners
+UI Designs
+Website Designs
+Web Ads
+
+Videos Tab
+
+Title
+Unlimited Video Design
+
+Subtitle
+Our video team helps you create engaging visual content for marketing, social media, and digital campaigns.
+
+Video examples
+
+Adding Thumbnails
+Animating Static Designs
+Basic & Advanced GIFs
+Cinemagraphs
+Combining & Editing Raw Footage
+Company Culture Videos
+Demo Videos
+Educational Videos
+Explainer Videos
+Logo Animations
+Motion Graphics
+Product Videos
+Promo Videos
+Short-Form Social Videos
+Social Media Ads
+Testimonial Videos
+UI/UX Animations
+Video Template Customization
+
+Scaling Section
+
+Headline
+Have a High Volume of Design Work?
+
+Text
+Agencies and growing companies often manage multiple brands and campaigns. Nolimit makes scaling easy by allowing you to add additional subscriptions whenever you need more creative output.
+
+CTA
+Contact Us
+
+Nolimit Perks
+
+Reuse homepage icon grid component.
+
+Items
+
+Unlimited Design Requests
+Dedicated Creative Team
+Fast 24 Hour Turnaround
+Unlimited Team Collaboration
+Full Ownership of All Designs
+100+ Design Categories
+Premium Stock Assets Included
+24/7 Support
+Top-Tier Designers
+
+FAQ
+
+Reuse FAQ accordion component from homepage.
+
+Questions
+
+Are there hidden fees?
+Which payment methods are accepted?
+Am I locked into a contract?
+Can I cancel anytime?
+How many requests can I submit?
+How long does each design take?
+Can I pause my subscription?
+Can agencies use Nolimit for client work?
+
+Final CTA
+
+Reuse homepage email capture component.
+
+Headline
+Design Without Limits
+
+Text
+Join startups, agencies, and growing companies using Nolimit Designs to scale their creative production.
+
+Input
+Email
+
+Button
+Start Free Trial.   Footer
+
+Reuse the exact footer component from the homepage.
