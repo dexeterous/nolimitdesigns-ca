@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { client } from "@/lib/api";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface AdminStats {
   total_active: number;
@@ -50,14 +51,19 @@ const priorityChartColors: Record<string, string> = {
 };
 
 export default function AdminDashboard() {
+  const { isAdmin, loading: authLoading } = useAuth();
   const [stats, setStats] = useState<AdminStats | null>(null);
   const [recentRequests, setRecentRequests] = useState<DesignRequest[]>([]);
   const [allRequests, setAllRequests] = useState<DesignRequest[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    loadData();
-  }, []);
+    if (isAdmin) loadData();
+  }, [isAdmin]);
+
+  if (!authLoading && !isAdmin) {
+    return <Navigate to="/client/dashboard" replace />;
+  }
 
   const loadData = async () => {
     try {

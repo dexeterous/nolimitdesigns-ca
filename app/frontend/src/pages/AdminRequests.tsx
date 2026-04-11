@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import { Navigate } from "react-router-dom";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { client } from "@/lib/api";
 import { toast } from "sonner";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface AdminRequest {
   id: number;
@@ -36,6 +38,7 @@ const priorityColors: Record<string, string> = {
 };
 
 export default function AdminRequests() {
+  const { isAdmin, loading: authLoading } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All Statuses");
   const [designerFilter, setDesignerFilter] = useState("All Designers");
@@ -43,8 +46,12 @@ export default function AdminRequests() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    loadRequests();
-  }, []);
+    if (isAdmin) loadRequests();
+  }, [isAdmin]);
+
+  if (!authLoading && !isAdmin) {
+    return <Navigate to="/client/dashboard" replace />;
+  }
 
   const loadRequests = async () => {
     try {

@@ -7,6 +7,8 @@ import React, {
 } from 'react';
 import { client } from '../lib/api';
 
+const ADMIN_EMAIL = 'hello@nolimitdesigns.ca';
+
 interface User {
   id: string;
   email?: string;
@@ -19,6 +21,7 @@ interface AuthContextType {
   login: () => Promise<void>;
   logout: () => Promise<void>;
   isAuthenticated: boolean;
+  isAdmin: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -71,12 +74,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     checkAuth();
   }, []);
 
+  const isAdmin = !!user && user.email?.toLowerCase() === ADMIN_EMAIL.toLowerCase();
+
   const value: AuthContextType = {
     user,
     loading,
     login,
     logout,
     isAuthenticated: !!user,
+    isAdmin,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

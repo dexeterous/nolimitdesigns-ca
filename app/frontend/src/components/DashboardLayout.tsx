@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { client } from "@/lib/api";
@@ -50,8 +50,16 @@ export function DashboardLayout({ children, type }: DashboardLayoutProps) {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [showNotifications, setShowNotifications] = useState(false);
   const notifRef = useRef<HTMLDivElement>(null);
-  const navItems = type === "client" ? clientNav : adminNav;
-  const { user, loading, isAuthenticated, login, logout } = useAuth();
+  const { user, loading, isAuthenticated, isAdmin, login, logout } = useAuth();
+
+  const navItems = useMemo(() => {
+    if (type === "admin") return adminNav;
+    // For client type, show admin nav items only if user is admin
+    if (isAdmin) {
+      return [...clientNav, { label: "Admin Panel", href: "/admin/dashboard", icon: "ri-shield-star-line" }];
+    }
+    return clientNav;
+  }, [type, isAdmin]);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -236,16 +244,7 @@ export function DashboardLayout({ children, type }: DashboardLayoutProps) {
             })}
           </div>
 
-          {/* Switch view link */}
-          <div className="mt-6 pt-4 border-t border-white/10">
-            <Link
-              to={type === "client" ? "/admin/dashboard" : "/client/dashboard"}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white/40 hover:text-white/70 transition-colors"
-            >
-              <i className={`${type === "client" ? "ri-shield-line" : "ri-user-line"} text-lg`} />
-              {type === "client" ? "Admin View" : "Client View"}
-            </Link>
-          </div>
+
         </nav>
 
         {/* Bottom Nav */}
