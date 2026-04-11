@@ -28,7 +28,7 @@
         },
         "status": {
             "type": "string",
-            "description": "Current status"
+            "description": "Request status"
         },
         "description": {
             "type": "string",
@@ -36,7 +36,7 @@
         },
         "designer_name": {
             "type": "string",
-            "description": "Assigned designer"
+            "description": "Assigned designer name"
         },
         "include_source": {
             "type": "boolean",
@@ -52,11 +52,11 @@
         },
         "dimensions": {
             "type": "string",
-            "description": "Size/dimension specifications"
+            "description": "Design dimensions"
         },
         "reference_links": {
             "type": "string",
-            "description": "Reference URLs or links"
+            "description": "Reference URLs"
         }
     },
     "required": [
