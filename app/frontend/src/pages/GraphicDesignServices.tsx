@@ -110,7 +110,7 @@ export default function GraphicDesignServices() {
       <SiteHeader />
 
       {/* HERO SECTION */}
-      <section className="lg:pt-[180px] pt-[120px] pb-16 relative overflow-hidden bg-gradient-to-br from-[#0a3d0a] via-[#0d5e0d] to-[#1a7a1a]">
+      <section className="lg:pt-[180px] pt-[120px] pb-16 relative overflow-hidden bg-gradient-to-r from-[#ff4f01] to-[#ff8c42]">
         <div className="container-custom">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="relative z-10">
@@ -253,7 +253,7 @@ export default function GraphicDesignServices() {
       </section>
 
       {/* YOUR DESIGN TEAM */}
-      <section className="lg:py-24 py-16 bg-gradient-to-br from-[#0a3d0a] via-[#0d5e0d] to-[#1a7a1a] relative overflow-hidden">
+      <section className="lg:py-24 py-16 bg-gradient-to-r from-[#ff4f01] to-[#ff8c42] relative overflow-hidden">
         <div className="container-custom relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
