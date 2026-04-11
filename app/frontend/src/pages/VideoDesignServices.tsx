@@ -367,9 +367,11 @@ export default function VideoDesignServices() {
                   NoLimit Video
                 </span>
                 <p className="text-[42px] font-medium font-bricolage text-[#ff4f01] mt-4">
-                  $799
-                  <span className="text-base text-[rgb(119,119,125)] font-normal"> per month</span>
+                  CAD 1,040
+                  <span className="text-base text-[rgb(119,119,125)] font-normal"> / month</span>
                 </p>
+                <p className="text-sm text-[rgb(119,119,125)] line-through mt-1">CAD 2,080 / month</p>
+                <p className="text-xs text-[#ff4f01] font-medium mt-1">Save CAD 1,040 per month for the first 4 months</p>
               </div>
               <div className="p-6">
                 <ul className="flex flex-col gap-3 mb-6">
