@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { client } from "@/lib/api";
@@ -38,13 +38,12 @@ const priorityColors: Record<string, string> = {
 };
 
 const kanbanColumns = [
-  { key: "Requests", label: "Requests", icon: "ri-file-list-3-line", color: "#9ca3af" },
-  { key: "In Progress", label: "In Progress", icon: "ri-loader-4-line", color: "#7c3aed" },
-  { key: "In Review", label: "In Review", icon: "ri-eye-line", color: "#0ea5e9" },
-  { key: "Completed", label: "Completed", icon: "ri-check-double-line", color: "#22c55e" },
+  { key: "Requests", label: "Requests", icon: "ri-file-list-3-line", color: "#9ca3af", dbStatus: "Queue" },
+  { key: "In Progress", label: "In Progress", icon: "ri-loader-4-line", color: "#7c3aed", dbStatus: "In Progress" },
+  { key: "In Review", label: "In Review", icon: "ri-eye-line", color: "#0ea5e9", dbStatus: "Client Review" },
+  { key: "Completed", label: "Completed", icon: "ri-check-double-line", color: "#22c55e", dbStatus: "Completed" },
 ];
 
-// Map old statuses to Kimp360-style columns
 const statusToColumn = (status: string): string => {
   switch (status) {
     case "Queue":
@@ -70,6 +69,12 @@ export default function ClientRequests() {
   const [statusFilter, setStatusFilter] = useState("All");
   const [requests, setRequests] = useState<DesignRequest[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // Drag-and-drop state
+  const [draggedCard, setDraggedCard] = useState<DesignRequest | null>(null);
+  const [dragOverColumn, setDragOverColumn] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const dragCounter = useRef<Record<string, number>>({});
 
   useEffect(() => {
     loadRequests();
@@ -101,6 +106,132 @@ export default function ClientRequests() {
       toast.error("Failed to delete request");
     }
   };
+
+  // --- Drag-and-Drop Handlers ---
+  const handleDragStart = useCallback((e: React.DragEvent, req: DesignRequest) => {
+    setDraggedCard(req);
+    setIsDragging(true);
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text/plain", String(req.id));
+    // Add a slight delay for the drag image
+    const target = e.currentTarget as HTMLElement;
+    target.style.opacity = "0.5";
+  }, []);
+
+  const handleDragEnd = useCallback((e: React.DragEvent) => {
+    const target = e.currentTarget as HTMLElement;
+    target.style.opacity = "1";
+    setDraggedCard(null);
+    setDragOverColumn(null);
+    setIsDragging(false);
+    dragCounter.current = {};
+  }, []);
+
+  const handleColumnDragEnter = useCallback((e: React.DragEvent, columnKey: string) => {
+    e.preventDefault();
+    if (!dragCounter.current[columnKey]) dragCounter.current[columnKey] = 0;
+    dragCounter.current[columnKey]++;
+    setDragOverColumn(columnKey);
+  }, []);
+
+  const handleColumnDragLeave = useCallback((e: React.DragEvent, columnKey: string) => {
+    e.preventDefault();
+    if (!dragCounter.current[columnKey]) dragCounter.current[columnKey] = 0;
+    dragCounter.current[columnKey]--;
+    if (dragCounter.current[columnKey] <= 0) {
+      dragCounter.current[columnKey] = 0;
+      setDragOverColumn((prev) => (prev === columnKey ? null : prev));
+    }
+  }, []);
+
+  const handleColumnDragOver = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+  }, []);
+
+  const handleDrop = useCallback(
+    async (e: React.DragEvent, columnKey: string) => {
+      e.preventDefault();
+      setDragOverColumn(null);
+      setIsDragging(false);
+      dragCounter.current = {};
+
+      if (!draggedCard) return;
+
+      const currentColumn = statusToColumn(draggedCard.status);
+      if (currentColumn === columnKey) {
+        setDraggedCard(null);
+        return;
+      }
+
+      // Find the target DB status for this column
+      const targetColumn = kanbanColumns.find((c) => c.key === columnKey);
+      if (!targetColumn) return;
+
+      const newDbStatus = targetColumn.dbStatus;
+      const oldStatus = draggedCard.status;
+
+      // Optimistic update
+      setRequests((prev) =>
+        prev.map((r) =>
+          r.id === draggedCard.id ? { ...r, status: newDbStatus } : r
+        )
+      );
+
+      try {
+        // Update the request status
+        await client.entities.design_requests.update({
+          id: String(draggedCard.id),
+          data: { status: newDbStatus },
+        });
+
+        // Create status history entry
+        try {
+          await client.entities.status_history.create({
+            data: {
+              request_id: draggedCard.id,
+              from_status: oldStatus,
+              to_status: newDbStatus,
+              changed_by: "Client",
+              note: `Moved from ${currentColumn} to ${columnKey} via Kanban board`,
+            },
+          });
+        } catch {
+          // Non-critical, continue
+        }
+
+        // Trigger email notification via backend
+        try {
+          await client.apiCall.invoke({
+            url: "/api/v1/notifications/notify-status-change",
+            method: "POST",
+            data: {
+              request_id: draggedCard.id,
+              old_status: oldStatus,
+              new_status: newDbStatus,
+              changed_by: "Client",
+            },
+          });
+        } catch {
+          // Non-critical, continue
+        }
+
+        toast.success(`Moved to ${columnKey}`);
+      } catch (err) {
+        console.error("Failed to update status:", err);
+        // Revert optimistic update
+        setRequests((prev) =>
+          prev.map((r) =>
+            r.id === draggedCard.id ? { ...r, status: oldStatus } : r
+          )
+        );
+        toast.error("Failed to update status");
+      }
+
+      setDraggedCard(null);
+    },
+    [draggedCard]
+  );
 
   const filteredRequests = requests.filter((req) => {
     const matchesSearch =
@@ -270,15 +401,31 @@ export default function ClientRequests() {
             </div>
           )}
 
-          {/* Kanban View */}
+          {/* Kanban View with Drag-and-Drop */}
           {viewMode === "kanban" && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {kanbanColumns.map((column) => {
                 const columnRequests = filteredRequests.filter(
                   (r) => statusToColumn(r.status) === column.key
                 );
+                const isOver = dragOverColumn === column.key;
+                const isValidDrop = draggedCard && statusToColumn(draggedCard.status) !== column.key;
+
                 return (
-                  <div key={column.key} className="bg-[#f9f9f9] rounded-xl p-3">
+                  <div
+                    key={column.key}
+                    className={`rounded-xl p-3 transition-all duration-200 ${
+                      isOver && isValidDrop
+                        ? "bg-[#ff4f01]/5 ring-2 ring-[#ff4f01]/30 ring-dashed"
+                        : isDragging
+                        ? "bg-[#f5f5f5]"
+                        : "bg-[#f9f9f9]"
+                    }`}
+                    onDragEnter={(e) => handleColumnDragEnter(e, column.key)}
+                    onDragLeave={(e) => handleColumnDragLeave(e, column.key)}
+                    onDragOver={handleColumnDragOver}
+                    onDrop={(e) => handleDrop(e, column.key)}
+                  >
                     {/* Column Header */}
                     <div className="flex items-center justify-between mb-3 px-1">
                       <div className="flex items-center gap-2">
@@ -298,68 +445,93 @@ export default function ClientRequests() {
                       </span>
                     </div>
 
+                    {/* Drop zone indicator */}
+                    {isOver && isValidDrop && (
+                      <div className="mb-2 p-3 rounded-xl border-2 border-dashed border-[#ff4f01]/40 bg-[#ff4f01]/5 text-center">
+                        <i className="ri-drag-drop-line text-[#ff4f01] text-lg" />
+                        <p className="text-xs text-[#ff4f01] font-medium mt-1">Drop here</p>
+                      </div>
+                    )}
+
                     {/* Column Cards */}
                     <div className="space-y-2 min-h-[100px]">
-                      {columnRequests.length === 0 && (
+                      {columnRequests.length === 0 && !isOver && (
                         <div className="text-center py-8 text-xs text-[rgb(119,119,125)]">
                           No requests
                         </div>
                       )}
                       {columnRequests.map((req) => (
-                        <Link
+                        <div
                           key={req.id}
-                          to={`/client/requests/${req.id}`}
-                          className="block bg-white rounded-xl p-4 border border-[#e5e5e5] hover:border-[#ff4f01]/30 hover:shadow-md transition-all group"
+                          draggable
+                          onDragStart={(e) => handleDragStart(e, req)}
+                          onDragEnd={handleDragEnd}
+                          className={`bg-white rounded-xl p-4 border border-[#e5e5e5] hover:border-[#ff4f01]/30 hover:shadow-md transition-all group cursor-grab active:cursor-grabbing ${
+                            draggedCard?.id === req.id ? "opacity-50 scale-95" : ""
+                          }`}
                         >
-                          {/* Card Header */}
-                          <div className="flex items-start justify-between mb-2">
-                            <p className="text-sm font-medium text-[#101010] group-hover:text-[#ff4f01] transition-colors leading-tight flex-1 mr-2">
-                              {req.title}
-                            </p>
-                            <span className={`text-[10px] font-bold shrink-0 ${priorityColors[req.priority] || ""}`}>
-                              {req.priority}
-                            </span>
-                          </div>
-
-                          {/* Card Meta */}
-                          <div className="flex items-center gap-1.5 flex-wrap mb-3">
-                            {req.brand_name && (
-                              <span className="text-[10px] bg-[#f5f5f5] px-2 py-0.5 rounded-full text-[rgb(119,119,125)] flex items-center gap-1">
-                                <i className="ri-palette-line" />
-                                {req.brand_name}
-                              </span>
-                            )}
-                            <span className="text-[10px] bg-[#f5f5f5] px-2 py-0.5 rounded-full text-[rgb(119,119,125)]">
-                              {req.category}
-                            </span>
-                          </div>
-
-                          {/* Card Footer */}
-                          <div className="flex items-center justify-between pt-2 border-t border-[#f0f0f0]">
-                            <div className="flex items-center gap-2">
-                              {/* Designer Avatar */}
-                              <div className="w-5 h-5 rounded-full bg-[#ff4f01]/20 flex items-center justify-center">
-                                <span className="text-[8px] font-bold text-[#ff4f01]">
-                                  {(req.designer_name || "U").charAt(0).toUpperCase()}
-                                </span>
-                              </div>
-                              <span className="text-[10px] text-[rgb(119,119,125)]">
-                                {req.designer_name || "Unassigned"}
+                          <Link
+                            to={`/client/requests/${req.id}`}
+                            className="block"
+                            onClick={(e) => {
+                              // Prevent navigation during drag
+                              if (isDragging) e.preventDefault();
+                            }}
+                          >
+                            {/* Card Header */}
+                            <div className="flex items-start justify-between mb-2">
+                              <p className="text-sm font-medium text-[#101010] group-hover:text-[#ff4f01] transition-colors leading-tight flex-1 mr-2">
+                                {req.title}
+                              </p>
+                              <span className={`text-[10px] font-bold shrink-0 ${priorityColors[req.priority] || ""}`}>
+                                {req.priority}
                               </span>
                             </div>
-                            <div className="flex items-center gap-2">
-                              {(req.revision_count || 0) > 0 && (
-                                <span className="text-[10px] text-[rgb(119,119,125)] flex items-center gap-0.5">
-                                  <i className="ri-loop-left-line" />
-                                  {req.revision_count}
+
+                            {/* Card Meta */}
+                            <div className="flex items-center gap-1.5 flex-wrap mb-3">
+                              {req.brand_name && (
+                                <span className="text-[10px] bg-[#f5f5f5] px-2 py-0.5 rounded-full text-[rgb(119,119,125)] flex items-center gap-1">
+                                  <i className="ri-palette-line" />
+                                  {req.brand_name}
                                 </span>
                               )}
-                              <span className="text-[10px] text-[rgb(119,119,125)]">
-                                {formatTime(req.updated_at || req.created_at)}
+                              <span className="text-[10px] bg-[#f5f5f5] px-2 py-0.5 rounded-full text-[rgb(119,119,125)]">
+                                {req.category}
                               </span>
                             </div>
+
+                            {/* Card Footer */}
+                            <div className="flex items-center justify-between pt-2 border-t border-[#f0f0f0]">
+                              <div className="flex items-center gap-2">
+                                <div className="w-5 h-5 rounded-full bg-[#ff4f01]/20 flex items-center justify-center">
+                                  <span className="text-[8px] font-bold text-[#ff4f01]">
+                                    {(req.designer_name || "U").charAt(0).toUpperCase()}
+                                  </span>
+                                </div>
+                                <span className="text-[10px] text-[rgb(119,119,125)]">
+                                  {req.designer_name || "Unassigned"}
+                                </span>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                {(req.revision_count || 0) > 0 && (
+                                  <span className="text-[10px] text-[rgb(119,119,125)] flex items-center gap-0.5">
+                                    <i className="ri-loop-left-line" />
+                                    {req.revision_count}
+                                  </span>
+                                )}
+                                <span className="text-[10px] text-[rgb(119,119,125)]">
+                                  {formatTime(req.updated_at || req.created_at)}
+                                </span>
+                              </div>
+                            </div>
+                          </Link>
+
+                          {/* Drag handle indicator */}
+                          <div className="flex justify-center mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <i className="ri-drag-move-2-line text-[rgb(119,119,125)] text-xs" />
                           </div>
-                        </Link>
+                        </div>
                       ))}
                     </div>
                   </div>

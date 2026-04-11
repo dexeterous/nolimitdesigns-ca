@@ -19,6 +19,7 @@ import ClientBrands from './pages/ClientBrands';
 import ClientRequestDetail from './pages/ClientRequestDetail';
 import ClientFiles from './pages/ClientFiles';
 import ClientTeam from './pages/ClientTeam';
+import ClientNotificationSettings from './pages/ClientNotificationSettings';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminRequests from './pages/AdminRequests';
 
@@ -47,6 +48,7 @@ const App = () => (
             <Route path="/client/brands" element={<ClientBrands />} />
             <Route path="/client/files" element={<ClientFiles />} />
             <Route path="/client/team" element={<ClientTeam />} />
+            <Route path="/client/notifications" element={<ClientNotificationSettings />} />
             <Route path="/client/*" element={<ClientDashboard />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="/admin/requests" element={<AdminRequests />} />

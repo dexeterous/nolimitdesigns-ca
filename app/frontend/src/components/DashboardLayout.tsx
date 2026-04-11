@@ -31,6 +31,7 @@ const clientNav: NavItem[] = [
   { label: "Brands", href: "/client/brands", icon: "ri-palette-line" },
   { label: "Files", href: "/client/files", icon: "ri-folder-3-line" },
   { label: "Team", href: "/client/team", icon: "ri-team-line" },
+  { label: "Notifications", href: "/client/notifications", icon: "ri-notification-settings-line" },
 ];
 
 const adminNav: NavItem[] = [

@@ -70,6 +70,8 @@ export default function AdminRequests() {
   };
 
   const handleStatusChange = async (id: number, newStatus: string) => {
+    const oldReq = requests.find((r) => r.id === id);
+    const oldStatus = oldReq?.status || "Queue";
     try {
       await client.apiCall.invoke({
         url: `/api/v1/admin/requests/${id}`,
@@ -80,6 +82,22 @@ export default function AdminRequests() {
         prev.map((r) => (r.id === id ? { ...r, status: newStatus } : r))
       );
       toast.success("Status updated");
+
+      // Trigger email notification
+      try {
+        await client.apiCall.invoke({
+          url: "/api/v1/notifications/notify-status-change",
+          method: "POST",
+          data: {
+            request_id: id,
+            old_status: oldStatus,
+            new_status: newStatus,
+            changed_by: "Admin",
+          },
+        });
+      } catch {
+        // Non-critical
+      }
     } catch (err) {
       console.error("Failed to update status:", err);
       toast.error("Failed to update status");
@@ -97,6 +115,22 @@ export default function AdminRequests() {
         prev.map((r) => (r.id === id ? { ...r, designer_name: newDesigner } : r))
       );
       toast.success("Designer assigned");
+
+      // Trigger email notification for designer assignment
+      if (newDesigner !== "Unassigned") {
+        try {
+          await client.apiCall.invoke({
+            url: "/api/v1/notifications/notify-designer-assigned",
+            method: "POST",
+            data: {
+              request_id: id,
+              designer_name: newDesigner,
+            },
+          });
+        } catch {
+          // Non-critical
+        }
+      }
     } catch (err) {
       console.error("Failed to assign designer:", err);
       toast.error("Failed to assign designer");

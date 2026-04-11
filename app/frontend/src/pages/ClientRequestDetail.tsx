@@ -147,6 +147,22 @@ export default function ClientRequestDetail() {
       });
       setNewComment("");
       toast.success("Comment added");
+
+      // Trigger email notification for comment
+      try {
+        await client.apiCall.invoke({
+          url: "/api/v1/notifications/notify-comment",
+          method: "POST",
+          data: {
+            request_id: Number(id),
+            commenter_name: "Client",
+            comment_preview: newComment,
+          },
+        });
+      } catch {
+        // Non-critical
+      }
+
       const commentsRes = await client.entities.request_comments.query({
         query: { request_id: Number(id) },
         sort: "-created_at",
