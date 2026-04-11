@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 
@@ -145,10 +146,10 @@ const testimonials = [
   { text: "Our team can focus on strategy while NoLimit Designs handles all creative work.", author: "Emily Park", role: "Brand Manager" },
 ];
 
-const blogPosts = [
-  { title: "How Subscription Design Services Work", excerpt: "Learn how unlimited design subscriptions can transform your creative workflow.", img: BLOG_IMG },
-  { title: "Design Trends Businesses Should Follow", excerpt: "Stay ahead of the curve with the latest design trends for marketing.", img: SERVICES_COLLAGE },
-  { title: "Scaling Marketing with Unlimited Design", excerpt: "Discover how businesses scale their creative production without growing their team.", img: BLOG_IMG },
+const blogPostsData = [
+  { slug: "how-subscription-design-services-work", title: "How Subscription Design Services Work", excerpt: "Learn how unlimited design subscriptions can transform your creative workflow.", img: BLOG_IMG },
+  { slug: "design-trends-businesses-should-follow", title: "Design Trends Businesses Should Follow", excerpt: "Stay ahead of the curve with the latest design trends for marketing.", img: SERVICES_COLLAGE },
+  { slug: "scaling-marketing-with-unlimited-design", title: "Scaling Marketing with Unlimited Design", excerpt: "Discover how businesses scale their creative production without growing their team.", img: BLOG_IMG },
 ];
 
 const faqs = [
@@ -553,9 +554,10 @@ export default function Index() {
           </div>
 
           <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-6">
-            {blogPosts.map((post, i) => (
-              <div
+            {blogPostsData.map((post, i) => (
+              <Link
                 key={i}
+                to={`/blog-posts/${post.slug}`}
                 className="rounded-2xl overflow-hidden border border-[#bebebe] hover:border-[#ff4f01] transition-all duration-500 bg-white/50 group"
               >
                 <div className="overflow-hidden">
@@ -570,18 +572,18 @@ export default function Index() {
                     {post.title}
                   </h4>
                   <p className="text-[rgb(119,119,125)] text-base">{post.excerpt}</p>
-                  <a href="#" className="inline-flex items-center gap-1 text-[#ff4f01] font-medium mt-4 hover:gap-2 transition-all">
+                  <span className="inline-flex items-center gap-1 text-[#ff4f01] font-medium mt-4 hover:gap-2 transition-all">
                     Read More <i className="ri-arrow-right-line" />
-                  </a>
+                  </span>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
 
           <div className="text-center mt-10">
-            <a href="#blog" className="btn btn-outline">
+            <Link to="/blog-posts" className="btn btn-outline">
               Visit the Blog
-            </a>
+            </Link>
           </div>
         </div>
       </section>

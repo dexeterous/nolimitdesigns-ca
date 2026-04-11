@@ -6,6 +6,8 @@ import Index from './pages/Index';
 import GraphicDesignServices from './pages/GraphicDesignServices';
 import VideoDesignServices from './pages/VideoDesignServices';
 import Pricing from './pages/Pricing';
+import Blog from './pages/Blog';
+import BlogPost from './pages/BlogPost';
 
 const queryClient = new QueryClient();
 
@@ -19,6 +21,8 @@ const App = () => (
           <Route path="/graphic-design-services" element={<GraphicDesignServices />} />
           <Route path="/video-design-services" element={<VideoDesignServices />} />
           <Route path="/pricing" element={<Pricing />} />
+          <Route path="/blog-posts" element={<Blog />} />
+          <Route path="/blog-posts/:slug" element={<BlogPost />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>

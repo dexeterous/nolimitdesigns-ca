@@ -67,7 +67,7 @@ export function SiteFooter() {
           <div>
             <h4 className="text-lg font-semibold mb-5 text-[#101010]">Resources</h4>
             <ul className="flex flex-col gap-3">
-              <li><a href="#blog" className="text-[rgb(119,119,125)] hover:text-[#ff4f01] transition-colors">Blog</a></li>
+              <li><a href="/blog-posts" className="text-[rgb(119,119,125)] hover:text-[#ff4f01] transition-colors">Blog</a></li>
               <li><a href="#faqs" className="text-[rgb(119,119,125)] hover:text-[#ff4f01] transition-colors">FAQ</a></li>
               <li><a href="#" className="text-[rgb(119,119,125)] hover:text-[#ff4f01] transition-colors">Guides</a></li>
             </ul>

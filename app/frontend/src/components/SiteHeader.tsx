@@ -130,6 +130,7 @@ export function SiteHeader() {
 
               {[
                 { label: "Pricing", href: "/pricing" },
+                { label: "Blog", href: "/blog-posts" },
                 { label: "How It Works", href: "/#how-it-works" },
                 { label: "Portfolio", href: "/#portfolio" },
                 { label: "About", href: "/#about" },
