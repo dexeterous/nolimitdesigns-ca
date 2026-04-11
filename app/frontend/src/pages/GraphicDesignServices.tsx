@@ -121,7 +121,7 @@ export default function GraphicDesignServices() {
                 Launching a brand, growing a startup, or managing multiple clients? NoLimit Designs gives you a dependable creative team ready to handle your graphic design needs without the cost and complexity of hiring in-house designers.
               </p>
               <div className="flex flex-wrap gap-3">
-                <a href="#graphics-plan" className="btn btn-primary">
+                <a href="#graphics-plan" className="btn bg-[#070707] text-white border-2 border-[#070707] hover:bg-white hover:text-[#070707] transition-all">
                   See Pricing
                 </a>
                 <a href="#book-demo" className="btn border-2 border-white text-white hover:bg-white hover:text-[#070707] transition-all">
