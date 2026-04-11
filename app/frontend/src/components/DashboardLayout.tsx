@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { client } from "@/lib/api";
 
 interface NavItem {
   label: string;
@@ -13,10 +14,23 @@ interface DashboardLayoutProps {
   type: "client" | "admin";
 }
 
+interface Notification {
+  id: number;
+  title: string;
+  message: string;
+  type: string;
+  is_read: boolean;
+  created_at: string;
+  request_id?: number;
+}
+
 const clientNav: NavItem[] = [
   { label: "Dashboard", href: "/client/dashboard", icon: "ri-dashboard-line" },
   { label: "Requests", href: "/client/requests", icon: "ri-file-list-3-line" },
   { label: "Submit Request", href: "/client/submit-request", icon: "ri-add-circle-line" },
+  { label: "Brands", href: "/client/brands", icon: "ri-palette-line" },
+  { label: "Files", href: "/client/files", icon: "ri-folder-3-line" },
+  { label: "Team", href: "/client/team", icon: "ri-team-line" },
 ];
 
 const adminNav: NavItem[] = [
@@ -33,8 +47,94 @@ export function DashboardLayout({ children, type }: DashboardLayoutProps) {
   const location = useLocation();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const notifRef = useRef<HTMLDivElement>(null);
   const navItems = type === "client" ? clientNav : adminNav;
   const { user, loading, isAuthenticated, login, logout } = useAuth();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      loadNotifications();
+    }
+  }, [isAuthenticated]);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (notifRef.current && !notifRef.current.contains(e.target as Node)) {
+        setShowNotifications(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const loadNotifications = async () => {
+    try {
+      const response = await client.entities.notifications.query({
+        sort: "-created_at",
+        limit: 20,
+      });
+      setNotifications(response?.data?.items || []);
+    } catch {
+      // silently fail
+    }
+  };
+
+  const markAsRead = async (id: number) => {
+    try {
+      await client.entities.notifications.update({
+        id: String(id),
+        data: { is_read: true },
+      });
+      setNotifications((prev) =>
+        prev.map((n) => (n.id === id ? { ...n, is_read: true } : n))
+      );
+    } catch {
+      // silently fail
+    }
+  };
+
+  const markAllRead = async () => {
+    const unread = notifications.filter((n) => !n.is_read);
+    for (const n of unread) {
+      try {
+        await client.entities.notifications.update({
+          id: String(n.id),
+          data: { is_read: true },
+        });
+      } catch {
+        // continue
+      }
+    }
+    setNotifications((prev) => prev.map((n) => ({ ...n, is_read: true })));
+  };
+
+  const unreadCount = notifications.filter((n) => !n.is_read).length;
+
+  const formatNotifTime = (dateStr: string) => {
+    if (!dateStr) return "";
+    const date = new Date(dateStr);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffMins = Math.floor(diffMs / (1000 * 60));
+    if (diffMins < 1) return "Just now";
+    if (diffMins < 60) return `${diffMins}m ago`;
+    const diffHrs = Math.floor(diffMins / 60);
+    if (diffHrs < 24) return `${diffHrs}h ago`;
+    const diffDays = Math.floor(diffHrs / 24);
+    return `${diffDays}d ago`;
+  };
+
+  const notifIcon = (type: string) => {
+    switch (type) {
+      case "status_change": return "ri-refresh-line text-[#7c3aed]";
+      case "comment": return "ri-chat-3-line text-[#0ea5e9]";
+      case "file": return "ri-file-download-line text-[#22c55e]";
+      case "assignment": return "ri-user-star-line text-[#ff4f01]";
+      default: return "ri-notification-3-line text-[#666]";
+    }
+  };
 
   if (loading) {
     return (
@@ -116,7 +216,8 @@ export function DashboardLayout({ children, type }: DashboardLayoutProps) {
         <nav className="flex-1 p-3 overflow-y-auto">
           <div className="space-y-1">
             {navItems.map((item) => {
-              const isActive = location.pathname === item.href;
+              const isActive = location.pathname === item.href || 
+                (item.href !== "/client/dashboard" && item.href !== "/admin/dashboard" && location.pathname.startsWith(item.href));
               return (
                 <Link
                   key={item.href}
@@ -203,9 +304,75 @@ export function DashboardLayout({ children, type }: DashboardLayoutProps) {
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <button className="relative w-9 h-9 rounded-lg bg-[#f5f5f5] flex items-center justify-center hover:bg-[#e5e5e5] transition-colors cursor-pointer">
-              <i className="ri-notification-3-line text-[#101010]" />
-            </button>
+            {/* Notification Bell */}
+            <div className="relative" ref={notifRef}>
+              <button
+                onClick={() => setShowNotifications(!showNotifications)}
+                className="relative w-9 h-9 rounded-lg bg-[#f5f5f5] flex items-center justify-center hover:bg-[#e5e5e5] transition-colors cursor-pointer"
+              >
+                <i className="ri-notification-3-line text-[#101010]" />
+                {unreadCount > 0 && (
+                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-[#ff4f01] text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                    {unreadCount > 9 ? "9+" : unreadCount}
+                  </span>
+                )}
+              </button>
+
+              {/* Notification Dropdown */}
+              {showNotifications && (
+                <div className="absolute right-0 top-12 w-80 bg-white rounded-xl border border-[#e5e5e5] shadow-xl z-50 overflow-hidden">
+                  <div className="flex items-center justify-between px-4 py-3 border-b border-[#e5e5e5]">
+                    <h3 className="text-sm font-semibold text-[#101010]">Notifications</h3>
+                    {unreadCount > 0 && (
+                      <button
+                        onClick={markAllRead}
+                        className="text-xs text-[#ff4f01] hover:underline cursor-pointer"
+                      >
+                        Mark all read
+                      </button>
+                    )}
+                  </div>
+                  <div className="max-h-80 overflow-y-auto">
+                    {notifications.length === 0 ? (
+                      <div className="p-6 text-center">
+                        <i className="ri-notification-off-line text-2xl text-[rgb(119,119,125)] mb-2 inline-block" />
+                        <p className="text-sm text-[rgb(119,119,125)]">No notifications yet</p>
+                      </div>
+                    ) : (
+                      notifications.map((n) => (
+                        <div
+                          key={n.id}
+                          onClick={() => {
+                            markAsRead(n.id);
+                            if (n.request_id) {
+                              navigate(`/client/requests/${n.request_id}`);
+                              setShowNotifications(false);
+                            }
+                          }}
+                          className={`flex items-start gap-3 px-4 py-3 border-b border-[#f0f0f0] last:border-b-0 hover:bg-[#fafafa] cursor-pointer transition-colors ${
+                            !n.is_read ? "bg-[#ff4f01]/5" : ""
+                          }`}
+                        >
+                          <div className="w-8 h-8 rounded-full bg-[#f5f5f5] flex items-center justify-center shrink-0 mt-0.5">
+                            <i className={`${notifIcon(n.type)} text-sm`} />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className={`text-sm ${!n.is_read ? "font-semibold text-[#101010]" : "text-[#101010]"}`}>
+                              {n.title}
+                            </p>
+                            <p className="text-xs text-[rgb(119,119,125)] mt-0.5 line-clamp-2">{n.message}</p>
+                            <p className="text-[10px] text-[rgb(119,119,125)] mt-1">{formatNotifTime(n.created_at)}</p>
+                          </div>
+                          {!n.is_read && (
+                            <div className="w-2 h-2 rounded-full bg-[#ff4f01] shrink-0 mt-2" />
+                          )}
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </header>
 

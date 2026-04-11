@@ -15,6 +15,10 @@ import AuthCallback from './pages/AuthCallback';
 import ClientDashboard from './pages/ClientDashboard';
 import ClientRequests from './pages/ClientRequests';
 import ClientSubmitRequest from './pages/ClientSubmitRequest';
+import ClientBrands from './pages/ClientBrands';
+import ClientRequestDetail from './pages/ClientRequestDetail';
+import ClientFiles from './pages/ClientFiles';
+import ClientTeam from './pages/ClientTeam';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminRequests from './pages/AdminRequests';
 
@@ -38,7 +42,11 @@ const App = () => (
             <Route path="/auth/callback" element={<AuthCallback />} />
             <Route path="/client/dashboard" element={<ClientDashboard />} />
             <Route path="/client/requests" element={<ClientRequests />} />
+            <Route path="/client/requests/:id" element={<ClientRequestDetail />} />
             <Route path="/client/submit-request" element={<ClientSubmitRequest />} />
+            <Route path="/client/brands" element={<ClientBrands />} />
+            <Route path="/client/files" element={<ClientFiles />} />
+            <Route path="/client/team" element={<ClientTeam />} />
             <Route path="/client/*" element={<ClientDashboard />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="/admin/requests" element={<AdminRequests />} />

@@ -187,8 +187,10 @@ export default function ClientRequests() {
                     {filteredRequests.map((req) => (
                       <tr key={req.id} className="border-b border-[#f0f0f0] last:border-b-0 hover:bg-[#fafafa] transition-colors">
                         <td className="px-5 py-3.5">
-                          <p className="text-sm font-medium text-[#101010]">{req.title}</p>
-                          <p className="text-xs text-[rgb(119,119,125)]">REQ-{String(req.id).padStart(3, "0")}</p>
+                          <Link to={`/client/requests/${req.id}`} className="hover:text-[#ff4f01] transition-colors">
+                            <p className="text-sm font-medium text-[#101010] hover:text-[#ff4f01]">{req.title}</p>
+                            <p className="text-xs text-[rgb(119,119,125)]">REQ-{String(req.id).padStart(3, "0")}</p>
+                          </Link>
                         </td>
                         <td className="px-5 py-3.5 text-sm text-[#101010]">{req.brand_name || "—"}</td>
                         <td className="px-5 py-3.5 text-sm text-[rgb(119,119,125)]">{req.category}</td>
@@ -207,13 +209,22 @@ export default function ClientRequests() {
                         </td>
                         <td className="px-5 py-3.5 text-xs text-[rgb(119,119,125)]">{formatTime(req.updated_at || req.created_at)}</td>
                         <td className="px-5 py-3.5">
-                          <button
-                            onClick={() => handleDelete(req.id)}
-                            className="w-8 h-8 rounded-lg hover:bg-red-50 flex items-center justify-center transition-colors cursor-pointer"
-                            title="Delete"
-                          >
-                            <i className="ri-delete-bin-line text-red-400" />
-                          </button>
+                          <div className="flex items-center gap-1">
+                            <Link
+                              to={`/client/requests/${req.id}`}
+                              className="w-8 h-8 rounded-lg hover:bg-[#f5f5f5] flex items-center justify-center transition-colors cursor-pointer"
+                              title="View Details"
+                            >
+                              <i className="ri-eye-line text-[rgb(119,119,125)]" />
+                            </Link>
+                            <button
+                              onClick={() => handleDelete(req.id)}
+                              className="w-8 h-8 rounded-lg hover:bg-red-50 flex items-center justify-center transition-colors cursor-pointer"
+                              title="Delete"
+                            >
+                              <i className="ri-delete-bin-line text-red-400" />
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))}
@@ -238,9 +249,10 @@ export default function ClientRequests() {
                     </div>
                     <div className="space-y-2">
                       {columnRequests.map((req) => (
-                        <div
+                        <Link
                           key={req.id}
-                          className="bg-white rounded-lg p-3.5 border border-[#e5e5e5] hover:border-[#ff4f01]/30 hover:shadow-sm transition-all"
+                          to={`/client/requests/${req.id}`}
+                          className="block bg-white rounded-lg p-3.5 border border-[#e5e5e5] hover:border-[#ff4f01]/30 hover:shadow-sm transition-all"
                         >
                           <p className="text-sm font-medium text-[#101010] mb-2">{req.title}</p>
                           <div className="flex items-center gap-2 mb-2">
@@ -251,7 +263,7 @@ export default function ClientRequests() {
                             <span className="text-xs text-[rgb(119,119,125)]">{req.designer_name || "Unassigned"}</span>
                             <span className="text-xs text-[rgb(119,119,125)]">{req.due_date || "—"}</span>
                           </div>
-                        </div>
+                        </Link>
                       ))}
                     </div>
                   </div>

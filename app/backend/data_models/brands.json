@@ -14,26 +14,43 @@
             "type": "string",
             "description": "Brand name"
         },
-        "logo_url": {
+        "logo_key": {
             "type": "string",
-            "description": "Brand logo URL"
+            "description": "Object storage key for brand logo"
         },
-        "color_primary": {
+        "primary_color": {
             "type": "string",
             "description": "Primary brand color hex"
         },
-        "color_secondary": {
+        "secondary_color": {
             "type": "string",
             "description": "Secondary brand color hex"
+        },
+        "fonts": {
+            "type": "string",
+            "description": "Brand fonts comma separated"
         },
         "guidelines": {
             "type": "string",
             "description": "Brand guidelines text"
         },
+        "website": {
+            "type": "string",
+            "description": "Brand website URL"
+        },
+        "industry": {
+            "type": "string",
+            "description": "Brand industry"
+        },
         "created_at": {
             "type": "string",
             "format": "date-time",
-            "description": "Creation timestamp"
+            "description": "Created timestamp"
+        },
+        "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Updated timestamp"
         }
     },
     "required": [

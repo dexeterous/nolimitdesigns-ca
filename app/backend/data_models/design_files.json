@@ -1,0 +1,62 @@
+{
+    "title": "design_files",
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "integer",
+            "description": "Primary key, auto-increment"
+        },
+        "user_id": {
+            "type": "string",
+            "description": "Owner user ID"
+        },
+        "request_id": {
+            "type": "integer",
+            "description": "Related design request ID"
+        },
+        "file_name": {
+            "type": "string",
+            "description": "Original file name"
+        },
+        "object_key": {
+            "type": "string",
+            "description": "Object storage key"
+        },
+        "file_type": {
+            "type": "string",
+            "description": "File MIME type"
+        },
+        "file_size": {
+            "type": "integer",
+            "description": "File size in bytes"
+        },
+        "version": {
+            "type": "integer",
+            "description": "File version number"
+        },
+        "is_source": {
+            "type": "boolean",
+            "description": "Whether this is a source file"
+        },
+        "is_final": {
+            "type": "boolean",
+            "description": "Whether this is the final deliverable"
+        },
+        "uploaded_by": {
+            "type": "string",
+            "description": "Who uploaded - client or designer"
+        },
+        "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Created timestamp"
+        }
+    },
+    "required": [
+        "id",
+        "user_id",
+        "request_id",
+        "file_name",
+        "object_key"
+    ]
+}

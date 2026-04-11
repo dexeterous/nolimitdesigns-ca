@@ -9,96 +9,96 @@ from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.database import get_db
-from services.brands import BrandsService
+from services.design_files import Design_filesService
 from dependencies.auth import get_current_user
 from schemas.auth import UserResponse
 
 # Set up logging
 logger = logging.getLogger(__name__)
 
-router = APIRouter(prefix="/api/v1/entities/brands", tags=["brands"])
+router = APIRouter(prefix="/api/v1/entities/design_files", tags=["design_files"])
 
 
 # ---------- Pydantic Schemas ----------
-class BrandsData(BaseModel):
+class Design_filesData(BaseModel):
     """Entity data schema (for create/update)"""
-    name: str
-    logo_key: str = None
-    primary_color: str = None
-    secondary_color: str = None
-    fonts: str = None
-    guidelines: str = None
-    website: str = None
-    industry: str = None
+    request_id: int
+    file_name: str
+    object_key: str
+    file_type: str = None
+    file_size: int = None
+    version: int = None
+    is_source: bool = None
+    is_final: bool = None
+    uploaded_by: str = None
     created_at: Optional[datetime] = None
-    updated_at: Optional[datetime] = None
 
 
-class BrandsUpdateData(BaseModel):
+class Design_filesUpdateData(BaseModel):
     """Update entity data (partial updates allowed)"""
-    name: Optional[str] = None
-    logo_key: Optional[str] = None
-    primary_color: Optional[str] = None
-    secondary_color: Optional[str] = None
-    fonts: Optional[str] = None
-    guidelines: Optional[str] = None
-    website: Optional[str] = None
-    industry: Optional[str] = None
+    request_id: Optional[int] = None
+    file_name: Optional[str] = None
+    object_key: Optional[str] = None
+    file_type: Optional[str] = None
+    file_size: Optional[int] = None
+    version: Optional[int] = None
+    is_source: Optional[bool] = None
+    is_final: Optional[bool] = None
+    uploaded_by: Optional[str] = None
     created_at: Optional[datetime] = None
-    updated_at: Optional[datetime] = None
 
 
-class BrandsResponse(BaseModel):
+class Design_filesResponse(BaseModel):
     """Entity response schema"""
     id: int
     user_id: str
-    name: str
-    logo_key: Optional[str] = None
-    primary_color: Optional[str] = None
-    secondary_color: Optional[str] = None
-    fonts: Optional[str] = None
-    guidelines: Optional[str] = None
-    website: Optional[str] = None
-    industry: Optional[str] = None
+    request_id: int
+    file_name: str
+    object_key: str
+    file_type: Optional[str] = None
+    file_size: Optional[int] = None
+    version: Optional[int] = None
+    is_source: Optional[bool] = None
+    is_final: Optional[bool] = None
+    uploaded_by: Optional[str] = None
     created_at: Optional[datetime] = None
-    updated_at: Optional[datetime] = None
 
     class Config:
         from_attributes = True
 
 
-class BrandsListResponse(BaseModel):
+class Design_filesListResponse(BaseModel):
     """List response schema"""
-    items: List[BrandsResponse]
+    items: List[Design_filesResponse]
     total: int
     skip: int
     limit: int
 
 
-class BrandsBatchCreateRequest(BaseModel):
+class Design_filesBatchCreateRequest(BaseModel):
     """Batch create request"""
-    items: List[BrandsData]
+    items: List[Design_filesData]
 
 
-class BrandsBatchUpdateItem(BaseModel):
+class Design_filesBatchUpdateItem(BaseModel):
     """Batch update item"""
     id: int
-    updates: BrandsUpdateData
+    updates: Design_filesUpdateData
 
 
-class BrandsBatchUpdateRequest(BaseModel):
+class Design_filesBatchUpdateRequest(BaseModel):
     """Batch update request"""
-    items: List[BrandsBatchUpdateItem]
+    items: List[Design_filesBatchUpdateItem]
 
 
-class BrandsBatchDeleteRequest(BaseModel):
+class Design_filesBatchDeleteRequest(BaseModel):
     """Batch delete request"""
     ids: List[int]
 
 
 # ---------- Routes ----------
-@router.get("", response_model=BrandsListResponse)
-async def query_brandss(
+@router.get("", response_model=Design_filesListResponse)
+async def query_design_filess(
     query: str = Query(None, description="Query conditions (JSON string)"),
     sort: str = Query(None, description="Sort field (prefix with '-' for descending)"),
     skip: int = Query(0, ge=0, description="Number of records to skip"),
@@ -107,10 +107,10 @@ async def query_brandss(
     current_user: UserResponse = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    """Query brandss with filtering, sorting, and pagination (user can only see their own records)"""
-    logger.debug(f"Querying brandss: query={query}, sort={sort}, skip={skip}, limit={limit}, fields={fields}")
+    """Query design_filess with filtering, sorting, and pagination (user can only see their own records)"""
+    logger.debug(f"Querying design_filess: query={query}, sort={sort}, skip={skip}, limit={limit}, fields={fields}")
     
-    service = BrandsService(db)
+    service = Design_filesService(db)
     try:
         # Parse query JSON if provided
         query_dict = None
@@ -127,17 +127,17 @@ async def query_brandss(
             sort=sort,
             user_id=str(current_user.id),
         )
-        logger.debug(f"Found {result['total']} brandss")
+        logger.debug(f"Found {result['total']} design_filess")
         return result
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Error querying brandss: {str(e)}", exc_info=True)
+        logger.error(f"Error querying design_filess: {str(e)}", exc_info=True)
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
 
-@router.get("/all", response_model=BrandsListResponse)
-async def query_brandss_all(
+@router.get("/all", response_model=Design_filesListResponse)
+async def query_design_filess_all(
     query: str = Query(None, description="Query conditions (JSON string)"),
     sort: str = Query(None, description="Sort field (prefix with '-' for descending)"),
     skip: int = Query(0, ge=0, description="Number of records to skip"),
@@ -145,10 +145,10 @@ async def query_brandss_all(
     fields: str = Query(None, description="Comma-separated list of fields to return"),
     db: AsyncSession = Depends(get_db),
 ):
-    # Query brandss with filtering, sorting, and pagination without user limitation
-    logger.debug(f"Querying brandss: query={query}, sort={sort}, skip={skip}, limit={limit}, fields={fields}")
+    # Query design_filess with filtering, sorting, and pagination without user limitation
+    logger.debug(f"Querying design_filess: query={query}, sort={sort}, skip={skip}, limit={limit}, fields={fields}")
 
-    service = BrandsService(db)
+    service = Design_filesService(db)
     try:
         # Parse query JSON if provided
         query_dict = None
@@ -164,75 +164,75 @@ async def query_brandss_all(
             query_dict=query_dict,
             sort=sort
         )
-        logger.debug(f"Found {result['total']} brandss")
+        logger.debug(f"Found {result['total']} design_filess")
         return result
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Error querying brandss: {str(e)}", exc_info=True)
+        logger.error(f"Error querying design_filess: {str(e)}", exc_info=True)
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
 
-@router.get("/{id}", response_model=BrandsResponse)
-async def get_brands(
+@router.get("/{id}", response_model=Design_filesResponse)
+async def get_design_files(
     id: int,
     fields: str = Query(None, description="Comma-separated list of fields to return"),
     current_user: UserResponse = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    """Get a single brands by ID (user can only see their own records)"""
-    logger.debug(f"Fetching brands with id: {id}, fields={fields}")
+    """Get a single design_files by ID (user can only see their own records)"""
+    logger.debug(f"Fetching design_files with id: {id}, fields={fields}")
     
-    service = BrandsService(db)
+    service = Design_filesService(db)
     try:
         result = await service.get_by_id(id, user_id=str(current_user.id))
         if not result:
-            logger.warning(f"Brands with id {id} not found")
-            raise HTTPException(status_code=404, detail="Brands not found")
+            logger.warning(f"Design_files with id {id} not found")
+            raise HTTPException(status_code=404, detail="Design_files not found")
         
         return result
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Error fetching brands {id}: {str(e)}", exc_info=True)
+        logger.error(f"Error fetching design_files {id}: {str(e)}", exc_info=True)
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
 
-@router.post("", response_model=BrandsResponse, status_code=201)
-async def create_brands(
-    data: BrandsData,
+@router.post("", response_model=Design_filesResponse, status_code=201)
+async def create_design_files(
+    data: Design_filesData,
     current_user: UserResponse = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    """Create a new brands"""
-    logger.debug(f"Creating new brands with data: {data}")
+    """Create a new design_files"""
+    logger.debug(f"Creating new design_files with data: {data}")
     
-    service = BrandsService(db)
+    service = Design_filesService(db)
     try:
         result = await service.create(data.model_dump(), user_id=str(current_user.id))
         if not result:
-            raise HTTPException(status_code=400, detail="Failed to create brands")
+            raise HTTPException(status_code=400, detail="Failed to create design_files")
         
-        logger.info(f"Brands created successfully with id: {result.id}")
+        logger.info(f"Design_files created successfully with id: {result.id}")
         return result
     except ValueError as e:
-        logger.error(f"Validation error creating brands: {str(e)}")
+        logger.error(f"Validation error creating design_files: {str(e)}")
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
-        logger.error(f"Error creating brands: {str(e)}", exc_info=True)
+        logger.error(f"Error creating design_files: {str(e)}", exc_info=True)
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
 
-@router.post("/batch", response_model=List[BrandsResponse], status_code=201)
-async def create_brandss_batch(
-    request: BrandsBatchCreateRequest,
+@router.post("/batch", response_model=List[Design_filesResponse], status_code=201)
+async def create_design_filess_batch(
+    request: Design_filesBatchCreateRequest,
     current_user: UserResponse = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    """Create multiple brandss in a single request"""
-    logger.debug(f"Batch creating {len(request.items)} brandss")
+    """Create multiple design_filess in a single request"""
+    logger.debug(f"Batch creating {len(request.items)} design_filess")
     
-    service = BrandsService(db)
+    service = Design_filesService(db)
     results = []
     
     try:
@@ -241,7 +241,7 @@ async def create_brandss_batch(
             if result:
                 results.append(result)
         
-        logger.info(f"Batch created {len(results)} brandss successfully")
+        logger.info(f"Batch created {len(results)} design_filess successfully")
         return results
     except Exception as e:
         await db.rollback()
@@ -249,16 +249,16 @@ async def create_brandss_batch(
         raise HTTPException(status_code=500, detail=f"Batch create failed: {str(e)}")
 
 
-@router.put("/batch", response_model=List[BrandsResponse])
-async def update_brandss_batch(
-    request: BrandsBatchUpdateRequest,
+@router.put("/batch", response_model=List[Design_filesResponse])
+async def update_design_filess_batch(
+    request: Design_filesBatchUpdateRequest,
     current_user: UserResponse = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    """Update multiple brandss in a single request (requires ownership)"""
-    logger.debug(f"Batch updating {len(request.items)} brandss")
+    """Update multiple design_filess in a single request (requires ownership)"""
+    logger.debug(f"Batch updating {len(request.items)} design_filess")
     
-    service = BrandsService(db)
+    service = Design_filesService(db)
     results = []
     
     try:
@@ -269,7 +269,7 @@ async def update_brandss_batch(
             if result:
                 results.append(result)
         
-        logger.info(f"Batch updated {len(results)} brandss successfully")
+        logger.info(f"Batch updated {len(results)} design_filess successfully")
         return results
     except Exception as e:
         await db.rollback()
@@ -277,47 +277,47 @@ async def update_brandss_batch(
         raise HTTPException(status_code=500, detail=f"Batch update failed: {str(e)}")
 
 
-@router.put("/{id}", response_model=BrandsResponse)
-async def update_brands(
+@router.put("/{id}", response_model=Design_filesResponse)
+async def update_design_files(
     id: int,
-    data: BrandsUpdateData,
+    data: Design_filesUpdateData,
     current_user: UserResponse = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    """Update an existing brands (requires ownership)"""
-    logger.debug(f"Updating brands {id} with data: {data}")
+    """Update an existing design_files (requires ownership)"""
+    logger.debug(f"Updating design_files {id} with data: {data}")
 
-    service = BrandsService(db)
+    service = Design_filesService(db)
     try:
         # Only include non-None values for partial updates
         update_dict = {k: v for k, v in data.model_dump().items() if v is not None}
         result = await service.update(id, update_dict, user_id=str(current_user.id))
         if not result:
-            logger.warning(f"Brands with id {id} not found for update")
-            raise HTTPException(status_code=404, detail="Brands not found")
+            logger.warning(f"Design_files with id {id} not found for update")
+            raise HTTPException(status_code=404, detail="Design_files not found")
         
-        logger.info(f"Brands {id} updated successfully")
+        logger.info(f"Design_files {id} updated successfully")
         return result
     except HTTPException:
         raise
     except ValueError as e:
-        logger.error(f"Validation error updating brands {id}: {str(e)}")
+        logger.error(f"Validation error updating design_files {id}: {str(e)}")
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
-        logger.error(f"Error updating brands {id}: {str(e)}", exc_info=True)
+        logger.error(f"Error updating design_files {id}: {str(e)}", exc_info=True)
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
 
 @router.delete("/batch")
-async def delete_brandss_batch(
-    request: BrandsBatchDeleteRequest,
+async def delete_design_filess_batch(
+    request: Design_filesBatchDeleteRequest,
     current_user: UserResponse = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    """Delete multiple brandss by their IDs (requires ownership)"""
-    logger.debug(f"Batch deleting {len(request.ids)} brandss")
+    """Delete multiple design_filess by their IDs (requires ownership)"""
+    logger.debug(f"Batch deleting {len(request.ids)} design_filess")
     
-    service = BrandsService(db)
+    service = Design_filesService(db)
     deleted_count = 0
     
     try:
@@ -326,8 +326,8 @@ async def delete_brandss_batch(
             if success:
                 deleted_count += 1
         
-        logger.info(f"Batch deleted {deleted_count} brandss successfully")
-        return {"message": f"Successfully deleted {deleted_count} brandss", "deleted_count": deleted_count}
+        logger.info(f"Batch deleted {deleted_count} design_filess successfully")
+        return {"message": f"Successfully deleted {deleted_count} design_filess", "deleted_count": deleted_count}
     except Exception as e:
         await db.rollback()
         logger.error(f"Error in batch delete: {str(e)}", exc_info=True)
@@ -335,25 +335,25 @@ async def delete_brandss_batch(
 
 
 @router.delete("/{id}")
-async def delete_brands(
+async def delete_design_files(
     id: int,
     current_user: UserResponse = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    """Delete a single brands by ID (requires ownership)"""
-    logger.debug(f"Deleting brands with id: {id}")
+    """Delete a single design_files by ID (requires ownership)"""
+    logger.debug(f"Deleting design_files with id: {id}")
     
-    service = BrandsService(db)
+    service = Design_filesService(db)
     try:
         success = await service.delete(id, user_id=str(current_user.id))
         if not success:
-            logger.warning(f"Brands with id {id} not found for deletion")
-            raise HTTPException(status_code=404, detail="Brands not found")
+            logger.warning(f"Design_files with id {id} not found for deletion")
+            raise HTTPException(status_code=404, detail="Design_files not found")
         
-        logger.info(f"Brands {id} deleted successfully")
-        return {"message": "Brands deleted successfully", "id": id}
+        logger.info(f"Design_files {id} deleted successfully")
+        return {"message": "Design_files deleted successfully", "id": id}
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Error deleting brands {id}: {str(e)}", exc_info=True)
+        logger.error(f"Error deleting design_files {id}: {str(e)}", exc_info=True)
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")

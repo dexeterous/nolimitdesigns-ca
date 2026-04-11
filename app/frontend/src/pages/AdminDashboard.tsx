@@ -33,9 +33,26 @@ const statusColors: Record<string, string> = {
   Completed: "bg-[#22c55e]/10 text-[#22c55e]",
 };
 
+const statusChartColors: Record<string, string> = {
+  Queue: "#9ca3af",
+  "In Progress": "#7c3aed",
+  Review: "#0ea5e9",
+  "Client Review": "#0ea5e9",
+  "Internal Review": "#f59e0b",
+  Completed: "#22c55e",
+};
+
+const priorityChartColors: Record<string, string> = {
+  Low: "#22c55e",
+  Medium: "#f59e0b",
+  High: "#ff4f01",
+  Urgent: "#ef4444",
+};
+
 export default function AdminDashboard() {
   const [stats, setStats] = useState<AdminStats | null>(null);
   const [recentRequests, setRecentRequests] = useState<DesignRequest[]>([]);
+  const [allRequests, setAllRequests] = useState<DesignRequest[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -44,12 +61,14 @@ export default function AdminDashboard() {
 
   const loadData = async () => {
     try {
-      const [statsRes, requestsRes] = await Promise.all([
+      const [statsRes, requestsRes, allReqRes] = await Promise.all([
         client.apiCall.invoke({ url: "/api/v1/admin/stats", method: "GET" }),
         client.apiCall.invoke({ url: "/api/v1/admin/requests", method: "GET", data: { limit: 5, sort: "-created_at" } }),
+        client.apiCall.invoke({ url: "/api/v1/admin/requests", method: "GET", data: { limit: 100, sort: "-created_at" } }),
       ]);
       setStats(statsRes?.data || null);
       setRecentRequests(requestsRes?.data?.items || []);
+      setAllRequests(allReqRes?.data?.items || []);
     } catch (err) {
       console.error("Failed to load admin data:", err);
     } finally {
@@ -68,6 +87,26 @@ export default function AdminDashboard() {
     const diffDays = Math.floor(diffHrs / 24);
     return `${diffDays}d ago`;
   };
+
+  const statusDistribution = allRequests.reduce<Record<string, number>>((acc, req) => {
+    acc[req.status] = (acc[req.status] || 0) + 1;
+    return acc;
+  }, {});
+  const totalForChart = allRequests.length || 1;
+
+  const categoryDistribution = allRequests.reduce<Record<string, number>>((acc, req) => {
+    acc[req.category] = (acc[req.category] || 0) + 1;
+    return acc;
+  }, {});
+  const topCategories = Object.entries(categoryDistribution)
+    .sort(([, a], [, b]) => b - a)
+    .slice(0, 5);
+  const maxCategoryCount = Math.max(...topCategories.map(([, c]) => c), 1);
+
+  const priorityDistribution = allRequests.reduce<Record<string, number>>((acc, req) => {
+    acc[req.priority] = (acc[req.priority] || 0) + 1;
+    return acc;
+  }, {});
 
   const statCards = [
     { label: "Total Active Requests", value: String(stats?.total_active || 0), icon: "ri-file-list-3-line", color: "bg-[#ff4f01]" },
@@ -106,6 +145,92 @@ export default function AdminDashboard() {
                 <p className="text-sm text-[rgb(119,119,125)] mt-1">{stat.label}</p>
               </div>
             ))}
+          </div>
+
+          {/* Analytics Row */}
+          <div className="grid lg:grid-cols-3 gap-6 mb-6">
+            {/* Status Distribution */}
+            <div className="bg-white rounded-xl border border-[#e5e5e5] p-5">
+              <h2 className="text-lg font-semibold font-bricolage text-[#101010] mb-4">Status Distribution</h2>
+              <div className="space-y-3">
+                {Object.entries(statusDistribution).map(([status, count]) => (
+                  <div key={status}>
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-sm text-[#101010]">{status}</span>
+                      <span className="text-sm font-medium text-[#101010]">{count}</span>
+                    </div>
+                    <div className="w-full bg-[#f5f5f5] rounded-full h-2.5">
+                      <div
+                        className="h-2.5 rounded-full transition-all duration-500"
+                        style={{
+                          width: `${(count / totalForChart) * 100}%`,
+                          backgroundColor: statusChartColors[status] || "#9ca3af",
+                        }}
+                      />
+                    </div>
+                  </div>
+                ))}
+                {Object.keys(statusDistribution).length === 0 && (
+                  <p className="text-sm text-[rgb(119,119,125)] text-center py-4">No data yet</p>
+                )}
+              </div>
+            </div>
+
+            {/* Top Categories */}
+            <div className="bg-white rounded-xl border border-[#e5e5e5] p-5">
+              <h2 className="text-lg font-semibold font-bricolage text-[#101010] mb-4">Top Categories</h2>
+              <div className="space-y-3">
+                {topCategories.map(([cat, count], i) => (
+                  <div key={cat} className="flex items-center gap-3">
+                    <span className="w-6 h-6 rounded-full bg-[#ff4f01] flex items-center justify-center text-white text-[10px] font-bold shrink-0">
+                      {i + 1}
+                    </span>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-sm text-[#101010] truncate">{cat}</span>
+                        <span className="text-xs text-[rgb(119,119,125)] ml-2">{count}</span>
+                      </div>
+                      <div className="w-full bg-[#f5f5f5] rounded-full h-1.5">
+                        <div
+                          className="bg-gradient-to-r from-[#ff4f01] to-[#ff8c42] h-1.5 rounded-full transition-all duration-500"
+                          style={{ width: `${(count / maxCategoryCount) * 100}%` }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                {topCategories.length === 0 && (
+                  <p className="text-sm text-[rgb(119,119,125)] text-center py-4">No data yet</p>
+                )}
+              </div>
+            </div>
+
+            {/* Priority Breakdown */}
+            <div className="bg-white rounded-xl border border-[#e5e5e5] p-5">
+              <h2 className="text-lg font-semibold font-bricolage text-[#101010] mb-4">Priority Breakdown</h2>
+              <div className="grid grid-cols-2 gap-3">
+                {["Low", "Medium", "High", "Urgent"].map((priority) => {
+                  const count = priorityDistribution[priority] || 0;
+                  const pct = totalForChart > 0 ? Math.round((count / totalForChart) * 100) : 0;
+                  return (
+                    <div
+                      key={priority}
+                      className="rounded-xl p-4 text-center"
+                      style={{ backgroundColor: `${priorityChartColors[priority]}10` }}
+                    >
+                      <p
+                        className="text-2xl font-bold font-bricolage"
+                        style={{ color: priorityChartColors[priority] }}
+                      >
+                        {count}
+                      </p>
+                      <p className="text-xs text-[rgb(119,119,125)] mt-1">{priority}</p>
+                      <p className="text-[10px] text-[rgb(119,119,125)]">{pct}%</p>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           </div>
 
           <div className="grid lg:grid-cols-2 gap-6 mb-6">
