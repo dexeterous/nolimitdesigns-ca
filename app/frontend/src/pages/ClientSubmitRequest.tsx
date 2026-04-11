@@ -1,0 +1,168 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { DashboardLayout } from "@/components/DashboardLayout";
+
+const categories = [
+  "Social Media Graphics", "Logo Design", "Brand Identity", "Presentation Design",
+  "Email Graphics", "Web Design", "Packaging Design", "Print Design",
+  "Illustration", "Video Editing", "Motion Graphics", "Other",
+];
+
+const brands = ["TechCo", "FoodBrand", "EcoGoods", "Add New Brand..."];
+
+export default function ClientSubmitRequest() {
+  const navigate = useNavigate();
+  const [form, setForm] = useState({
+    title: "",
+    category: "",
+    brand: "",
+    priority: "Medium",
+    description: "",
+    includeSource: false,
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const target = e.target;
+    const value = target instanceof HTMLInputElement && target.type === "checkbox" ? target.checked : target.value;
+    setForm({ ...form, [target.name]: value });
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    navigate("/client/requests");
+  };
+
+  return (
+    <DashboardLayout type="client">
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold font-bricolage text-[#101010]">Submit Request</h1>
+        <p className="text-sm text-[rgb(119,119,125)]">Create a new design request for your team.</p>
+      </div>
+
+      <form onSubmit={handleSubmit} className="max-w-3xl">
+        <div className="bg-white rounded-xl border border-[#e5e5e5] p-6 space-y-6">
+          {/* Title */}
+          <div>
+            <label className="block text-sm font-medium text-[#101010] mb-1.5">Request Title *</label>
+            <input
+              type="text"
+              name="title"
+              value={form.title}
+              onChange={handleChange}
+              placeholder="e.g., Instagram Post Design for Product Launch"
+              required
+              className="w-full px-4 py-3 rounded-xl border border-[#e5e5e5] bg-[#f9f9f9] text-sm text-[#101010] placeholder:text-[rgb(119,119,125)]/50 focus:outline-none focus:border-[#ff4f01] transition-colors"
+            />
+          </div>
+
+          {/* Category & Brand */}
+          <div className="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-[#101010] mb-1.5">Design Category *</label>
+              <select
+                name="category"
+                value={form.category}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 rounded-xl border border-[#e5e5e5] bg-[#f9f9f9] text-sm text-[#101010] focus:outline-none focus:border-[#ff4f01] cursor-pointer"
+              >
+                <option value="">Select category</option>
+                {categories.map((cat) => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-[#101010] mb-1.5">Brand *</label>
+              <select
+                name="brand"
+                value={form.brand}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 rounded-xl border border-[#e5e5e5] bg-[#f9f9f9] text-sm text-[#101010] focus:outline-none focus:border-[#ff4f01] cursor-pointer"
+              >
+                <option value="">Select brand</option>
+                {brands.map((b) => (
+                  <option key={b} value={b}>{b}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* Priority */}
+          <div>
+            <label className="block text-sm font-medium text-[#101010] mb-1.5">Priority</label>
+            <div className="flex gap-2">
+              {["Low", "Medium", "High", "Urgent"].map((p) => (
+                <button
+                  key={p}
+                  type="button"
+                  onClick={() => setForm({ ...form, priority: p })}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all cursor-pointer ${
+                    form.priority === p
+                      ? "bg-[#ff4f01] text-white"
+                      : "bg-[#f5f5f5] text-[rgb(119,119,125)] hover:bg-[#e5e5e5]"
+                  }`}
+                >
+                  {p}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Description */}
+          <div>
+            <label className="block text-sm font-medium text-[#101010] mb-1.5">Description *</label>
+            <textarea
+              name="description"
+              value={form.description}
+              onChange={handleChange}
+              placeholder="Describe your design request in detail. Include dimensions, colors, text content, and any specific requirements..."
+              required
+              rows={6}
+              className="w-full px-4 py-3 rounded-xl border border-[#e5e5e5] bg-[#f9f9f9] text-sm text-[#101010] placeholder:text-[rgb(119,119,125)]/50 focus:outline-none focus:border-[#ff4f01] transition-colors resize-none"
+            />
+          </div>
+
+          {/* File Upload */}
+          <div>
+            <label className="block text-sm font-medium text-[#101010] mb-1.5">Attachments</label>
+            <div className="border-2 border-dashed border-[#e5e5e5] rounded-xl p-8 text-center hover:border-[#ff4f01]/50 transition-colors cursor-pointer">
+              <i className="ri-upload-cloud-2-line text-4xl text-[rgb(119,119,125)] mb-2 inline-block" />
+              <p className="text-sm text-[#101010] font-medium">Drop files here or click to upload</p>
+              <p className="text-xs text-[rgb(119,119,125)] mt-1">
+                Reference images, brand assets, example links (PNG, JPG, PDF, up to 50MB)
+              </p>
+            </div>
+          </div>
+
+          {/* Include Source */}
+          <label className="flex items-center gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              name="includeSource"
+              checked={form.includeSource}
+              onChange={handleChange}
+              className="w-4 h-4 rounded border-[#bebebe] text-[#ff4f01] focus:ring-[#ff4f01] cursor-pointer"
+            />
+            <span className="text-sm text-[#101010]">Include source files with delivery</span>
+          </label>
+
+          {/* Actions */}
+          <div className="flex items-center gap-3 pt-2">
+            <button type="submit" className="btn btn-primary !mb-0 !py-3 !px-8">
+              <i className="ri-send-plane-line mr-1" /> Create Request
+            </button>
+            <button
+              type="button"
+              onClick={() => navigate("/client/requests")}
+              className="btn btn-outline !mb-0 !py-3 !px-8"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </form>
+    </DashboardLayout>
+  );
+}

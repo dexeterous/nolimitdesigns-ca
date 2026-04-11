@@ -371,7 +371,7 @@ export default function GraphicDesignServices() {
                     </li>
                   ))}
                 </ul>
-                <a href="#" className="btn btn-primary w-full text-center block">
+                <a href="/register" className="btn btn-primary w-full text-center block">
                   Start Free Trial
                 </a>
                 <p className="text-center text-sm text-[rgb(119,119,125)] mt-3">
@@ -558,7 +558,7 @@ export default function GraphicDesignServices() {
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full sm:flex-1 px-5 py-3.5 rounded-full bg-white/10 border border-white/20 text-white placeholder:text-white/50 focus:outline-none focus:border-[#ff4f01] transition-colors"
                 />
-                <a href="#" className="btn btn-primary !mb-0 whitespace-nowrap">
+                <a href="/register" className="btn btn-primary !mb-0 whitespace-nowrap">
                   Start Free Trial
                 </a>
               </div>

@@ -151,7 +151,7 @@ export function SiteHeader() {
 
           {/* CTA Button - desktop only */}
           <a
-            href="/#pricing"
+            href="/register"
             className="hidden lg:inline-block btn-primary btn text-sm !py-3 !px-6 !mb-0 !mr-0"
           >
             Start Your Subscription

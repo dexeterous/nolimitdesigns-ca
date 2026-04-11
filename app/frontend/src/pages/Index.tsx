@@ -187,10 +187,10 @@ export default function Index() {
                 NoLimit Designs gives businesses access to professional designers without the cost of hiring in-house or managing freelancers. Submit unlimited design requests and get consistent, high-quality creative work delivered quickly.
               </p>
               <div className="flex flex-wrap gap-3">
-                <a href="#pricing" className="btn btn-primary">
+                <a href="/register" className="btn btn-primary">
                   Start Your Subscription
                 </a>
-                <a href="#pricing" className="btn btn-dark">
+                <a href="/pricing" className="btn btn-dark">
                   See Pricing
                 </a>
               </div>
@@ -320,7 +320,7 @@ export default function Index() {
                     ))}
                   </ul>
                   <div className="mt-6">
-                    <a href="#" className="btn btn-primary w-full text-center block">
+                    <a href="/register" className="btn btn-primary w-full text-center block">
                       {plan.cta}
                     </a>
                     <p className="text-center text-xs text-[rgb(119,119,125)] mt-2">
@@ -666,11 +666,11 @@ export default function Index() {
                 Start producing high-quality graphics and videos without hiring in-house designers.
               </p>
               <div className="flex flex-wrap justify-center gap-3">
-                <a href="#pricing" className="btn btn-primary">
+                <a href="/register" className="btn btn-primary">
                   Start Your Subscription
                 </a>
                 <a
-                  href="#pricing"
+                  href="/pricing"
                   className="btn border-2 border-white text-white hover:bg-white hover:text-[#070707] transition-all"
                 >
                   View Pricing

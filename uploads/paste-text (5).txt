@@ -1,0 +1,588 @@
+Build Nolimit360 Design Management Platform (Client + Admin)
+PROJECT OVERVIEW
+
+Build Nolimit360, the internal design request management platform for Nolimit Designs (nolimitdesigns.ca).
+
+This is a SaaS platform used by two user groups:
+
+Clients
+Submit design requests, review work, collaborate with designers.
+Admin / Designers (internal team)
+Manage requests, assign designers, upload deliverables, track productivity.
+
+The system must feel like a modern SaaS dashboard similar to Linear, ClickUp, or Notion.
+
+CRITICAL DESIGN RULE
+
+Reuse the existing Nolimit UI design system and components wherever possible.
+
+This includes:
+
+Typography scale
+Color tokens
+Button styles
+Input components
+Cards
+Badges
+Avatars
+Icons
+Spacing system
+Modals
+Form elements
+
+Do NOT introduce a new visual system.
+
+The dashboard must feel like a natural extension of the Nolimit marketing website.
+
+PLATFORM STRUCTURE
+
+The application has two separate dashboard environments.
+
+/client-dashboard
+/admin-dashboard
+
+Each uses the same base design system but different permissions.
+
+CLIENT DASHBOARD
+
+Routes:
+
+/client/dashboard
+/client/requests
+/client/request/[id]
+/client/submit-request
+/client/files
+/client/brands
+/client/team
+/client/activity
+/client/settings
+CLIENT DASHBOARD LAYOUT
+
+Create reusable component:
+
+ClientDashboardLayout
+
+Structure:
+
+Left Sidebar
+Top Navigation Bar
+Main Content
+Optional Activity Panel
+
+CLIENT SIDEBAR NAVIGATION
+
+Items:
+
+Dashboard
+Requests
+Submit Request
+Files
+Brands
+Team
+Activity
+Settings
+
+Bottom:
+
+Help Center
+Live Chat
+Logout
+
+CLIENT DASHBOARD PAGE
+
+Route:
+
+/client/dashboard
+
+Purpose:
+Overview of design activity.
+
+Sections:
+
+STAT CARDS
+
+Active Requests
+Requests In Progress
+Completed Requests
+Pending Feedback
+
+RECENT REQUESTS
+
+Columns:
+
+Request Title
+Brand
+Status
+Designer
+Last Updated
+
+Status badges:
+
+Queued
+In Progress
+Review
+Completed
+
+ACTIVITY FEED
+
+Timeline showing:
+
+Designer uploaded files
+Client requested revisions
+Request completed
+
+REQUESTS PAGE
+
+Route:
+
+/client/requests
+
+Include view toggle:
+
+List View
+Kanban View
+
+LIST VIEW
+
+Table columns:
+
+Request Name
+Brand
+Category
+Priority
+Status
+Designer
+Last Updated
+
+Filters:
+
+Brand
+Status
+Category
+Designer
+
+Search input.
+
+KANBAN VIEW
+
+Columns:
+
+Queue
+In Progress
+Review
+Completed
+
+Cards include:
+
+Request title
+Brand tag
+Priority
+Designer avatar
+Due date
+
+Support drag-and-drop.
+
+SUBMIT REQUEST PAGE
+
+Route:
+
+/client/submit-request
+
+Form fields:
+
+Request Title
+Design Category
+Brand
+Priority
+
+Large description editor.
+
+Upload section:
+
+Reference Images
+Brand Assets
+Example Links
+
+Checkbox:
+
+Include Source Files
+
+Submit button:
+
+Create Request
+
+REQUEST DETAIL PAGE
+
+Route:
+
+/client/request/[id]
+
+Layout:
+
+Left panel
+Center workspace
+Right comment thread
+
+LEFT PANEL
+
+Request details:
+
+Title
+Brand
+Category
+Priority
+Status
+Assigned Designer
+Due Date
+
+CENTER PANEL
+
+Design preview area.
+
+Supports:
+
+Images
+Video
+PDF
+
+Each upload shows:
+
+Version number
+Upload time
+Download button
+
+Primary actions:
+
+Approve Design
+Request Revision
+
+RIGHT PANEL
+
+Comment thread.
+
+Features:
+
+Mentions
+File attachments
+Timestamps
+Avatar icons
+
+FILE LIBRARY
+
+Route:
+
+/client/files
+
+Grid of completed designs.
+
+Filters:
+
+Brand
+Category
+Date
+
+Each item:
+
+Preview
+Download
+Open request
+
+BRANDS PAGE
+
+Route:
+
+/client/brands
+
+Brand cards include:
+
+Brand logo
+Primary colors
+Fonts
+Guidelines
+
+Buttons:
+
+Edit brand
+Upload assets
+
+TEAM PAGE
+
+Route:
+
+/client/team
+
+Columns:
+
+Name
+Email
+Role
+Permissions
+
+Roles:
+
+Admin
+Manager
+Viewer
+
+ACTIVITY PAGE
+
+Route:
+
+/client/activity
+
+Full timeline of all activity.
+
+CLIENT SETTINGS
+
+Route:
+
+/client/settings
+
+Tabs:
+
+Profile
+Billing
+Notifications
+
+ADMIN / DESIGNER DASHBOARD
+
+Routes:
+
+/admin/dashboard
+/admin/requests
+/admin/request/[id]
+/admin/designers
+/admin/clients
+/admin/files
+/admin/workload
+/admin/reports
+/admin/settings
+ADMIN DASHBOARD LAYOUT
+
+Component:
+
+AdminDashboardLayout
+
+Structure:
+
+Left sidebar
+Top bar
+Main workspace
+
+ADMIN SIDEBAR
+
+Items:
+
+Dashboard
+Requests
+Clients
+Designers
+Files
+Workload
+Reports
+Settings
+
+ADMIN DASHBOARD PAGE
+
+Overview metrics.
+
+Stat cards:
+
+Total Active Requests
+Requests in Queue
+Designers Online
+Completed Today
+
+Charts:
+
+Requests per day
+Designer workload
+
+ADMIN REQUEST MANAGEMENT
+
+Route:
+
+/admin/requests
+
+Table columns:
+
+Request Title
+Client
+Brand
+Category
+Priority
+Assigned Designer
+Status
+Created Date
+
+Filters:
+
+Client
+Status
+Designer
+Category
+
+REQUEST ASSIGNMENT SYSTEM
+
+Admin can:
+
+Assign designer
+Change priority
+Update status
+
+Statuses:
+
+Queue
+In Progress
+Internal Review
+Client Review
+Completed
+
+ADMIN REQUEST DETAIL PAGE
+
+Route:
+
+/admin/request/[id]
+
+Admin can:
+
+Upload design files
+Add internal notes
+Change status
+Assign designer
+
+DESIGNER MANAGEMENT
+
+Route:
+
+/admin/designers
+
+Table:
+
+Designer name
+Email
+Active tasks
+Completed tasks
+Performance score
+
+Actions:
+
+Add designer
+Deactivate designer
+
+CLIENT MANAGEMENT
+
+Route:
+
+/admin/clients
+
+Columns:
+
+Company
+Plan
+Active Requests
+Subscription Status
+
+Admin can:
+
+Pause subscription
+Upgrade plan
+View requests
+
+FILE MANAGEMENT
+
+Route:
+
+/admin/files
+
+View all uploaded assets.
+
+Filters:
+
+Client
+Brand
+Date
+Designer
+
+WORKLOAD MANAGEMENT
+
+Route:
+
+/admin/workload
+
+Visual board showing:
+
+Designer task queues.
+
+Columns per designer showing:
+
+Active requests.
+
+REPORTING PAGE
+
+Route:
+
+/admin/reports
+
+Charts:
+
+Requests completed per day
+Designer productivity
+Average turnaround time
+
+ADMIN SETTINGS
+
+Tabs:
+
+Team Permissions
+Categories
+Priority Rules
+Automation
+
+REUSABLE COMPONENTS
+
+Create reusable components:
+
+DashboardLayout
+SidebarNavigation
+TopNavigation
+StatCard
+RequestTable
+KanbanBoard
+RequestCard
+FilePreview
+CommentThread
+BrandCard
+DesignerTable
+ClientTable
+ActivityTimeline
+Charts
+
+ADVANCED FEATURES
+
+Include support for:
+
+Drag and drop Kanban
+File version history
+Task priority flags
+Designer assignment dropdown
+Notification badges
+
+PERFORMANCE REQUIREMENTS
+
+Use modular components.
+
+Lazy load heavy sections.
+
+Ensure mobile responsive layout.
+
+FINAL PRODUCT GOAL
+
+The result should feel like a premium SaaS platform similar to the system used by Kimp or Design Pickle, allowing Nolimit Designs to manage:
+
+• unlimited design requests
+• designer workflows
+• client collaboration
+• file delivery
+
+inside a single scalable platform called Nolimit360.
