@@ -37,18 +37,18 @@ export default function ClientSubmitRequest() {
 
     setSubmitting(true);
     try {
+      const requestData: Record<string, unknown> = {
+        title: form.title,
+        category: form.category,
+        priority: form.priority,
+        status: "Queue",
+        include_source: form.include_source,
+      };
+      if (form.brand_name) requestData.brand_name = form.brand_name;
+      if (form.description) requestData.description = form.description;
+
       await client.entities.design_requests.create({
-        data: {
-          title: form.title,
-          category: form.category,
-          brand_name: form.brand_name || null,
-          priority: form.priority,
-          status: "Queue",
-          description: form.description || null,
-          include_source: form.include_source,
-          designer_name: null,
-          due_date: null,
-        },
+        data: requestData,
       });
       toast.success("Request submitted successfully!");
       navigate("/client/requests");

@@ -24,13 +24,13 @@ class Design_requestsData(BaseModel):
     """Entity data schema (for create/update)"""
     title: str
     category: str
-    brand_name: str = None
+    brand_name: Optional[str] = None
     priority: str
     status: str
-    description: str = None
-    designer_name: str = None
-    include_source: bool = None
-    due_date: str = None
+    description: Optional[str] = None
+    designer_name: Optional[str] = None
+    include_source: Optional[bool] = None
+    due_date: Optional[str] = None
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
 
