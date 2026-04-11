@@ -162,11 +162,7 @@ export default function Index() {
                 alt="Design dashboard workflow"
                 className="w-full rounded-2xl shadow-2xl"
               />
-              <img
-                src={MASCOT}
-                alt="NoLimit Designs mascot"
-                className="absolute -bottom-8 -left-8 w-32 h-32 lg:w-40 lg:h-40 object-contain drop-shadow-lg hidden md:block"
-              />
+              
             </div>
           </div>
         </div>
@@ -551,7 +547,7 @@ export default function Index() {
             {/* Left side - CTA card */}
             <div className="p-10 rounded-2xl bg-[#070707] text-center flex flex-col items-center justify-center">
               <img
-                src={MASCOT}
+                src="https://mgx-backend-cdn.metadl.com/mgx-backend-1300249583/production/s0rj2/2a90607c42ad49da8bce1e3c3e8e412c/b6c8df64196840c08001b85a5ef4a6bc.png"
                 alt="mascot"
                 className="w-32 h-32 object-contain mx-auto mb-4"
               />
@@ -623,11 +619,7 @@ export default function Index() {
                 </a>
               </div>
             </div>
-            <img
-              src={MASCOT}
-              alt="mascot"
-              className="absolute -bottom-4 -right-4 w-40 h-40 lg:w-56 lg:h-56 object-contain opacity-30 lg:opacity-60"
-            />
+            
             <div className="absolute top-0 left-0 w-64 h-64 bg-[#ff4f01]/10 rounded-full blur-3xl" />
           </div>
         </div>
