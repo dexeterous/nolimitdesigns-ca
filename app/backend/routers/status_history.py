@@ -25,7 +25,7 @@ class Status_historyData(BaseModel):
     from_status: str
     to_status: str
     changed_by: str
-    note: str = None
+    note: Optional[str] = None
 
 
 class Status_historyUpdateData(BaseModel):

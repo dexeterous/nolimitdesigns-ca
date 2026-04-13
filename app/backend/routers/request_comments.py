@@ -24,7 +24,7 @@ class Request_commentsData(BaseModel):
     """Entity data schema (for create/update)"""
     request_id: int
     content: str
-    author_name: str = None
+    author_name: Optional[str] = None
     created_at: Optional[datetime] = None
 
 

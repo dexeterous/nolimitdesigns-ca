@@ -25,8 +25,8 @@ class NotificationsData(BaseModel):
     title: str
     message: str
     type: str
-    request_id: int = None
-    is_read: bool = None
+    request_id: Optional[int] = None
+    is_read: Optional[bool] = None
     created_at: Optional[datetime] = None
 
 

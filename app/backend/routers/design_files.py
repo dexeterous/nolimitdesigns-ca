@@ -25,12 +25,12 @@ class Design_filesData(BaseModel):
     request_id: int
     file_name: str
     object_key: str
-    file_type: str = None
-    file_size: int = None
-    version: int = None
-    is_source: bool = None
-    is_final: bool = None
-    uploaded_by: str = None
+    file_type: Optional[str] = None
+    file_size: Optional[int] = None
+    version: Optional[int] = None
+    is_source: Optional[bool] = None
+    is_final: Optional[bool] = None
+    uploaded_by: Optional[str] = None
     created_at: Optional[datetime] = None
 
 

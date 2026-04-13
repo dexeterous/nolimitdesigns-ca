@@ -23,9 +23,9 @@ router = APIRouter(prefix="/api/v1/entities/team_members", tags=["team_members"]
 class Team_membersData(BaseModel):
     """Entity data schema (for create/update)"""
     member_email: str
-    member_name: str = None
+    member_name: Optional[str] = None
     role: str
-    status: str = None
+    status: Optional[str] = None
     created_at: Optional[datetime] = None
 
 

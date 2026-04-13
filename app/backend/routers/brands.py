@@ -23,13 +23,13 @@ router = APIRouter(prefix="/api/v1/entities/brands", tags=["brands"])
 class BrandsData(BaseModel):
     """Entity data schema (for create/update)"""
     name: str
-    logo_key: str = None
-    primary_color: str = None
-    secondary_color: str = None
-    fonts: str = None
-    guidelines: str = None
-    website: str = None
-    industry: str = None
+    logo_key: Optional[str] = None
+    primary_color: Optional[str] = None
+    secondary_color: Optional[str] = None
+    fonts: Optional[str] = None
+    guidelines: Optional[str] = None
+    website: Optional[str] = None
+    industry: Optional[str] = None
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
 
