@@ -2,6 +2,8 @@ import { useState } from "react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { industries } from "@/data/siteData";
+import { client } from "@/lib/api";
+import { toast } from "sonner";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -15,10 +17,31 @@ export default function Contact() {
     services: [] as string[],
   });
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setLoading(true);
+    try {
+      await client.entities.contact_submissions.create({
+        data: {
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone || "",
+          company: formData.company || "",
+          industry: formData.industry || "",
+          budget: formData.budget || "",
+          message: formData.message,
+          services: formData.services.join(", "),
+        },
+      });
+      setSubmitted(true);
+      toast.success("Message sent successfully! We'll get back to you within 2 hours.");
+    } catch {
+      toast.error("Something went wrong. Please try again or call us directly.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const toggleService = (service: string) => {
@@ -81,16 +104,7 @@ export default function Contact() {
                 <p className="text-sm text-[rgb(119,119,125)]">hello@nolimitdesigns.com</p>
               </div>
             </a>
-            <button type="button" className="flex items-center gap-4 p-6 rounded-xl border border-[#bebebe] hover:border-[#ff4f01] transition-all bg-white group text-left">
-              <div className="w-12 h-12 rounded-full bg-[#ff4f01]/10 flex items-center justify-center shrink-0 group-hover:bg-[#ff4f01] transition-colors">
-                <i className="ri-chat-1-line text-[#ff4f01] text-xl group-hover:text-white transition-colors" />
-              </div>
-              <div>
-                <p className="font-medium font-bricolage">Live Chat</p>
-                <p className="text-sm text-[rgb(119,119,125)]">Chat with us now</p>
-              </div>
-            </button>
-            <button type="button" className="flex items-center gap-4 p-6 rounded-xl border border-[#bebebe] hover:border-[#ff4f01] transition-all bg-white group text-left">
+            <a href="https://calendly.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 p-6 rounded-xl border border-[#bebebe] hover:border-[#ff4f01] transition-all bg-white group">
               <div className="w-12 h-12 rounded-full bg-[#ff4f01]/10 flex items-center justify-center shrink-0 group-hover:bg-[#ff4f01] transition-colors">
                 <i className="ri-calendar-line text-[#ff4f01] text-xl group-hover:text-white transition-colors" />
               </div>
@@ -98,235 +112,236 @@ export default function Contact() {
                 <p className="font-medium font-bricolage">Book a Call</p>
                 <p className="text-sm text-[rgb(119,119,125)]">Schedule a meeting</p>
               </div>
-            </button>
+            </a>
+            <div className="flex items-center gap-4 p-6 rounded-xl border border-[#bebebe] bg-white">
+              <div className="w-12 h-12 rounded-full bg-[#ff4f01]/10 flex items-center justify-center shrink-0">
+                <i className="ri-map-pin-line text-[#ff4f01] text-xl" />
+              </div>
+              <div>
+                <p className="font-medium font-bricolage">Visit Us</p>
+                <p className="text-sm text-[rgb(119,119,125)]">Edmonton, AB, Canada</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Contact Form + Info */}
-      <section className="lg:py-16 py-8">
+      {/* Form Section */}
+      <section className="lg:pb-24 pb-16">
         <div className="container-custom">
-          <div className="grid lg:grid-cols-[60%_40%] gap-12">
+          <div className="grid lg:grid-cols-[2fr_1fr] gap-12">
             {/* Form */}
-            <div className="bg-white rounded-2xl p-8 lg:p-10 shadow-sm border border-[#eee]">
+            <div className="bg-white rounded-2xl p-8 lg:p-10 border border-[#bebebe]">
               {submitted ? (
                 <div className="text-center py-16">
-                  <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-6">
-                    <i className="ri-check-line text-green-600 text-4xl" />
+                  <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i className="ri-check-line text-4xl text-green-600" />
                   </div>
-                  <h3 className="font-bricolage text-3xl font-bold mb-4">Thank You!</h3>
-                  <p className="text-[rgb(119,119,125)] text-lg mb-2">
-                    We&apos;ve received your message and will get back to you within 2 hours.
+                  <h3 className="text-3xl font-bold font-bricolage mb-4">Message Sent!</h3>
+                  <p className="text-[rgb(119,119,125)] text-lg mb-6 max-w-md mx-auto">
+                    Thank you for reaching out. Our team will review your project details and get back to you within 2 hours during business hours.
                   </p>
-                  <p className="text-sm text-[rgb(119,119,125)]">
-                    In the meantime, feel free to call us at (780) 900-1234.
-                  </p>
+                  <button
+                    onClick={() => {
+                      setSubmitted(false);
+                      setFormData({ name: "", email: "", phone: "", company: "", industry: "", budget: "", message: "", services: [] });
+                    }}
+                    className="btn btn-primary"
+                  >
+                    Send Another Message
+                  </button>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit}>
-                  <h3 className="font-bricolage text-2xl font-bold mb-6">Tell Us About Your Project</h3>
-
-                  <div className="grid md:grid-cols-2 gap-4 mb-4">
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="grid md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-sm font-medium mb-1">Full Name *</label>
+                      <label className="block text-sm font-medium mb-2">Full Name *</label>
                       <input
                         type="text"
                         required
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        className="w-full px-4 py-3 rounded-lg border border-[#ccc] focus:border-[#ff4f01] focus:outline-none transition-colors"
+                        className="w-full px-4 py-3 rounded-lg border border-[#bebebe] focus:border-[#ff4f01] focus:ring-1 focus:ring-[#ff4f01] outline-none transition-all"
                         placeholder="John Smith"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium mb-1">Email *</label>
+                      <label className="block text-sm font-medium mb-2">Email Address *</label>
                       <input
                         type="email"
                         required
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        className="w-full px-4 py-3 rounded-lg border border-[#ccc] focus:border-[#ff4f01] focus:outline-none transition-colors"
+                        className="w-full px-4 py-3 rounded-lg border border-[#bebebe] focus:border-[#ff4f01] focus:ring-1 focus:ring-[#ff4f01] outline-none transition-all"
                         placeholder="john@company.com"
                       />
                     </div>
                   </div>
 
-                  <div className="grid md:grid-cols-2 gap-4 mb-4">
+                  <div className="grid md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-sm font-medium mb-1">Phone</label>
+                      <label className="block text-sm font-medium mb-2">Phone Number</label>
                       <input
                         type="tel"
                         value={formData.phone}
                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                        className="w-full px-4 py-3 rounded-lg border border-[#ccc] focus:border-[#ff4f01] focus:outline-none transition-colors"
-                        placeholder="(780) 000-0000"
+                        className="w-full px-4 py-3 rounded-lg border border-[#bebebe] focus:border-[#ff4f01] focus:ring-1 focus:ring-[#ff4f01] outline-none transition-all"
+                        placeholder="(780) 555-0123"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium mb-1">Company</label>
+                      <label className="block text-sm font-medium mb-2">Company Name</label>
                       <input
                         type="text"
                         value={formData.company}
                         onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                        className="w-full px-4 py-3 rounded-lg border border-[#ccc] focus:border-[#ff4f01] focus:outline-none transition-colors"
-                        placeholder="Your Company Name"
+                        className="w-full px-4 py-3 rounded-lg border border-[#bebebe] focus:border-[#ff4f01] focus:ring-1 focus:ring-[#ff4f01] outline-none transition-all"
+                        placeholder="Your Company Inc."
                       />
                     </div>
                   </div>
 
-                  <div className="grid md:grid-cols-2 gap-4 mb-4">
+                  <div className="grid md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-sm font-medium mb-1">Industry</label>
+                      <label className="block text-sm font-medium mb-2">Industry</label>
                       <select
                         value={formData.industry}
                         onChange={(e) => setFormData({ ...formData, industry: e.target.value })}
-                        className="w-full px-4 py-3 rounded-lg border border-[#ccc] focus:border-[#ff4f01] focus:outline-none transition-colors bg-white"
+                        className="w-full px-4 py-3 rounded-lg border border-[#bebebe] focus:border-[#ff4f01] focus:ring-1 focus:ring-[#ff4f01] outline-none transition-all"
                       >
                         <option value="">Select your industry</option>
                         {industries.map((ind) => (
-                          <option key={ind.slug} value={ind.slug}>{ind.name}</option>
+                          <option key={ind.slug} value={ind.name}>{ind.name}</option>
                         ))}
+                        <option value="Other">Other</option>
                       </select>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium mb-1">Budget Range</label>
+                      <label className="block text-sm font-medium mb-2">Budget Range</label>
                       <select
                         value={formData.budget}
                         onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-                        className="w-full px-4 py-3 rounded-lg border border-[#ccc] focus:border-[#ff4f01] focus:outline-none transition-colors bg-white"
+                        className="w-full px-4 py-3 rounded-lg border border-[#bebebe] focus:border-[#ff4f01] focus:ring-1 focus:ring-[#ff4f01] outline-none transition-all"
                       >
                         <option value="">Select budget range</option>
-                        <option value="2500-5000">$2,500 - $5,000</option>
-                        <option value="5000-10000">$5,000 - $10,000</option>
-                        <option value="10000-15000">$10,000 - $15,000</option>
-                        <option value="15000+">$15,000+</option>
+                        <option value="$2,000 - $5,000">$2,000 - $5,000</option>
+                        <option value="$5,000 - $10,000">$5,000 - $10,000</option>
+                        <option value="$10,000 - $25,000">$10,000 - $25,000</option>
+                        <option value="$25,000 - $50,000">$25,000 - $50,000</option>
+                        <option value="$50,000+">$50,000+</option>
                       </select>
                     </div>
                   </div>
 
-                  {/* Services checkboxes */}
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium mb-2">Services Needed</label>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                      {serviceOptions.map((svc) => (
-                        <label
-                          key={svc}
-                          className={`flex items-center gap-2 p-3 rounded-lg border cursor-pointer transition-all ${
-                            formData.services.includes(svc)
-                              ? "border-[#ff4f01] bg-[#ff4f01]/5"
-                              : "border-[#ccc] hover:border-[#ff4f01]/50"
+                  {/* Services Selection */}
+                  <div>
+                    <label className="block text-sm font-medium mb-3">Services Needed</label>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                      {serviceOptions.map((service) => (
+                        <button
+                          key={service}
+                          type="button"
+                          onClick={() => toggleService(service)}
+                          className={`px-4 py-3 rounded-lg text-sm font-medium transition-all border ${
+                            formData.services.includes(service)
+                              ? "bg-[#ff4f01] text-white border-[#ff4f01]"
+                              : "bg-white text-[#101010] border-[#bebebe] hover:border-[#ff4f01]"
                           }`}
                         >
-                          <input
-                            type="checkbox"
-                            checked={formData.services.includes(svc)}
-                            onChange={() => toggleService(svc)}
-                            className="accent-[#ff4f01]"
-                          />
-                          <span className="text-sm">{svc}</span>
-                        </label>
+                          {service}
+                        </button>
                       ))}
                     </div>
                   </div>
 
-                  <div className="mb-6">
-                    <label className="block text-sm font-medium mb-1">Project Details</label>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Project Details *</label>
                     <textarea
+                      required
+                      rows={5}
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      rows={4}
-                      className="w-full px-4 py-3 rounded-lg border border-[#ccc] focus:border-[#ff4f01] focus:outline-none transition-colors resize-none"
+                      className="w-full px-4 py-3 rounded-lg border border-[#bebebe] focus:border-[#ff4f01] focus:ring-1 focus:ring-[#ff4f01] outline-none transition-all resize-none"
                       placeholder="Tell us about your project, goals, and timeline..."
                     />
                   </div>
 
-                  <button type="submit" className="btn btn-primary w-full text-center">
-                    Send Message &amp; Get Free Quote
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="btn btn-primary w-full text-center justify-center disabled:opacity-60 disabled:cursor-not-allowed"
+                  >
+                    {loading ? (
+                      <span className="flex items-center gap-2">
+                        <i className="ri-loader-4-line animate-spin" />
+                        Sending...
+                      </span>
+                    ) : (
+                      <span className="flex items-center gap-2">
+                        Send Message <i className="ri-send-plane-line" />
+                      </span>
+                    )}
                   </button>
-                  <p className="text-center text-xs text-[rgb(119,119,125)] mt-3">
-                    We respond within 2 hours during business hours. No spam, ever.
-                  </p>
                 </form>
               )}
             </div>
 
-            {/* Sidebar Info */}
+            {/* Sidebar */}
             <div className="space-y-6">
-              {/* Office Info */}
-              <div className="bg-white rounded-2xl p-8 border border-[#eee]">
-                <h4 className="font-bricolage text-xl font-bold mb-4">Our Office</h4>
-                <div className="space-y-4">
-                  <div className="flex items-start gap-3">
-                    <i className="ri-map-pin-line text-[#ff4f01] text-xl mt-0.5" />
-                    <div>
-                      <p className="font-medium">Edmonton, Alberta</p>
-                      <p className="text-sm text-[rgb(119,119,125)]">Serving all of Edmonton Metro</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <i className="ri-time-line text-[#ff4f01] text-xl mt-0.5" />
-                    <div>
-                      <p className="font-medium">Business Hours</p>
-                      <p className="text-sm text-[rgb(119,119,125)]">Mon-Fri: 9am - 6pm MST</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <i className="ri-reply-line text-[#ff4f01] text-xl mt-0.5" />
-                    <div>
-                      <p className="font-medium">Response Time</p>
-                      <p className="text-sm text-[rgb(119,119,125)]">Within 2 hours</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Why Choose Us */}
-              <div className="bg-gradient-to-br from-[#070707] to-[#1f1f1f] rounded-2xl p-8 text-white">
-                <h4 className="font-bricolage text-xl font-bold mb-4">Why Choose Nolimit?</h4>
-                <div className="space-y-3">
+              <div className="bg-white rounded-2xl p-8 border border-[#bebebe]">
+                <h3 className="text-xl font-bold font-bricolage mb-4">Why Choose Us?</h3>
+                <ul className="space-y-4">
                   {[
-                    "100+ projects delivered",
-                    "20+ industries served",
-                    "Local Edmonton team",
-                    "Free consultation included",
-                    "No obligation quotes",
-                    "2-4 week delivery",
+                    { icon: "ri-timer-line", text: "2-hour response time" },
+                    { icon: "ri-money-dollar-circle-line", text: "Free consultation & quote" },
+                    { icon: "ri-shield-check-line", text: "100% satisfaction guarantee" },
+                    { icon: "ri-team-line", text: "Dedicated project manager" },
+                    { icon: "ri-rocket-line", text: "Launch in 2-4 weeks" },
+                    { icon: "ri-refresh-line", text: "Unlimited revisions" },
                   ].map((item, i) => (
-                    <div key={i} className="flex items-center gap-2">
-                      <i className="ri-check-line text-[#ff4f01]" />
-                      <span className="text-white/80 text-sm">{item}</span>
-                    </div>
+                    <li key={i} className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-[#ff4f01]/10 flex items-center justify-center shrink-0">
+                        <i className={`${item.icon} text-[#ff4f01]`} />
+                      </div>
+                      <span className="text-sm text-[#101010]">{item.text}</span>
+                    </li>
                   ))}
-                </div>
+                </ul>
               </div>
 
-              {/* Booking Calendar Placeholder */}
-              <div className="bg-white rounded-2xl p-8 border border-[#eee] text-center">
-                <i className="ri-calendar-check-line text-4xl text-[#ff4f01] mb-3 inline-block" />
-                <h4 className="font-bricolage text-lg font-bold mb-2">Book a Discovery Call</h4>
-                <p className="text-sm text-[rgb(119,119,125)] mb-4">
-                  Schedule a 30-minute call to discuss your project.
+              <div className="bg-gradient-to-br from-[#070707] to-[#1f1f1f] rounded-2xl p-8 text-center">
+                <i className="ri-phone-line text-4xl text-[#ff4f01] mb-4" />
+                <h3 className="text-xl font-bold font-bricolage text-white mb-2">Prefer to Talk?</h3>
+                <p className="text-white/70 text-sm mb-4">
+                  Call us directly for immediate assistance
                 </p>
-                <button type="button" className="btn btn-dark w-full text-center text-sm !py-3">
-                  <i className="ri-calendar-line mr-2" />
-                  Choose a Time Slot
-                </button>
+                <a href="tel:+17809001234" className="btn btn-primary w-full justify-center">
+                  (780) 900-1234
+                </a>
+                <p className="text-white/50 text-xs mt-3">Mon-Fri 9am-6pm MST</p>
+              </div>
+
+              <div className="bg-white rounded-2xl p-8 border border-[#bebebe]">
+                <h3 className="text-xl font-bold font-bricolage mb-4">Office Hours</h3>
+                <div className="space-y-3 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-[rgb(119,119,125)]">Monday - Friday</span>
+                    <span className="font-medium">9:00 AM - 6:00 PM</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-[rgb(119,119,125)]">Saturday</span>
+                    <span className="font-medium">10:00 AM - 2:00 PM</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-[rgb(119,119,125)]">Sunday</span>
+                    <span className="font-medium text-red-500">Closed</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
-
-      {/* Chat Widget (Fixed) */}
-      <div className="fixed bottom-6 right-6 z-50">
-        <button
-          type="button"
-          className="w-14 h-14 rounded-full bg-[#ff4f01] text-white shadow-xl flex items-center justify-center hover:scale-110 transition-transform"
-          title="Chat with us"
-        >
-          <i className="ri-chat-3-fill text-2xl" />
-        </button>
-      </div>
 
       <SiteFooter />
     </div>

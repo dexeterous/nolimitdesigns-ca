@@ -1,0 +1,48 @@
+{
+    "title": "contact_submissions",
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "integer",
+            "description": "Primary key, auto-increment"
+        },
+        "name": {
+            "type": "string",
+            "description": "Contact name"
+        },
+        "email": {
+            "type": "string",
+            "description": "Contact email"
+        },
+        "phone": {
+            "type": "string",
+            "description": "Contact phone number"
+        },
+        "company": {
+            "type": "string",
+            "description": "Company name"
+        },
+        "industry": {
+            "type": "string",
+            "description": "Industry type"
+        },
+        "budget": {
+            "type": "string",
+            "description": "Budget range"
+        },
+        "message": {
+            "type": "string",
+            "description": "Contact message"
+        },
+        "services": {
+            "type": "string",
+            "description": "Selected services comma separated"
+        }
+    },
+    "required": [
+        "id",
+        "name",
+        "email",
+        "message"
+    ]
+}

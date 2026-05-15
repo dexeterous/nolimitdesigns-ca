@@ -27,3 +27,6 @@ Transform Nolimit360 (design subscription service) into Nolimit Designs - a prof
 - Completed full transformation: homepage, header, footer, 20 industry pages, 6 service pages, 6 location pages, contact page, about page, 3 demo mini-websites
 - Lint and build passed successfully
 - UI check passed with grade 4
+- Made contact form functional with backend database (contact_submissions table)
+- Updated blog posts with 6 web design/development focused articles
+- Updated Blog page title and CTA to match web agency theme

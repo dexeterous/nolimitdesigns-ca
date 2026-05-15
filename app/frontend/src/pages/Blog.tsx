@@ -26,10 +26,10 @@ export default function Blog() {
             Blog
           </span>
           <h1 className="font-bricolage font-semibold xl:text-[64px] xl:leading-[72px] lg:text-[52px] lg:leading-[60px] md:text-[42px] md:leading-[50px] text-[34px] leading-[42px] text-[#101010] mb-4">
-            Design Tips &amp; Marketing Insights
+            Web Design &amp; Development Insights
           </h1>
           <p className="text-lg text-[rgb(119,119,125)] max-w-2xl mx-auto">
-            Practical advice on graphic design, video marketing, branding, and scaling your creative production.
+            Expert advice on web development, SEO, e-commerce, and growing your Edmonton business online.
           </p>
         </div>
       </section>
@@ -143,14 +143,14 @@ export default function Blog() {
           <div className="relative bg-gradient-to-br from-[#070707] to-[#1f1f1f] rounded-3xl p-12 lg:p-16 text-center overflow-hidden">
             <div className="relative z-10">
               <h2 className="font-bricolage font-semibold xl:text-[48px] xl:leading-[56px] md:text-[36px] md:leading-[44px] text-[28px] leading-[36px] text-white mb-4">
-                Get Design Tips in Your Inbox
+                Get Web Development Tips in Your Inbox
               </h2>
               <p className="text-lg text-white/80 mb-8 max-w-xl mx-auto">
-                Join thousands of marketers and business owners who receive our weekly design and marketing insights.
+                Join Edmonton business owners who receive our weekly web development and digital marketing insights.
               </p>
-              <a href="/#pricing" className="btn btn-primary">
-                Start Your Subscription
-              </a>
+              <Link to="/contact" className="btn btn-primary">
+                Get a Free Consultation
+              </Link>
             </div>
             <div className="absolute top-0 right-0 w-64 h-64 bg-[#ff4f01]/10 rounded-full blur-3xl" />
             <div className="absolute bottom-0 left-0 w-48 h-48 bg-[#ff4f01]/5 rounded-full blur-3xl" />
