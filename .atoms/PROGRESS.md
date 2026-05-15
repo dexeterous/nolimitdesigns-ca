@@ -30,3 +30,4 @@ Transform Nolimit360 (design subscription service) into Nolimit Designs - a prof
 - Made contact form functional with backend database (contact_submissions table)
 - Updated blog posts with 6 web design/development focused articles
 - Updated Blog page title and CTA to match web agency theme
+- Integrated Resend API for contact form email notifications (backend service + router + frontend call)

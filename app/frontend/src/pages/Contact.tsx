@@ -23,6 +23,7 @@ export default function Contact() {
     e.preventDefault();
     setLoading(true);
     try {
+      // Save to database
       await client.entities.contact_submissions.create({
         data: {
           name: formData.name,
@@ -35,6 +36,28 @@ export default function Contact() {
           services: formData.services.join(", "),
         },
       });
+
+      // Send email notification via Resend
+      try {
+        await client.apiCall.invoke({
+          url: "/api/v1/email/send-contact",
+          method: "POST",
+          data: {
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone || "",
+            company: formData.company || "",
+            industry: formData.industry || "",
+            budget: formData.budget || "",
+            message: formData.message,
+            services: formData.services.join(", "),
+          },
+        });
+      } catch {
+        // Email sending is non-blocking - form submission still succeeds
+        console.warn("Email notification could not be sent, but form was saved.");
+      }
+
       setSubmitted(true);
       toast.success("Message sent successfully! We'll get back to you within 2 hours.");
     } catch {
