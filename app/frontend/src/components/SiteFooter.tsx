@@ -18,7 +18,7 @@ export function SiteFooter() {
               Edmonton&apos;s premier web development agency. Building websites that grow businesses.
             </p>
             <p className="text-sm text-[rgb(119,119,125)] mb-5">
-              <i className="ri-phone-line text-[#ff4f01]" /> (780) 900-1234<br />
+              <i className="ri-phone-line text-[#ff4f01]" /> (587) 882-6700<br />
               <i className="ri-mail-line text-[#ff4f01]" /> hello@nolimitdesigns.com
             </p>
             <div className="flex gap-3">

@@ -1,0 +1,18 @@
+{
+  "status": "success",
+  "results": [
+    {
+      "status": "success",
+      "path": "https://mgx-backend-cdn.metadl.com/generate/images/1108746/2026-05-14/osegv5qaagoq/hero-web-agency-edmonton.png",
+      "absolute_path": "https://mgx-backend-cdn.metadl.com/generate/images/1108746/2026-05-14/osegv5qaagoq/hero-web-agency-edmonton.png",
+      "url": "https://mgx-backend-cdn.metadl.com/generate/images/1108746/2026-05-14/osegv5qaagoq/hero-web-agency-edmonton.png",
+      "message": "Image generated successfully.\n\nNote: The image is on CDN and will be displayed automatically. Just describe what you created briefly, no need to mention filenames or URLs.",
+      "description": "Professional web development agency workspace showing a modern computer screen with beautiful website designs, Edmonton city skyline visible through large windows in background, warm orange accent lighting, clean modern office environment, team collaboration atmosphere",
+      "style": "photorealistic",
+      "filename": "hero-web-agency-edmonton.jpg"
+    }
+  ],
+  "success_count": 1,
+  "failed_count": 0,
+  "message": "Generated 1/1 images"
+}

@@ -58,36 +58,21 @@ export default function Index() {
             </div>
 
             <div className="relative">
-              <div className="bg-gradient-to-br from-[#ff4f01] to-[#ff8c42] rounded-3xl p-8 shadow-2xl">
-                <div className="bg-white rounded-2xl p-6 shadow-lg">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-3 h-3 rounded-full bg-red-400" />
-                    <div className="w-3 h-3 rounded-full bg-yellow-400" />
-                    <div className="w-3 h-3 rounded-full bg-green-400" />
-                    <span className="text-xs text-gray-400 ml-2">nolimitdesigns.com</span>
+              <div className="rounded-3xl overflow-hidden shadow-2xl">
+                <img
+                  src="https://mgx-backend-cdn.metadl.com/generate/images/1108746/2026-05-14/osegv5qaagoq/hero-web-agency-edmonton.png"
+                  alt="Nolimit Designs - Professional Web Development Agency in Edmonton"
+                  className="w-full h-auto object-cover rounded-3xl"
+                />
+              </div>
+              <div className="absolute -bottom-4 -right-4 bg-white rounded-xl p-4 shadow-xl border border-gray-100">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                    <i className="ri-arrow-up-line text-green-600" />
                   </div>
-                  <div className="space-y-3">
-                    <div className="h-4 bg-gray-100 rounded w-3/4" />
-                    <div className="h-32 bg-gradient-to-r from-[#ff4f01]/10 to-[#ff8c42]/10 rounded-lg flex items-center justify-center">
-                      <i className="ri-code-s-slash-line text-5xl text-[#ff4f01]/40" />
-                    </div>
-                    <div className="grid grid-cols-3 gap-2">
-                      <div className="h-16 bg-gray-50 rounded" />
-                      <div className="h-16 bg-gray-50 rounded" />
-                      <div className="h-16 bg-gray-50 rounded" />
-                    </div>
-                    <div className="h-4 bg-gray-100 rounded w-1/2" />
-                  </div>
-                </div>
-                <div className="absolute -bottom-4 -right-4 bg-white rounded-xl p-4 shadow-xl border border-gray-100">
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                      <i className="ri-arrow-up-line text-green-600" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-gray-500">Leads This Month</p>
-                      <p className="text-lg font-bold text-[#101010]">+247%</p>
-                    </div>
+                  <div>
+                    <p className="text-xs text-gray-500">Leads This Month</p>
+                    <p className="text-lg font-bold text-[#101010]">+247%</p>
                   </div>
                 </div>
               </div>
@@ -407,8 +392,8 @@ export default function Index() {
               </Link>
               <p className="text-white/70 mt-3 text-sm">
                 Or call us:{" "}
-                <a href="tel:+17809001234" className="text-[#ff4f01]">
-                  (780) 900-1234
+                <a href="tel:+15878826700" className="text-[#ff4f01]">
+                  (587) 882-6700
                 </a>
               </p>
             </div>
@@ -459,11 +444,11 @@ export default function Index() {
                   Get Your Free Quote
                 </Link>
                 <a
-                  href="tel:+17809001234"
+                  href="tel:+15878826700"
                   className="btn border-2 border-white text-white hover:bg-white hover:text-[#070707] transition-all"
                 >
                   <i className="ri-phone-line mr-2" />
-                  Call (780) 900-1234
+                  Call (587) 882-6700
                 </a>
               </div>
             </div>

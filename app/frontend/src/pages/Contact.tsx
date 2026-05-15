@@ -86,13 +86,13 @@ export default function Contact() {
       <section className="pb-12">
         <div className="container-custom">
           <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-4">
-            <a href="tel:+17809001234" className="flex items-center gap-4 p-6 rounded-xl border border-[#bebebe] hover:border-[#ff4f01] transition-all bg-white group">
+            <a href="tel:+15878826700" className="flex items-center gap-4 p-6 rounded-xl border border-[#bebebe] hover:border-[#ff4f01] transition-all bg-white group">
               <div className="w-12 h-12 rounded-full bg-[#ff4f01]/10 flex items-center justify-center shrink-0 group-hover:bg-[#ff4f01] transition-colors">
                 <i className="ri-phone-line text-[#ff4f01] text-xl group-hover:text-white transition-colors" />
               </div>
               <div>
                 <p className="font-medium font-bricolage">Call Us</p>
-                <p className="text-sm text-[rgb(119,119,125)]">(780) 900-1234</p>
+                <p className="text-sm text-[rgb(119,119,125)]">(587) 882-6700</p>
               </div>
             </a>
             <a href="mailto:hello@nolimitdesigns.com" className="flex items-center gap-4 p-6 rounded-xl border border-[#bebebe] hover:border-[#ff4f01] transition-all bg-white group">
@@ -315,8 +315,8 @@ export default function Contact() {
                 <p className="text-white/70 text-sm mb-4">
                   Call us directly for immediate assistance
                 </p>
-                <a href="tel:+17809001234" className="btn btn-primary w-full justify-center">
-                  (780) 900-1234
+                <a href="tel:+15878826700" className="btn btn-primary w-full justify-center">
+                  (587) 882-6700
                 </a>
                 <p className="text-white/50 text-xs mt-3">Mon-Fri 9am-6pm MST</p>
               </div>

@@ -157,8 +157,8 @@ export default function About() {
             </p>
             <div className="flex flex-wrap justify-center gap-3">
               <Link to="/contact" className="btn btn-primary">Get Your Free Quote</Link>
-              <a href="tel:+17809001234" className="btn border-2 border-white text-white hover:bg-white hover:text-[#070707] transition-all">
-                <i className="ri-phone-line mr-2" />Call (780) 900-1234
+              <a href="tel:+15878826700" className="btn border-2 border-white text-white hover:bg-white hover:text-[#070707] transition-all">
+                <i className="ri-phone-line mr-2" />Call (587) 882-6700
               </a>
             </div>
           </div>
