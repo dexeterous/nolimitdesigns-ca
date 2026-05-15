@@ -22,6 +22,11 @@ import ClientTeam from './pages/ClientTeam';
 import ClientNotificationSettings from './pages/ClientNotificationSettings';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminRequests from './pages/AdminRequests';
+import IndustryPortfolio from './pages/IndustryPortfolio';
+import ServicePage from './pages/ServicePage';
+import LocationPage from './pages/LocationPage';
+import Contact from './pages/Contact';
+import About from './pages/About';
 
 const queryClient = new QueryClient();
 
@@ -33,6 +38,13 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
+            {/* New Agency Pages */}
+            <Route path="/portfolio/:slug" element={<IndustryPortfolio />} />
+            <Route path="/services/:slug" element={<ServicePage />} />
+            <Route path="/web-design/:slug" element={<LocationPage />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/about" element={<About />} />
+            {/* Legacy Pages */}
             <Route path="/graphic-design-services" element={<GraphicDesignServices />} />
             <Route path="/video-design-services" element={<VideoDesignServices />} />
             <Route path="/pricing" element={<Pricing />} />
@@ -41,6 +53,7 @@ const App = () => (
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/auth/callback" element={<AuthCallback />} />
+            {/* Client Dashboard */}
             <Route path="/client/dashboard" element={<ClientDashboard />} />
             <Route path="/client/requests" element={<ClientRequests />} />
             <Route path="/client/requests/:id" element={<ClientRequestDetail />} />
@@ -50,6 +63,7 @@ const App = () => (
             <Route path="/client/team" element={<ClientTeam />} />
             <Route path="/client/notifications" element={<ClientNotificationSettings />} />
             <Route path="/client/*" element={<ClientDashboard />} />
+            {/* Admin Dashboard */}
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="/admin/requests" element={<AdminRequests />} />
             <Route path="/admin/*" element={<AdminDashboard />} />

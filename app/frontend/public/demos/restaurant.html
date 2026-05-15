@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Saigon Kitchen Edmonton - Demo Website by Nolimit Designs</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; color: #1a1a2e; line-height: 1.6; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+    /* Header */
+    .header { background: rgba(0,0,0,0.9); padding: 15px 0; position: fixed; width: 100%; top: 0; z-index: 100; }
+    .header .container { display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-size: 24px; font-weight: 700; color: #fff; }
+    .logo span { color: #e63946; }
+    .nav { display: flex; gap: 30px; list-style: none; }
+    .nav a { text-decoration: none; color: #ddd; font-weight: 500; transition: color 0.3s; }
+    .nav a:hover { color: #e63946; }
+    .header-btn { background: #e63946; color: #fff; padding: 10px 24px; border-radius: 25px; text-decoration: none; font-weight: 600; }
+
+    /* Hero */
+    .hero { padding: 160px 0 100px; background: linear-gradient(135deg, #1a1a2e 0%, #2d2d44 100%); text-align: center; color: #fff; }
+    .hero h1 { font-size: 56px; margin-bottom: 20px; }
+    .hero h1 span { color: #e63946; }
+    .hero p { font-size: 20px; opacity: 0.8; margin-bottom: 30px; max-width: 600px; margin-left: auto; margin-right: auto; }
+    .hero-btns { display: flex; gap: 15px; justify-content: center; }
+    .btn-primary { background: #e63946; color: #fff; padding: 14px 32px; border-radius: 30px; text-decoration: none; font-weight: 600; transition: all 0.3s; display: inline-block; }
+    .btn-primary:hover { background: #c1121f; transform: translateY(-2px); }
+    .btn-outline { border: 2px solid #fff; color: #fff; padding: 14px 32px; border-radius: 30px; text-decoration: none; font-weight: 600; display: inline-block; }
+
+    /* Menu */
+    .menu { padding: 80px 0; background: #fff; }
+    .section-title { text-align: center; margin-bottom: 50px; }
+    .section-title h2 { font-size: 36px; margin-bottom: 10px; }
+    .section-title p { color: #666; font-size: 18px; }
+    .menu-categories { display: flex; justify-content: center; gap: 10px; margin-bottom: 40px; flex-wrap: wrap; }
+    .menu-cat { padding: 8px 20px; border-radius: 20px; border: 1px solid #ddd; background: #fff; cursor: pointer; font-weight: 500; }
+    .menu-cat.active { background: #e63946; color: #fff; border-color: #e63946; }
+    .menu-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; max-width: 900px; margin: 0 auto; }
+    .menu-item { display: flex; justify-content: space-between; align-items: center; padding: 20px; border-radius: 12px; border: 1px solid #eee; transition: all 0.3s; }
+    .menu-item:hover { border-color: #e63946; box-shadow: 0 5px 15px rgba(230,57,70,0.1); }
+    .menu-item-info h4 { font-size: 16px; margin-bottom: 4px; }
+    .menu-item-info p { color: #888; font-size: 13px; }
+    .menu-item-price { font-size: 18px; font-weight: 700; color: #e63946; }
+
+    /* Reservation */
+    .reservation { padding: 80px 0; background: linear-gradient(135deg, #e63946, #c1121f); color: #fff; }
+    .reservation .container { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+    .reservation h2 { font-size: 36px; margin-bottom: 15px; }
+    .reservation p { font-size: 18px; opacity: 0.9; margin-bottom: 20px; }
+    .res-form { background: #fff; border-radius: 15px; padding: 40px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; font-size: 14px; font-weight: 600; color: #333; margin-bottom: 5px; }
+    .form-group input, .form-group select { width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px; }
+    .form-submit { background: #e63946; color: #fff; padding: 14px 32px; border: none; border-radius: 30px; font-size: 16px; font-weight: 600; cursor: pointer; width: 100%; }
+
+    /* Reviews */
+    .reviews { padding: 80px 0; background: #fafafa; }
+    .reviews-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+    .review-card { background: #fff; padding: 30px; border-radius: 15px; border: 1px solid #eee; }
+    .review-stars { color: #ffc107; font-size: 18px; margin-bottom: 10px; }
+    .review-text { color: #555; font-size: 14px; margin-bottom: 15px; font-style: italic; }
+    .review-author { font-weight: 600; font-size: 14px; }
+
+    /* Footer */
+    .footer { background: #1a1a2e; color: #fff; padding: 60px 0 30px; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+    .footer h4 { margin-bottom: 15px; }
+    .footer p, .footer a { color: #aaa; text-decoration: none; font-size: 14px; }
+    .footer a:hover { color: #e63946; }
+    .footer ul { list-style: none; }
+    .footer li { margin-bottom: 8px; }
+    .footer-bottom { border-top: 1px solid #2d2d44; padding-top: 20px; text-align: center; color: #666; font-size: 13px; }
+
+    .demo-banner { background: #ff4f01; color: #fff; text-align: center; padding: 10px; font-size: 14px; position: fixed; bottom: 0; width: 100%; z-index: 999; }
+    .demo-banner a { color: #fff; font-weight: 700; text-decoration: underline; }
+
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 36px; }
+      .reservation .container, .footer-grid { grid-template-columns: 1fr; }
+      .menu-grid, .reviews-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .nav { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="demo-banner">
+    🍜 This is a demo website built by <a href="/">Nolimit Designs</a> — Edmonton's #1 Web Development Agency
+  </div>
+
+  <header class="header">
+    <div class="container">
+      <div class="logo">Saigon<span>Kitchen</span></div>
+      <ul class="nav">
+        <li><a href="#menu">Menu</a></li>
+        <li><a href="#reservation">Reservations</a></li>
+        <li><a href="#reviews">Reviews</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <a href="#reservation" class="header-btn">Order Online</a>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <h1>Authentic Vietnamese Cuisine in <span>Edmonton</span></h1>
+      <p>Experience the vibrant flavors of Vietnam right here in Edmonton. Fresh ingredients, family recipes, unforgettable taste.</p>
+      <div class="hero-btns">
+        <a href="#menu" class="btn-primary">View Menu</a>
+        <a href="#reservation" class="btn-outline">Reserve a Table</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="menu" id="menu">
+    <div class="container">
+      <div class="section-title">
+        <h2>Our Menu</h2>
+        <p>Fresh, authentic Vietnamese dishes made daily</p>
+      </div>
+      <div class="menu-categories">
+        <span class="menu-cat active">Popular</span>
+        <span class="menu-cat">Pho</span>
+        <span class="menu-cat">Banh Mi</span>
+        <span class="menu-cat">Rice Dishes</span>
+        <span class="menu-cat">Appetizers</span>
+        <span class="menu-cat">Drinks</span>
+      </div>
+      <div class="menu-grid">
+        <div class="menu-item">
+          <div class="menu-item-info">
+            <h4>🍜 Pho Bo (Beef Pho)</h4>
+            <p>Traditional beef broth, rice noodles, herbs</p>
+          </div>
+          <div class="menu-item-price">$16.99</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info">
+            <h4>🥖 Banh Mi Thit</h4>
+            <p>Grilled pork, pickled veggies, fresh herbs</p>
+          </div>
+          <div class="menu-item-price">$12.99</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info">
+            <h4>🍚 Com Tam</h4>
+            <p>Broken rice, grilled pork chop, egg</p>
+          </div>
+          <div class="menu-item-price">$17.99</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info">
+            <h4>🥗 Goi Cuon</h4>
+            <p>Fresh spring rolls, shrimp, peanut sauce</p>
+          </div>
+          <div class="menu-item-price">$9.99</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info">
+            <h4>🍲 Bun Bo Hue</h4>
+            <p>Spicy beef noodle soup, lemongrass</p>
+          </div>
+          <div class="menu-item-price">$17.99</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info">
+            <h4>☕ Ca Phe Sua Da</h4>
+            <p>Vietnamese iced coffee, condensed milk</p>
+          </div>
+          <div class="menu-item-price">$5.99</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="reservation" id="reservation">
+    <div class="container">
+      <div>
+        <h2>Reserve Your Table</h2>
+        <p>Book online and skip the wait. Perfect for date nights, family dinners, and celebrations.</p>
+        <ul style="list-style:none; margin-top:20px;">
+          <li style="margin-bottom:10px;">✓ Instant confirmation</li>
+          <li style="margin-bottom:10px;">✓ Special occasion arrangements</li>
+          <li style="margin-bottom:10px;">✓ Group bookings welcome</li>
+          <li style="margin-bottom:10px;">✓ Free parking available</li>
+        </ul>
+      </div>
+      <div class="res-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Name</label>
+            <input type="text" placeholder="Your name">
+          </div>
+          <div class="form-group">
+            <label>Phone</label>
+            <input type="tel" placeholder="(780) 000-0000">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Date</label>
+            <input type="date">
+          </div>
+          <div class="form-group">
+            <label>Time</label>
+            <select>
+              <option>5:00 PM</option>
+              <option>5:30 PM</option>
+              <option>6:00 PM</option>
+              <option>6:30 PM</option>
+              <option>7:00 PM</option>
+              <option>7:30 PM</option>
+              <option>8:00 PM</option>
+              <option>8:30 PM</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Party Size</label>
+          <select>
+            <option>2 Guests</option>
+            <option>3 Guests</option>
+            <option>4 Guests</option>
+            <option>5 Guests</option>
+            <option>6+ Guests</option>
+          </select>
+        </div>
+        <button class="form-submit">Reserve Now</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="reviews" id="reviews">
+    <div class="container">
+      <div class="section-title">
+        <h2>What Our Guests Say</h2>
+        <p>4.8 stars on Google with 500+ reviews</p>
+      </div>
+      <div class="reviews-grid">
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"Best pho in Edmonton, hands down! The broth is rich and flavorful, just like what I had in Vietnam."</p>
+          <div class="review-author">— Sarah M.</div>
+        </div>
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"Amazing food and great service. The online ordering makes it so easy to get our weekly pho fix!"</p>
+          <div class="review-author">— James L.</div>
+        </div>
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"We had our anniversary dinner here. The staff was wonderful and the food was absolutely incredible."</p>
+          <div class="review-author">— Michelle & David</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer" id="contact">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <h4>Saigon Kitchen Edmonton</h4>
+          <p>Authentic Vietnamese cuisine in the heart of Edmonton. Family-owned since 2015.</p>
+          <p style="margin-top:15px;">📍 10234 104 St NW, Edmonton, AB</p>
+          <p>📞 (780) 555-0789</p>
+          <p>✉️ hello@saigonkitchen.ca</p>
+        </div>
+        <div>
+          <h4>Hours</h4>
+          <ul>
+            <li><a href="#">Mon-Thu: 11am-9pm</a></li>
+            <li><a href="#">Fri-Sat: 11am-10pm</a></li>
+            <li><a href="#">Sunday: 12pm-8pm</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Menu</h4>
+          <ul>
+            <li><a href="#">Pho</a></li>
+            <li><a href="#">Banh Mi</a></li>
+            <li><a href="#">Rice Dishes</a></li>
+            <li><a href="#">Drinks</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="#">Order Online</a></li>
+            <li><a href="#">Reserve Table</a></li>
+            <li><a href="#">Gift Cards</a></li>
+            <li><a href="#">Catering</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>Demo website by Nolimit Designs — Edmonton's Premier Web Development Agency | <a href="/" style="color:#e63946;">Get a website like this →</a></p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

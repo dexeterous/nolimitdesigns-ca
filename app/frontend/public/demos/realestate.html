@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Peak Realty Edmonton - Demo Website by Nolimit Designs</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; color: #1a1a2e; line-height: 1.6; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+    /* Header */
+    .header { background: #fff; padding: 15px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: fixed; width: 100%; top: 0; z-index: 100; }
+    .header .container { display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-size: 24px; font-weight: 700; color: #1b4332; }
+    .logo span { color: #40916c; }
+    .nav { display: flex; gap: 30px; list-style: none; }
+    .nav a { text-decoration: none; color: #333; font-weight: 500; transition: color 0.3s; }
+    .nav a:hover { color: #40916c; }
+    .header-btn { background: #1b4332; color: #fff; padding: 10px 24px; border-radius: 25px; text-decoration: none; font-weight: 600; }
+
+    /* Hero */
+    .hero { padding: 140px 0 80px; background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%); }
+    .hero .container { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+    .hero h1 { font-size: 48px; line-height: 1.2; margin-bottom: 20px; }
+    .hero h1 span { color: #40916c; }
+    .hero p { font-size: 18px; color: #555; margin-bottom: 30px; }
+
+    /* Search Box */
+    .search-box { background: #fff; padding: 25px; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); }
+    .search-tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+    .search-tab { padding: 8px 20px; border-radius: 20px; border: 1px solid #ddd; background: #fff; cursor: pointer; font-weight: 500; }
+    .search-tab.active { background: #1b4332; color: #fff; border-color: #1b4332; }
+    .search-fields { display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 10px; }
+    .search-fields input, .search-fields select { padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; }
+    .search-btn { background: #40916c; color: #fff; padding: 12px 30px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+
+    /* Listings */
+    .listings { padding: 80px 0; background: #fff; }
+    .section-title { text-align: center; margin-bottom: 50px; }
+    .section-title h2 { font-size: 36px; margin-bottom: 10px; }
+    .section-title p { color: #666; font-size: 18px; }
+    .listings-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+    .listing-card { border-radius: 15px; overflow: hidden; border: 1px solid #e8e8e8; transition: all 0.3s; }
+    .listing-card:hover { box-shadow: 0 10px 30px rgba(0,0,0,0.1); transform: translateY(-5px); }
+    .listing-img { height: 200px; display: flex; align-items: center; justify-content: center; font-size: 50px; }
+    .listing-info { padding: 20px; }
+    .listing-price { font-size: 24px; font-weight: 700; color: #1b4332; margin-bottom: 5px; }
+    .listing-address { color: #666; font-size: 14px; margin-bottom: 10px; }
+    .listing-features { display: flex; gap: 15px; color: #888; font-size: 13px; }
+
+    /* Stats */
+    .stats { padding: 60px 0; background: #1b4332; color: #fff; }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; text-align: center; }
+    .stat-num { font-size: 42px; font-weight: 700; color: #40916c; }
+    .stat-label { font-size: 14px; opacity: 0.8; margin-top: 5px; }
+
+    /* CTA */
+    .cta { padding: 80px 0; background: linear-gradient(135deg, #1b4332, #2d6a4f); color: #fff; text-align: center; }
+    .cta h2 { font-size: 36px; margin-bottom: 15px; }
+    .cta p { font-size: 18px; opacity: 0.9; margin-bottom: 30px; }
+    .cta-btn { background: #fff; color: #1b4332; padding: 14px 32px; border-radius: 30px; text-decoration: none; font-weight: 600; display: inline-block; }
+
+    /* Footer */
+    .footer { background: #0d1b2a; color: #fff; padding: 60px 0 30px; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+    .footer h4 { margin-bottom: 15px; }
+    .footer p, .footer a { color: #aaa; text-decoration: none; font-size: 14px; }
+    .footer a:hover { color: #40916c; }
+    .footer ul { list-style: none; }
+    .footer li { margin-bottom: 8px; }
+    .footer-bottom { border-top: 1px solid #1a2a3a; padding-top: 20px; text-align: center; color: #666; font-size: 13px; }
+
+    .demo-banner { background: #ff4f01; color: #fff; text-align: center; padding: 10px; font-size: 14px; position: fixed; bottom: 0; width: 100%; z-index: 999; }
+    .demo-banner a { color: #fff; font-weight: 700; text-decoration: underline; }
+
+    @media (max-width: 768px) {
+      .hero .container, .footer-grid { grid-template-columns: 1fr; }
+      .listings-grid { grid-template-columns: 1fr; }
+      .search-fields { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .hero h1 { font-size: 32px; }
+      .nav { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="demo-banner">
+    🏠 This is a demo website built by <a href="/">Nolimit Designs</a> — Edmonton's #1 Web Development Agency
+  </div>
+
+  <header class="header">
+    <div class="container">
+      <div class="logo">Peak<span>Realty</span></div>
+      <ul class="nav">
+        <li><a href="#listings">Listings</a></li>
+        <li><a href="#buy">Buy</a></li>
+        <li><a href="#sell">Sell</a></li>
+        <li><a href="#agents">Agents</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <a href="#contact" class="header-btn">List Your Home</a>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <div>
+        <h1>Find Your Dream Home in <span>Edmonton</span></h1>
+        <p>Search thousands of listings across Edmonton and surrounding areas. MLS-integrated with real-time updates.</p>
+        <div class="search-box">
+          <div class="search-tabs">
+            <span class="search-tab active">Buy</span>
+            <span class="search-tab">Rent</span>
+            <span class="search-tab">Sold</span>
+          </div>
+          <div class="search-fields">
+            <input type="text" placeholder="City, neighborhood, or address">
+            <select>
+              <option>Any Price</option>
+              <option>$200k - $400k</option>
+              <option>$400k - $600k</option>
+              <option>$600k+</option>
+            </select>
+            <select>
+              <option>Any Type</option>
+              <option>House</option>
+              <option>Condo</option>
+              <option>Townhouse</option>
+            </select>
+            <button class="search-btn">Search</button>
+          </div>
+        </div>
+      </div>
+      <div></div>
+    </div>
+  </section>
+
+  <section class="listings" id="listings">
+    <div class="container">
+      <div class="section-title">
+        <h2>Featured Listings</h2>
+        <p>Handpicked properties in Edmonton's best neighborhoods</p>
+      </div>
+      <div class="listings-grid">
+        <div class="listing-card">
+          <div class="listing-img" style="background: linear-gradient(135deg, #a8dadc, #457b9d);">🏡</div>
+          <div class="listing-info">
+            <div class="listing-price">$549,900</div>
+            <div class="listing-address">12345 Whitemud Dr, Edmonton</div>
+            <div class="listing-features">
+              <span>🛏 4 Beds</span>
+              <span>🚿 3 Baths</span>
+              <span>📐 2,400 sqft</span>
+            </div>
+          </div>
+        </div>
+        <div class="listing-card">
+          <div class="listing-img" style="background: linear-gradient(135deg, #ffd6a5, #f4845f);">🏠</div>
+          <div class="listing-info">
+            <div class="listing-price">$425,000</div>
+            <div class="listing-address">789 Windermere Blvd, Edmonton</div>
+            <div class="listing-features">
+              <span>🛏 3 Beds</span>
+              <span>🚿 2 Baths</span>
+              <span>📐 1,800 sqft</span>
+            </div>
+          </div>
+        </div>
+        <div class="listing-card">
+          <div class="listing-img" style="background: linear-gradient(135deg, #c8b6ff, #7209b7);">🏢</div>
+          <div class="listing-info">
+            <div class="listing-price">$299,900</div>
+            <div class="listing-address">456 Ice District, Downtown Edmonton</div>
+            <div class="listing-features">
+              <span>🛏 2 Beds</span>
+              <span>🚿 2 Baths</span>
+              <span>📐 1,100 sqft</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats">
+    <div class="container">
+      <div class="stats-grid">
+        <div>
+          <div class="stat-num">2,500+</div>
+          <div class="stat-label">Active Listings</div>
+        </div>
+        <div>
+          <div class="stat-num">850+</div>
+          <div class="stat-label">Homes Sold</div>
+        </div>
+        <div>
+          <div class="stat-num">98%</div>
+          <div class="stat-label">Client Satisfaction</div>
+        </div>
+        <div>
+          <div class="stat-num">15+</div>
+          <div class="stat-label">Years Experience</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta" id="contact">
+    <div class="container">
+      <h2>Ready to Find Your Perfect Home?</h2>
+      <p>Our Edmonton real estate experts are here to help you every step of the way.</p>
+      <a href="#" class="cta-btn">Contact an Agent Today</a>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <h4>Peak Realty Edmonton</h4>
+          <p>Edmonton's trusted real estate agency. Helping families find their dream homes since 2008.</p>
+          <p style="margin-top:15px;">📍 10180 101 St NW, Edmonton, AB</p>
+          <p>📞 (780) 555-0456</p>
+        </div>
+        <div>
+          <h4>Buy</h4>
+          <ul>
+            <li><a href="#">Houses</a></li>
+            <li><a href="#">Condos</a></li>
+            <li><a href="#">Townhouses</a></li>
+            <li><a href="#">New Builds</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Sell</h4>
+          <ul>
+            <li><a href="#">Free Valuation</a></li>
+            <li><a href="#">Selling Guide</a></li>
+            <li><a href="#">Market Report</a></li>
+            <li><a href="#">List With Us</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Areas</h4>
+          <ul>
+            <li><a href="#">South Edmonton</a></li>
+            <li><a href="#">West Edmonton</a></li>
+            <li><a href="#">St. Albert</a></li>
+            <li><a href="#">Sherwood Park</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>Demo website by Nolimit Designs — Edmonton's Premier Web Development Agency | <a href="/" style="color:#40916c;">Get a website like this →</a></p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

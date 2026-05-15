@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edmonton Family Health Clinic - Demo Website by Nolimit Designs</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; color: #1a1a2e; line-height: 1.6; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+    
+    /* Header */
+    .header { background: #fff; padding: 15px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: fixed; width: 100%; top: 0; z-index: 100; }
+    .header .container { display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-size: 24px; font-weight: 700; color: #0077b6; }
+    .logo span { color: #00b4d8; }
+    .nav { display: flex; gap: 30px; list-style: none; }
+    .nav a { text-decoration: none; color: #333; font-weight: 500; transition: color 0.3s; }
+    .nav a:hover { color: #0077b6; }
+    .header-btn { background: #0077b6; color: #fff; padding: 10px 24px; border-radius: 25px; text-decoration: none; font-weight: 600; transition: background 0.3s; }
+    .header-btn:hover { background: #005f8d; }
+
+    /* Hero */
+    .hero { padding: 140px 0 80px; background: linear-gradient(135deg, #e8f4f8 0%, #f0f9ff 100%); }
+    .hero .container { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+    .hero h1 { font-size: 48px; line-height: 1.2; margin-bottom: 20px; color: #0d1b2a; }
+    .hero h1 span { color: #0077b6; }
+    .hero p { font-size: 18px; color: #555; margin-bottom: 30px; }
+    .hero-btns { display: flex; gap: 15px; }
+    .btn-primary { background: #0077b6; color: #fff; padding: 14px 32px; border-radius: 30px; text-decoration: none; font-weight: 600; display: inline-block; transition: all 0.3s; }
+    .btn-primary:hover { background: #005f8d; transform: translateY(-2px); }
+    .btn-secondary { background: #fff; color: #0077b6; padding: 14px 32px; border-radius: 30px; text-decoration: none; font-weight: 600; border: 2px solid #0077b6; display: inline-block; transition: all 0.3s; }
+    .btn-secondary:hover { background: #0077b6; color: #fff; }
+    .hero-image { background: linear-gradient(135deg, #0077b6, #00b4d8); border-radius: 20px; height: 400px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 80px; }
+
+    /* Services */
+    .services { padding: 80px 0; background: #fff; }
+    .section-title { text-align: center; margin-bottom: 50px; }
+    .section-title h2 { font-size: 36px; color: #0d1b2a; margin-bottom: 10px; }
+    .section-title p { color: #666; font-size: 18px; }
+    .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+    .service-card { padding: 40px 30px; border-radius: 15px; border: 1px solid #e8e8e8; text-align: center; transition: all 0.3s; }
+    .service-card:hover { border-color: #0077b6; box-shadow: 0 10px 30px rgba(0,119,182,0.1); transform: translateY(-5px); }
+    .service-icon { width: 70px; height: 70px; background: #e8f4f8; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 30px; }
+    .service-card h3 { font-size: 20px; margin-bottom: 10px; }
+    .service-card p { color: #666; font-size: 14px; }
+
+    /* Booking */
+    .booking { padding: 80px 0; background: linear-gradient(135deg, #0077b6, #00b4d8); color: #fff; }
+    .booking .container { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+    .booking h2 { font-size: 36px; margin-bottom: 15px; }
+    .booking p { font-size: 18px; opacity: 0.9; margin-bottom: 30px; }
+    .booking-form { background: #fff; border-radius: 15px; padding: 40px; }
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; font-size: 14px; font-weight: 600; color: #333; margin-bottom: 5px; }
+    .form-group input, .form-group select { width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px; }
+    .form-group input:focus, .form-group select:focus { outline: none; border-color: #0077b6; }
+    .form-submit { background: #0077b6; color: #fff; padding: 14px 32px; border: none; border-radius: 30px; font-size: 16px; font-weight: 600; cursor: pointer; width: 100%; transition: background 0.3s; }
+    .form-submit:hover { background: #005f8d; }
+
+    /* Footer */
+    .footer { background: #0d1b2a; color: #fff; padding: 60px 0 30px; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+    .footer h4 { margin-bottom: 15px; font-size: 18px; }
+    .footer p, .footer a { color: #aaa; text-decoration: none; font-size: 14px; }
+    .footer a:hover { color: #00b4d8; }
+    .footer ul { list-style: none; }
+    .footer li { margin-bottom: 8px; }
+    .footer-bottom { border-top: 1px solid #1a2a3a; padding-top: 20px; text-align: center; color: #666; font-size: 13px; }
+
+    /* Banner */
+    .demo-banner { background: #ff4f01; color: #fff; text-align: center; padding: 10px; font-size: 14px; position: fixed; bottom: 0; width: 100%; z-index: 999; }
+    .demo-banner a { color: #fff; font-weight: 700; text-decoration: underline; }
+
+    @media (max-width: 768px) {
+      .hero .container, .booking .container, .footer-grid { grid-template-columns: 1fr; }
+      .services-grid { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 32px; }
+      .nav { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Demo Banner -->
+  <div class="demo-banner">
+    🏥 This is a demo website built by <a href="/">Nolimit Designs</a> — Edmonton's #1 Web Development Agency
+  </div>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="logo">Edmonton<span>Health</span></div>
+      <ul class="nav">
+        <li><a href="#services">Services</a></li>
+        <li><a href="#doctors">Doctors</a></li>
+        <li><a href="#booking">Book Online</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <a href="#booking" class="header-btn">Book Appointment</a>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <div>
+        <h1>Your Family's Health is Our <span>Priority</span></h1>
+        <p>Comprehensive healthcare services for the whole family. Online booking, telemedicine, and same-day appointments available.</p>
+        <div class="hero-btns">
+          <a href="#booking" class="btn-primary">Book Appointment</a>
+          <a href="#services" class="btn-secondary">Our Services</a>
+        </div>
+      </div>
+      <div class="hero-image">🏥</div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section class="services" id="services">
+    <div class="container">
+      <div class="section-title">
+        <h2>Our Medical Services</h2>
+        <p>Comprehensive care for you and your family</p>
+      </div>
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-icon">👨‍⚕️</div>
+          <h3>Family Medicine</h3>
+          <p>Complete primary care for patients of all ages, from newborns to seniors.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">💻</div>
+          <h3>Telemedicine</h3>
+          <p>Virtual consultations from the comfort of your home. Available 7 days a week.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">🔬</div>
+          <h3>Lab Services</h3>
+          <p>On-site blood work and diagnostic testing with fast results.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">💉</div>
+          <h3>Vaccinations</h3>
+          <p>Full immunization services including flu shots and travel vaccines.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">🩺</div>
+          <h3>Walk-In Clinic</h3>
+          <p>No appointment needed. Same-day care for urgent health concerns.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">❤️</div>
+          <h3>Chronic Disease</h3>
+          <p>Ongoing management for diabetes, hypertension, and other conditions.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Booking -->
+  <section class="booking" id="booking">
+    <div class="container">
+      <div>
+        <h2>Book Your Appointment Online</h2>
+        <p>Skip the phone call. Book your appointment in seconds with our easy online booking system. Choose your preferred doctor, date, and time.</p>
+        <ul style="list-style:none; margin-top:20px;">
+          <li style="margin-bottom:10px;">✓ Same-day appointments available</li>
+          <li style="margin-bottom:10px;">✓ Choose your preferred doctor</li>
+          <li style="margin-bottom:10px;">✓ Automatic email reminders</li>
+          <li style="margin-bottom:10px;">✓ Easy rescheduling</li>
+        </ul>
+      </div>
+      <div class="booking-form">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" placeholder="Enter your full name">
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" placeholder="your@email.com">
+        </div>
+        <div class="form-group">
+          <label>Phone</label>
+          <input type="tel" placeholder="(780) 000-0000">
+        </div>
+        <div class="form-group">
+          <label>Service</label>
+          <select>
+            <option>Family Medicine</option>
+            <option>Walk-In Visit</option>
+            <option>Telemedicine</option>
+            <option>Lab Work</option>
+            <option>Vaccination</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Preferred Date</label>
+          <input type="date">
+        </div>
+        <button class="form-submit">Book Appointment</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer" id="contact">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <h4>Edmonton Family Health Clinic</h4>
+          <p>Providing comprehensive healthcare to Edmonton families since 2010. Your health is our mission.</p>
+          <p style="margin-top:15px;">📍 12345 Jasper Avenue, Edmonton, AB</p>
+          <p>📞 (780) 555-0123</p>
+        </div>
+        <div>
+          <h4>Services</h4>
+          <ul>
+            <li><a href="#">Family Medicine</a></li>
+            <li><a href="#">Walk-In Clinic</a></li>
+            <li><a href="#">Telemedicine</a></li>
+            <li><a href="#">Lab Services</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Hours</h4>
+          <ul>
+            <li><a href="#">Mon-Fri: 8am-6pm</a></li>
+            <li><a href="#">Saturday: 9am-3pm</a></li>
+            <li><a href="#">Sunday: Closed</a></li>
+            <li><a href="#">Holidays: Call</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="#">Patient Portal</a></li>
+            <li><a href="#">Book Online</a></li>
+            <li><a href="#">Insurance</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>Demo website by Nolimit Designs — Edmonton's Premier Web Development Agency | <a href="/" style="color:#00b4d8;">Get a website like this →</a></p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
