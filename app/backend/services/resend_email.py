@@ -72,7 +72,7 @@ async def send_contact_email(
 
     payload = {
         "from": "Nolimit Designs <onboarding@resend.dev>",
-        "to": ["hello@nolimitdesigns.com"],
+        "to": ["hello@nolimitdesigns.ca"],
         "reply_to": email,
         "subject": f"New Inquiry from {name} - {industry or 'General'}",
         "html": html_body,
