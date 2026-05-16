@@ -50,4 +50,4 @@ async def send_contact_form_email(data: ContactEmailRequest):
         raise HTTPException(status_code=500, detail="Email service is not configured")
     except Exception as e:
         logger.error(f"Email sending error: {e}")
-        raise HTTPException(status_code=500, detail=f"Failed to send email: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))

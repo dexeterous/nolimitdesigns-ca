@@ -53,9 +53,10 @@ export default function Contact() {
             services: formData.services.join(", "),
           },
         });
-      } catch {
+        console.log("Email notification sent successfully");
+      } catch (emailErr) {
         // Email sending is non-blocking - form submission still succeeds
-        console.warn("Email notification could not be sent, but form was saved.");
+        console.error("Email notification failed:", emailErr);
       }
 
       setSubmitted(true);
@@ -118,13 +119,13 @@ export default function Contact() {
                 <p className="text-sm text-[rgb(119,119,125)]">(587) 882-6700</p>
               </div>
             </a>
-            <a href="mailto:hello@nolimitdesigns.com" className="flex items-center gap-4 p-6 rounded-xl border border-[#bebebe] hover:border-[#ff4f01] transition-all bg-white group">
+            <a href="mailto:hello@nolimitdesigns.ca" className="flex items-center gap-4 p-6 rounded-xl border border-[#bebebe] hover:border-[#ff4f01] transition-all bg-white group">
               <div className="w-12 h-12 rounded-full bg-[#ff4f01]/10 flex items-center justify-center shrink-0 group-hover:bg-[#ff4f01] transition-colors">
                 <i className="ri-mail-line text-[#ff4f01] text-xl group-hover:text-white transition-colors" />
               </div>
               <div>
                 <p className="font-medium font-bricolage">Email Us</p>
-                <p className="text-sm text-[rgb(119,119,125)]">hello@nolimitdesigns.com</p>
+                <p className="text-sm text-[rgb(119,119,125)]">hello@nolimitdesigns.ca</p>
               </div>
             </a>
             <a href="https://calendly.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 p-6 rounded-xl border border-[#bebebe] hover:border-[#ff4f01] transition-all bg-white group">

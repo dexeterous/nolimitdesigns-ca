@@ -6,6 +6,11 @@ logger = logging.getLogger(__name__)
 
 RESEND_API_KEY = os.environ.get("RESEND_API_KEY", "")
 RESEND_API_URL = "https://api.resend.com/emails"
+# Set your verified domain sender here once domain is verified in Resend
+# e.g., "Nolimit Designs <noreply@nolimitdesigns.ca>"
+# Until domain is verified, use "onboarding@resend.dev" (can only send to Resend account owner email)
+RESEND_FROM = os.environ.get("RESEND_FROM_EMAIL", "Nolimit Designs <onboarding@resend.dev>")
+RESEND_TO = os.environ.get("RESEND_TO_EMAIL", "hello@nolimitdesigns.ca")
 
 
 async def send_contact_email(
@@ -71,8 +76,8 @@ async def send_contact_email(
     """
 
     payload = {
-        "from": "Nolimit Designs <onboarding@resend.dev>",
-        "to": ["hello@nolimitdesigns.ca"],
+        "from": RESEND_FROM,
+        "to": [RESEND_TO],
         "reply_to": email,
         "subject": f"New Inquiry from {name} - {industry or 'General'}",
         "html": html_body,
@@ -83,6 +88,8 @@ async def send_contact_email(
         "Content-Type": "application/json",
     }
 
+    logger.info(f"Sending email via Resend from={RESEND_FROM} to={RESEND_TO}")
+
     async with httpx.AsyncClient() as http_client:
         response = await http_client.post(
             RESEND_API_URL,
@@ -91,10 +98,13 @@ async def send_contact_email(
             timeout=10.0,
         )
 
+    response_data = response.json() if response.headers.get("content-type", "").startswith("application/json") else response.text
+    logger.info(f"Resend API response: status={response.status_code} body={response_data}")
+
     if response.status_code in (200, 201):
         result = response.json()
         logger.info(f"Email sent successfully via Resend: {result.get('id', 'unknown')}")
         return {"success": True, "email_id": result.get("id")}
     else:
-        logger.error(f"Resend API error: {response.status_code} - {response.text}")
-        raise Exception(f"Failed to send email: {response.status_code}")
+        logger.error(f"Resend API error: {response.status_code} - {response_data}")
+        raise Exception(f"Failed to send email: status={response.status_code} detail={response_data}")
