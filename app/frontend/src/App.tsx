@@ -3,6 +3,7 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ScrollToTop from './components/ScrollToTop';
+import RouteProgressBar from './components/RouteProgressBar';
 import { AuthProvider } from './contexts/AuthContext';
 import Index from './pages/Index';
 import GraphicDesignServices from './pages/GraphicDesignServices';
@@ -37,6 +38,7 @@ const App = () => (
       <Toaster />
       <AuthProvider>
         <BrowserRouter>
+          <RouteProgressBar />
           <ScrollToTop />
           <Routes>
             <Route path="/" element={<Index />} />
