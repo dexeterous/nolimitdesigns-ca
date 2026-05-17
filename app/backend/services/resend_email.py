@@ -6,9 +6,9 @@ logger = logging.getLogger(__name__)
 
 RESEND_API_KEY = os.environ.get("RESEND_API_KEY", "")
 RESEND_API_URL = "https://api.resend.com/emails"
-# Domain verified - using nolimitdesigns.ca sender
-RESEND_FROM = os.environ.get("RESEND_FROM_EMAIL", "Nolimit Designs <noreply@nolimitdesigns.ca>")
-RESEND_TO = os.environ.get("RESEND_TO_EMAIL", "hello@nolimitdesigns.ca")
+# Using Resend default sender for reliable delivery
+RESEND_FROM = "Nolimit Designs <onboarding@resend.dev>"
+RESEND_TO = "adebisi.ibrohim@gmail.com"
 
 
 async def send_contact_email(

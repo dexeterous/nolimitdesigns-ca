@@ -1,6 +1,6 @@
 import logging
 from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel
 
 from services.resend_email import send_contact_email
 
@@ -11,7 +11,7 @@ router = APIRouter(prefix="/api/v1/email", tags=["email"])
 
 class ContactEmailRequest(BaseModel):
     name: str
-    email: EmailStr
+    email: str
     phone: str = ""
     company: str = ""
     industry: str = ""
