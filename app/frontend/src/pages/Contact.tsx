@@ -128,7 +128,7 @@ export default function Contact() {
                 <p className="text-sm text-[rgb(119,119,125)]">hello@nolimitdesigns.ca</p>
               </div>
             </a>
-            <a href="https://calendly.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 p-6 rounded-xl border border-[#bebebe] hover:border-[#ff4f01] transition-all bg-white group">
+            <a href="https://calendly.com/hello-nolimitdesigns/30min?back=1&month=2026-05" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 p-6 rounded-xl border border-[#bebebe] hover:border-[#ff4f01] transition-all bg-white group">
               <div className="w-12 h-12 rounded-full bg-[#ff4f01]/10 flex items-center justify-center shrink-0 group-hover:bg-[#ff4f01] transition-colors">
                 <i className="ri-calendar-line text-[#ff4f01] text-xl group-hover:text-white transition-colors" />
               </div>
