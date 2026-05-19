@@ -4,6 +4,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ScrollToTop from './components/ScrollToTop';
 import RouteProgressBar from './components/RouteProgressBar';
+import { PageLoadSpinner } from './components/PageLoadSpinner';
+import { SeoManager } from './components/SeoManager';
 import { AuthProvider } from './contexts/AuthContext';
 import Index from './pages/Index';
 import GraphicDesignServices from './pages/GraphicDesignServices';
@@ -29,6 +31,11 @@ import ServicePage from './pages/ServicePage';
 import LocationPage from './pages/LocationPage';
 import Contact from './pages/Contact';
 import About from './pages/About';
+import ServicesOverview from './pages/ServicesOverview';
+import PortfolioOverview from './pages/PortfolioOverview';
+import Sitemap from './pages/Sitemap';
+import LegalPage from './pages/LegalPage';
+import NotFound from './pages/NotFound';
 
 const queryClient = new QueryClient();
 
@@ -40,14 +47,21 @@ const App = () => (
         <BrowserRouter>
           <RouteProgressBar />
           <ScrollToTop />
+          <PageLoadSpinner />
+          <SeoManager />
           <Routes>
             <Route path="/" element={<Index />} />
             {/* New Agency Pages */}
+            <Route path="/services" element={<ServicesOverview />} />
+            <Route path="/portfolio" element={<PortfolioOverview />} />
             <Route path="/portfolio/:slug" element={<IndustryPortfolio />} />
             <Route path="/services/:slug" element={<ServicePage />} />
             <Route path="/web-design/:slug" element={<LocationPage />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/about" element={<About />} />
+            <Route path="/sitemap" element={<Sitemap />} />
+            <Route path="/privacy-policy" element={<LegalPage />} />
+            <Route path="/terms-of-service" element={<LegalPage />} />
             {/* Legacy Pages */}
             <Route path="/graphic-design-services" element={<GraphicDesignServices />} />
             <Route path="/video-design-services" element={<VideoDesignServices />} />
@@ -71,6 +85,7 @@ const App = () => (
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="/admin/requests" element={<AdminRequests />} />
             <Route path="/admin/*" element={<AdminDashboard />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
       </AuthProvider>

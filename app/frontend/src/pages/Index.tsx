@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { HomePricingSection } from "@/components/HomePricingSection";
 import { industries, services, testimonials, faqData, processSteps } from "@/data/siteData";
 
 const companyLogos = [
@@ -131,6 +132,8 @@ export default function Index() {
           </div>
         </div>
       </section>
+
+      <HomePricingSection />
 
       {/* INDUSTRIES SECTION */}
       <section id="industries" className="lg:py-24 py-16 bg-gradient-to-br from-[#070707] to-[#1f1f1f]">

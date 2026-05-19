@@ -47,6 +47,7 @@ export function SiteFooter() {
               <li><Link to="/services/ui-ux-design" className="text-[rgb(119,119,125)] hover:text-[#ff4f01] transition-colors">UI/UX Design</Link></li>
               <li><Link to="/services/digital-marketing" className="text-[rgb(119,119,125)] hover:text-[#ff4f01] transition-colors">Digital Marketing</Link></li>
               <li><Link to="/services/website-maintenance" className="text-[rgb(119,119,125)] hover:text-[#ff4f01] transition-colors">Maintenance</Link></li>
+              <li><Link to="/services" className="text-[#ff4f01] font-medium">View All Services →</Link></li>
             </ul>
           </div>
 
@@ -59,7 +60,7 @@ export function SiteFooter() {
               <li><Link to="/portfolio/restaurant" className="text-[rgb(119,119,125)] hover:text-[#ff4f01] transition-colors">Restaurant</Link></li>
               <li><Link to="/portfolio/legal" className="text-[rgb(119,119,125)] hover:text-[#ff4f01] transition-colors">Legal</Link></li>
               <li><Link to="/portfolio/construction" className="text-[rgb(119,119,125)] hover:text-[#ff4f01] transition-colors">Construction</Link></li>
-              <li><Link to="/portfolio/healthcare" className="text-[#ff4f01] font-medium">View All 20+ →</Link></li>
+              <li><Link to="/portfolio" className="text-[#ff4f01] font-medium">View All 20+ →</Link></li>
             </ul>
           </div>
 
@@ -83,8 +84,9 @@ export function SiteFooter() {
               <li><Link to="/about" className="text-[rgb(119,119,125)] hover:text-[#ff4f01] transition-colors">About Us</Link></li>
               <li><Link to="/contact" className="text-[rgb(119,119,125)] hover:text-[#ff4f01] transition-colors">Contact</Link></li>
               <li><Link to="/blog-posts" className="text-[rgb(119,119,125)] hover:text-[#ff4f01] transition-colors">Blog</Link></li>
-              <li><a href="#" className="text-[rgb(119,119,125)] hover:text-[#ff4f01] transition-colors">Privacy Policy</a></li>
-              <li><a href="#" className="text-[rgb(119,119,125)] hover:text-[#ff4f01] transition-colors">Terms of Service</a></li>
+              <li><Link to="/sitemap" className="text-[rgb(119,119,125)] hover:text-[#ff4f01] transition-colors">Sitemap</Link></li>
+              <li><Link to="/privacy-policy" className="text-[rgb(119,119,125)] hover:text-[#ff4f01] transition-colors">Privacy Policy</Link></li>
+              <li><Link to="/terms-of-service" className="text-[rgb(119,119,125)] hover:text-[#ff4f01] transition-colors">Terms of Service</Link></li>
             </ul>
           </div>
         </div>

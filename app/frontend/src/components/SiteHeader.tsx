@@ -31,6 +31,7 @@ export function SiteHeader() {
   }, []);
 
   const serviceItems = [
+    { name: "All Services", slug: "", icon: "ri-stack-line", color: "#ff4f01" },
     { name: "Web Development", slug: "web-development", icon: "ri-code-s-slash-line", color: "#ff4f01" },
     { name: "E-Commerce", slug: "ecommerce", icon: "ri-shopping-cart-line", color: "#7c3aed" },
     { name: "SEO Services", slug: "seo-services", icon: "ri-search-line", color: "#0ea5e9" },
@@ -40,12 +41,13 @@ export function SiteHeader() {
   ];
 
   const topIndustries = [
+    { name: "All Industries", slug: "", icon: "ri-window-line" },
     { name: "Healthcare", slug: "healthcare", icon: "ri-heart-pulse-line" },
     { name: "Real Estate", slug: "real-estate", icon: "ri-building-2-line" },
     { name: "Restaurant", slug: "restaurant", icon: "ri-restaurant-line" },
     { name: "Legal", slug: "legal", icon: "ri-scales-3-line" },
     { name: "Construction", slug: "construction", icon: "ri-building-4-line" },
-    { name: "View All 20+", slug: "healthcare", icon: "ri-arrow-right-line" },
+    { name: "View All 20+", slug: "", icon: "ri-arrow-right-line" },
   ];
 
   return (
@@ -98,7 +100,7 @@ export function SiteHeader() {
                     {serviceItems.map((item) => (
                       <Link
                         key={item.slug}
-                        to={`/services/${item.slug}`}
+                        to={item.slug ? `/services/${item.slug}` : "/services"}
                         onClick={() => { setIsServicesOpen(false); setIsMenuOpen(false); }}
                         className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-[#ff4f01]/10 transition-all duration-300 group"
                       >
@@ -132,7 +134,7 @@ export function SiteHeader() {
                     {topIndustries.map((item) => (
                       <Link
                         key={item.slug + item.name}
-                        to={`/portfolio/${item.slug}`}
+                        to={item.slug ? `/portfolio/${item.slug}` : "/portfolio"}
                         onClick={() => { setIsIndustriesOpen(false); setIsMenuOpen(false); }}
                         className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-[#ff4f01]/10 transition-all duration-300 group"
                       >
@@ -147,7 +149,8 @@ export function SiteHeader() {
               </li>
 
               {[
-                { label: "Portfolio", href: "/#portfolio" },
+                { label: "Portfolio", href: "/portfolio" },
+                { label: "Pricing", href: "/#pricing" },
                 { label: "About", href: "/about" },
                 { label: "Blog", href: "/blog-posts" },
                 { label: "Contact", href: "/contact" },
