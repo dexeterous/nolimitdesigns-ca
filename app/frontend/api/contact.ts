@@ -1,6 +1,6 @@
 const RESEND_API_URL = "https://api.resend.com/emails";
-const DEFAULT_FROM = "Nolimit Designs <onboarding@resend.dev>";
-const DEFAULT_TO = "adebisi.ibrohim@gmail.com";
+const DEFAULT_FROM = "Nolimit Designs <hello@nolimitdesigns.ca>";
+const DEFAULT_TO = "hello@nolimitdesigns.ca";
 
 function escapeHtml(value = "") {
   return String(value)
