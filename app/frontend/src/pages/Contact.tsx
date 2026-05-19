@@ -29,24 +29,6 @@ export default function Contact() {
     services: formData.services,
   });
 
-  const buildFallbackMailto = () => {
-    const payload = buildSubmissionPayload();
-    const body = [
-      `Name: ${payload.name}`,
-      `Email: ${payload.email}`,
-      `Phone: ${payload.phone || "Not provided"}`,
-      `Company: ${payload.company || "Not provided"}`,
-      `Industry: ${payload.industry || "Not specified"}`,
-      `Budget: ${payload.budget || "Not specified"}`,
-      `Services: ${payload.services.length ? payload.services.join(", ") : "Not specified"}`,
-      "",
-      "Project Details:",
-      payload.message,
-    ].join("\n");
-
-    return `mailto:hello@nolimitdesigns.ca?subject=${encodeURIComponent(`Website inquiry from ${payload.name}`)}&body=${encodeURIComponent(body)}`;
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -61,16 +43,14 @@ export default function Contact() {
 
       const result = await response.json().catch(() => null);
       if (!response.ok || !result?.success) {
-        throw new Error("Contact API failed");
+        throw new Error(result?.error || "Contact API failed");
       }
 
       setSubmitted(true);
       toast.success("Message sent successfully! We'll get back to you within 2 hours.");
     } catch (error) {
       console.error("Contact form submission failed:", error);
-      window.location.href = buildFallbackMailto();
-      setSubmitted(true);
-      toast.success("Your email app is opening with the message details. Send it to complete your request.");
+      toast.error("Message could not be sent through Resend. Please check the Resend API configuration.");
     } finally {
       setLoading(false);
     }
