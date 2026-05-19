@@ -2,7 +2,6 @@ import { useState } from "react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { industries } from "@/data/siteData";
-import { client } from "@/lib/api";
 import { toast } from "sonner";
 
 export default function Contact() {
@@ -19,50 +18,59 @@ export default function Contact() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const buildSubmissionPayload = () => ({
+    name: formData.name,
+    email: formData.email,
+    phone: formData.phone || "",
+    company: formData.company || "",
+    industry: formData.industry || "",
+    budget: formData.budget || "",
+    message: formData.message,
+    services: formData.services,
+  });
+
+  const buildFallbackMailto = () => {
+    const payload = buildSubmissionPayload();
+    const body = [
+      `Name: ${payload.name}`,
+      `Email: ${payload.email}`,
+      `Phone: ${payload.phone || "Not provided"}`,
+      `Company: ${payload.company || "Not provided"}`,
+      `Industry: ${payload.industry || "Not specified"}`,
+      `Budget: ${payload.budget || "Not specified"}`,
+      `Services: ${payload.services.length ? payload.services.join(", ") : "Not specified"}`,
+      "",
+      "Project Details:",
+      payload.message,
+    ].join("\n");
+
+    return `mailto:hello@nolimitdesigns.ca?subject=${encodeURIComponent(`Website inquiry from ${payload.name}`)}&body=${encodeURIComponent(body)}`;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
-      // Save to database
-      await client.entities.contact_submissions.create({
-        data: {
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone || "",
-          company: formData.company || "",
-          industry: formData.industry || "",
-          budget: formData.budget || "",
-          message: formData.message,
-          services: formData.services.join(", "),
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
+        body: JSON.stringify(buildSubmissionPayload()),
       });
 
-      // Send email notification via Resend
-      try {
-        await client.apiCall.invoke({
-          url: "/api/v1/email/send-contact",
-          method: "POST",
-          data: {
-            name: formData.name,
-            email: formData.email,
-            phone: formData.phone || "",
-            company: formData.company || "",
-            industry: formData.industry || "",
-            budget: formData.budget || "",
-            message: formData.message,
-            services: formData.services.join(", "),
-          },
-        });
-        console.log("Email notification sent successfully");
-      } catch (emailErr) {
-        // Email sending is non-blocking - form submission still succeeds
-        console.error("Email notification failed:", emailErr);
+      const result = await response.json().catch(() => null);
+      if (!response.ok || !result?.success) {
+        throw new Error("Contact API failed");
       }
 
       setSubmitted(true);
       toast.success("Message sent successfully! We'll get back to you within 2 hours.");
-    } catch {
-      toast.error("Something went wrong. Please try again or call us directly.");
+    } catch (error) {
+      console.error("Contact form submission failed:", error);
+      window.location.href = buildFallbackMailto();
+      setSubmitted(true);
+      toast.success("Your email app is opening with the message details. Send it to complete your request.");
     } finally {
       setLoading(false);
     }
