@@ -6,6 +6,7 @@ import ScrollToTop from './components/ScrollToTop';
 import RouteProgressBar from './components/RouteProgressBar';
 import { PageLoadSpinner } from './components/PageLoadSpinner';
 import { SeoManager } from './components/SeoManager';
+import { GoogleAnalytics } from './components/GoogleAnalytics';
 import { AuthProvider } from './contexts/AuthContext';
 import Index from './pages/Index';
 import GraphicDesignServices from './pages/GraphicDesignServices';
@@ -49,6 +50,7 @@ const App = () => (
           <ScrollToTop />
           <PageLoadSpinner />
           <SeoManager />
+          <GoogleAnalytics />
           <Routes>
             <Route path="/" element={<Index />} />
             {/* New Agency Pages */}
