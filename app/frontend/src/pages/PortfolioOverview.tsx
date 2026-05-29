@@ -57,7 +57,7 @@ const projects: PortfolioProject[] = [
     accent: "#0f766e",
     dark: "#0f172a",
     images: {
-      overview: "/images/portfolio/pinnacle/project-overview.png",
+      overview: "/images/portfolio/pinnacle/hero-image.png",
       mobile: "/images/portfolio/pinnacle/mobile-view.png",
       showcase: [
         "/images/portfolio/pinnacle/pathway-landing-page.png",
@@ -235,11 +235,11 @@ function PlaceholderScreen({ project, compact = false }: { project: PortfolioPro
 function ProjectImageScreen({ src, alt, compact = false }: { src: string; alt: string; compact?: boolean }) {
   return (
     <div className={`rounded-2xl border border-[#bebebe] bg-white/70 p-3 ${compact ? "min-h-[260px]" : ""}`}>
-      <div className={`overflow-hidden rounded-xl bg-[#fff6ec] shadow-sm ${compact ? "max-h-[560px]" : "max-h-[420px]"}`}>
+      <div className={`flex items-start justify-center overflow-hidden rounded-xl bg-[#fff6ec] shadow-sm ${compact ? "max-h-[640px]" : "max-h-[620px]"}`}>
         <img
           src={src}
           alt={alt}
-          className={`w-full object-top ${compact ? "h-full max-h-[540px] object-contain" : "h-full min-h-[280px] object-cover"}`}
+          className={`w-full object-contain object-top ${compact ? "h-[620px]" : "h-[600px]"}`}
           loading="lazy"
         />
       </div>
