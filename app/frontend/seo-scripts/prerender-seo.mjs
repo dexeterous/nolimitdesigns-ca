@@ -53,7 +53,7 @@ const locations = [
 const staticRoutes = [
   ["/", "Edmonton Web Design Agency | Nolimit Designs", "Nolimit Designs is an Edmonton web design agency building custom websites, e-commerce stores, and SEO strategies for growing local businesses.", 1],
   ["/services", "Web Design & Development Services Edmonton | Nolimit Designs", "Explore Edmonton web design, web development, e-commerce, SEO, UI/UX, digital marketing, and maintenance services from Nolimit Designs.", 0.9],
-  ["/portfolio", "Web Design Portfolio by Industry | Nolimit Designs Edmonton", "Browse industry-specific website portfolio pages for healthcare, real estate, restaurant, legal, construction, retail, and more Edmonton businesses.", 0.9],
+  ["/portfolio", "Website Portfolio & Case Studies | Nolimit Designs Edmonton", "View Nolimit Designs website case studies for immigration, education, language training, business technology, and fashion e-commerce projects.", 0.9],
   ["/pricing", "Website Pricing Edmonton | Nolimit Designs", "View website pricing options for starter websites, professional websites, e-commerce stores, and SEO services from Nolimit Designs.", 0.8],
   ["/about", "About Nolimit Designs | Edmonton Web Design Agency", "Learn about Nolimit Designs, an Edmonton web design agency helping local businesses launch faster websites, SEO strategies, and digital growth systems.", 0.8],
   ["/contact", "Contact Nolimit Designs | Edmonton Web Design Quote", "Contact Nolimit Designs for a free Edmonton web design quote, website consultation, SEO strategy, or e-commerce project estimate.", 0.9],
