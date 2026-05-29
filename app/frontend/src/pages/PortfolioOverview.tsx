@@ -284,7 +284,7 @@ function ProjectCaseStudy({ project, index }: { project: PortfolioProject; index
         <div className="grid gap-8 lg:grid-cols-[260px_1fr]">
           <PlaceholderScreen project={project} compact />
           <div className="grid gap-8">
-            {project.showcase.map((item) => (
+            {project.showcase.slice(0, 2).map((item) => (
               <div key={item}>
                 <PlaceholderScreen project={project} />
                 <p className="mt-3 text-sm font-semibold text-[#101010]">{item}</p>
