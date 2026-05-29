@@ -1,16 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { industries } from "@/data/siteData";
+import { getPricingPackage, pricingPackages } from "@/data/pricingPackages";
 import { toast } from "sonner";
 
 export default function Contact() {
+  const [searchParams] = useSearchParams();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
     company: "",
     industry: "",
+    selectedPackage: "",
     budget: "",
     message: "",
     services: [] as string[],
@@ -18,16 +22,47 @@ export default function Contact() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const buildSubmissionPayload = () => ({
-    name: formData.name,
-    email: formData.email,
-    phone: formData.phone || "",
-    company: formData.company || "",
-    industry: formData.industry || "",
-    budget: formData.budget || "",
-    message: formData.message,
-    services: formData.services,
-  });
+  const buildSubmissionPayload = () => {
+    const selected = getPricingPackage(formData.selectedPackage);
+
+    return {
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone || "",
+      company: formData.company || "",
+      industry: formData.industry || "",
+      selectedPackage: selected ? `${selected.title} (${selected.investment})` : "",
+      budget: formData.budget || "",
+      message: formData.message,
+      services: formData.services,
+    };
+  };
+
+  const applySelectedPackage = (packageId: string) => {
+    const selected = getPricingPackage(packageId);
+
+    setFormData((prev) => {
+      if (!selected) {
+        return { ...prev, selectedPackage: "" };
+      }
+
+      return {
+        ...prev,
+        selectedPackage: selected.id,
+        budget: selected.investment,
+        services: prev.services.includes(selected.service)
+          ? prev.services
+          : [...prev.services, selected.service],
+      };
+    });
+  };
+
+  useEffect(() => {
+    const packageId = searchParams.get("package");
+    if (packageId) {
+      applySelectedPackage(packageId);
+    }
+  }, [searchParams]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -156,7 +191,7 @@ export default function Contact() {
                   <button
                     onClick={() => {
                       setSubmitted(false);
-                      setFormData({ name: "", email: "", phone: "", company: "", industry: "", budget: "", message: "", services: [] });
+                      setFormData({ name: "", email: "", phone: "", company: "", industry: "", selectedPackage: "", budget: "", message: "", services: [] });
                     }}
                     className="btn btn-primary"
                   >
@@ -213,6 +248,27 @@ export default function Contact() {
                     </div>
                   </div>
 
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Selected Package</label>
+                    <select
+                      value={formData.selectedPackage}
+                      onChange={(e) => applySelectedPackage(e.target.value)}
+                      className="w-full px-4 py-3 rounded-lg border border-[#bebebe] focus:border-[#ff4f01] focus:ring-1 focus:ring-[#ff4f01] outline-none transition-all"
+                    >
+                      <option value="">Select a package</option>
+                      {pricingPackages.map((pkg) => (
+                        <option key={pkg.id} value={pkg.id}>
+                          {pkg.title} - {pkg.investment}
+                        </option>
+                      ))}
+                    </select>
+                    {formData.selectedPackage && (
+                      <p className="mt-2 text-sm text-[rgb(119,119,125)]">
+                        This package was added from your pricing selection and will be included with your message.
+                      </p>
+                    )}
+                  </div>
+
                   <div className="grid md:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-sm font-medium mb-2">Industry</label>
@@ -236,6 +292,11 @@ export default function Contact() {
                         className="w-full px-4 py-3 rounded-lg border border-[#bebebe] focus:border-[#ff4f01] focus:ring-1 focus:ring-[#ff4f01] outline-none transition-all"
                       >
                         <option value="">Select budget range</option>
+                        {pricingPackages.map((pkg) => (
+                          <option key={pkg.id} value={pkg.investment}>
+                            {pkg.title}: {pkg.investment}
+                          </option>
+                        ))}
                         <option value="$2,000 - $5,000">$2,000 - $5,000</option>
                         <option value="$5,000 - $10,000">$5,000 - $10,000</option>
                         <option value="$10,000 - $25,000">$10,000 - $25,000</option>

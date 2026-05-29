@@ -6,60 +6,40 @@ import { toast } from "sonner";
 
 const categoryGroups = [
   {
-    label: "Social Media",
-    items: ["Social Media Post", "Social Media Story", "Social Media Carousel", "Social Media Ad", "Social Media Cover/Banner"],
+    label: "Website",
+    items: ["Website Build", "Website Redesign", "Landing Page", "Service Page", "Contact Form", "Website Copy Update"],
   },
   {
-    label: "Branding",
-    items: ["Logo Design", "Brand Identity", "Brand Guidelines", "Business Card", "Letterhead & Stationery"],
+    label: "E-Commerce",
+    items: ["Online Store Setup", "Product Page", "Checkout Flow", "Payment Integration", "Inventory Setup"],
   },
   {
-    label: "Marketing",
-    items: ["Flyer / Brochure", "Poster", "Infographic", "Email Graphics", "Banner Ad", "Landing Page Design"],
+    label: "SEO & Analytics",
+    items: ["SEO Audit", "Local SEO Update", "Analytics Setup", "Search Console Setup", "Performance Optimization"],
   },
   {
-    label: "Presentation & Documents",
-    items: ["Presentation Design", "eBook / Report", "Resume / CV", "Menu Design"],
+    label: "Integrations",
+    items: ["Booking Integration", "CRM Integration", "Email Integration", "API Integration", "Custom Feature"],
   },
   {
-    label: "Video & Motion",
-    items: ["Video Editing", "Motion Graphics", "GIF Animation", "Video Thumbnail"],
-  },
-  {
-    label: "Web & App",
-    items: ["Web Design", "App UI Design", "Icon Design", "Illustration"],
-  },
-  {
-    label: "Print",
-    items: ["Packaging Design", "T-Shirt / Merch Design", "Signage", "Print Design"],
+    label: "Support",
+    items: ["Bug Fix", "Content Update", "Maintenance Request", "Hosting / Domain Help"],
   },
   {
     label: "Other",
-    items: ["Custom Request"],
+    items: ["Custom Website Request"],
   },
 ];
 
 const allCategories = categoryGroups.flatMap((g) => g.items);
 
 const dimensionSuggestions: Record<string, string[]> = {
-  "Social Media Post": ["1080x1080 (Square)", "1200x628 (Facebook)", "1080x566 (Twitter)"],
-  "Social Media Story": ["1080x1920 (Story)"],
-  "Social Media Carousel": ["1080x1080 (Square Slides)", "1080x1350 (Portrait Slides)"],
-  "Social Media Ad": ["1080x1080 (Feed Ad)", "1200x628 (Link Ad)", "1080x1920 (Story Ad)"],
-  "Social Media Cover/Banner": ["1500x500 (Twitter)", "820x312 (Facebook)", "1584x396 (LinkedIn)"],
-  "Logo Design": ["1000x1000 (Square)", "2000x500 (Horizontal)", "500x2000 (Vertical)"],
-  "Presentation Design": ["1920x1080 (16:9)", "1024x768 (4:3)"],
-  "Email Graphics": ["600x200 (Header)", "600x400 (Hero)", "600x600 (Square)"],
-  "Web Design": ["1440x900 (Desktop)", "768x1024 (Tablet)", "375x812 (Mobile)"],
-  "Landing Page Design": ["1440x900 (Desktop)", "375x812 (Mobile)"],
-  "Print Design": ["8.5x11 in (Letter)", "11x17 in (Tabloid)", "3.5x2 in (Business Card)"],
-  "Flyer / Brochure": ["8.5x11 in (Letter)", "5.5x8.5 in (Half Letter)", "A4 (210x297mm)"],
-  "Poster": ["18x24 in", "24x36 in", "A3 (297x420mm)"],
-  "Business Card": ["3.5x2 in (Standard)", "3.5x2 in (Rounded)"],
-  "Banner Ad": ["728x90 (Leaderboard)", "300x250 (Medium Rectangle)", "160x600 (Wide Skyscraper)"],
-  "Video Thumbnail": ["1280x720 (YouTube)", "1920x1080 (HD)"],
-  "Packaging Design": ["Custom dimensions required"],
-  "T-Shirt / Merch Design": ["4500x5400 (Front Print)", "4500x5400 (Back Print)"],
+  "Website Build": ["5-6 pages", "7-15 pages", "Custom scope"],
+  "Website Redesign": ["Homepage + key pages", "Full site redesign", "Custom scope"],
+  "Landing Page": ["Single page", "Campaign page", "Lead capture page"],
+  "Service Page": ["Single service page", "Service page set", "Local service page"],
+  "Online Store Setup": ["Small catalog", "Medium catalog", "Custom catalog"],
+  "Product Page": ["Single product", "Product template", "Product collection"],
 };
 
 interface Brand {
@@ -122,11 +102,11 @@ export default function ClientSubmitRequest() {
         messages: [
           {
             role: "system",
-            content: "You are a design brief assistant. Given a design request description, suggest the best category, dimensions, format, and any additional details that would help a designer. Keep it concise and actionable in 3-4 bullet points.",
+            content: "You are a web project brief assistant. Given a website request description, suggest the best category, scope, priority considerations, and any details that would help a web development team. Keep it concise and actionable in 3-4 bullet points.",
           },
           {
             role: "user",
-            content: `Design request: "${form.description}"\n\nCurrent category: ${form.category || "not selected"}\nPlease suggest optimal settings.`,
+            content: `Website project request: "${form.description}"\n\nCurrent category: ${form.category || "not selected"}\nPlease suggest optimal settings.`,
           },
         ],
         model: "deepseek-v3.2",
@@ -155,9 +135,9 @@ export default function ClientSubmitRequest() {
     setUploadingRef(true);
     try {
       for (const file of Array.from(fileList)) {
-        const objectKey = `references/${Date.now()}-${file.name}`;
+        const objectKey = `project-references/${Date.now()}-${file.name}`;
         const uploadRes = await client.storage.getUploadUrl({
-          bucket_name: "design-assets",
+          bucket_name: "project-assets",
           object_key: objectKey,
         });
         await fetch(uploadRes.data.upload_url, {
@@ -223,7 +203,7 @@ export default function ClientSubmitRequest() {
     <DashboardLayout type="client">
       <div className="mb-6">
         <h1 className="text-2xl font-bold font-bricolage text-[#101010]">Submit Request</h1>
-        <p className="text-sm text-[rgb(119,119,125)]">Create a new design request for your team.</p>
+        <p className="text-sm text-[rgb(119,119,125)]">Create a new website project request for your team.</p>
       </div>
 
       <form onSubmit={handleSubmit} className="max-w-3xl">
@@ -236,7 +216,7 @@ export default function ClientSubmitRequest() {
               name="title"
               value={form.title}
               onChange={handleChange}
-              placeholder="e.g., Instagram Post Design for Product Launch"
+              placeholder="e.g., Website redesign for service pages"
               required
               className="w-full px-4 py-3 rounded-xl border border-[#e5e5e5] bg-[#f9f9f9] text-sm text-[#101010] placeholder:text-[rgb(119,119,125)]/50 focus:outline-none focus:border-[#ff4f01] transition-colors"
             />
@@ -245,7 +225,7 @@ export default function ClientSubmitRequest() {
           {/* Category & Brand */}
           <div className="grid sm:grid-cols-2 gap-4">
             <div className="relative">
-              <label className="block text-sm font-medium text-[#101010] mb-1.5">Design Category *</label>
+              <label className="block text-sm font-medium text-[#101010] mb-1.5">Project Category *</label>
               <button
                 type="button"
                 onClick={() => setShowCategoryDropdown(!showCategoryDropdown)}
@@ -320,7 +300,7 @@ export default function ClientSubmitRequest() {
             <label className="block text-sm font-medium text-[#101010] mb-1.5">
               Dimensions / Size
               {suggestedDimensions.length > 0 && (
-                <span className="text-xs text-[rgb(119,119,125)] ml-2">Suggested for {form.category}</span>
+                <span className="text-xs text-[rgb(119,119,125)] ml-2">Suggested scope for {form.category}</span>
               )}
             </label>
             {suggestedDimensions.length > 0 && (
@@ -346,7 +326,7 @@ export default function ClientSubmitRequest() {
               name="dimensions"
               value={form.dimensions}
               onChange={handleChange}
-              placeholder="e.g., 1080x1080px, A4, 3.5x2 inches"
+              placeholder="e.g., 5 pages, full site redesign, custom integration"
               className="w-full px-4 py-3 rounded-xl border border-[#e5e5e5] bg-[#f9f9f9] text-sm text-[#101010] placeholder:text-[rgb(119,119,125)]/50 focus:outline-none focus:border-[#ff4f01] transition-colors"
             />
           </div>
@@ -402,7 +382,7 @@ export default function ClientSubmitRequest() {
               name="description"
               value={form.description}
               onChange={handleChange}
-              placeholder="Describe your design request in detail. Include colors, text content, target audience, and any specific requirements..."
+              placeholder="Describe your website request in detail. Include goals, pages, content, integrations, audience, and any specific requirements..."
               required
               rows={6}
               className="w-full px-4 py-3 rounded-xl border border-[#e5e5e5] bg-[#f9f9f9] text-sm text-[#101010] placeholder:text-[rgb(119,119,125)]/50 focus:outline-none focus:border-[#ff4f01] transition-colors resize-none"
@@ -430,7 +410,7 @@ export default function ClientSubmitRequest() {
               name="reference_links"
               value={form.reference_links}
               onChange={handleChange}
-              placeholder="Paste URLs to reference designs, inspiration boards, competitor examples, etc. (one per line)"
+              placeholder="Paste URLs to reference websites, competitor examples, content docs, or inspiration (one per line)"
               rows={3}
               className="w-full px-4 py-3 rounded-xl border border-[#e5e5e5] bg-[#f9f9f9] text-sm text-[#101010] placeholder:text-[rgb(119,119,125)]/50 focus:outline-none focus:border-[#ff4f01] transition-colors resize-none"
             />
@@ -442,14 +422,14 @@ export default function ClientSubmitRequest() {
             <div className="border-2 border-dashed border-[#e5e5e5] rounded-xl p-6 text-center hover:border-[#ff4f01]/30 transition-colors">
               <i className="ri-upload-cloud-2-line text-3xl text-[rgb(119,119,125)] mb-2 inline-block" />
               <p className="text-sm text-[rgb(119,119,125)] mb-2">
-                Upload reference images, brand assets, or inspiration
+                Upload reference files, brand assets, content docs, or inspiration
               </p>
               <label className="inline-flex items-center gap-2 text-sm text-[#ff4f01] font-medium cursor-pointer hover:underline">
                 <i className="ri-add-line" /> Choose Files
                 <input
                   type="file"
                   multiple
-                  accept="image/*,.pdf,.ai,.psd,.sketch,.fig"
+                  accept="image/*,.pdf,.doc,.docx,.txt,.fig"
                   className="hidden"
                   onChange={(e) => handleRefUpload(e.target.files)}
                 />

@@ -22,10 +22,10 @@ export default function Login() {
             <img src="/nolimit-logo.png" alt="NoLimit Designs" className="h-10 w-auto brightness-0 invert" />
           </a>
           <h1 className="font-bricolage font-semibold text-[48px] leading-[56px] text-white mb-6">
-            Welcome Back to <span className="text-[#ff4f01]">Nolimit360</span>
+            Welcome Back to <span className="text-[#ff4f01]">Nolimit Designs</span>
           </h1>
           <p className="text-lg text-white/70 leading-8 max-w-md">
-            Access your design dashboard, manage requests, and collaborate with your dedicated creative team.
+            Access your project dashboard, review website progress, and collaborate with our web development team.
           </p>
 
           <div className="mt-12 bg-white/5 rounded-2xl p-8 border border-white/10">
@@ -37,9 +37,9 @@ export default function Login() {
               </div>
             </div>
             <p className="text-white/80 italic leading-7 mb-4">
-              "Nolimit360 has completely streamlined how we manage design work. Everything is in one place."
+              "Nolimit Designs made our website rebuild simple, organized, and easy to manage."
             </p>
-            <p className="text-white/50 text-sm">— Marketing Director, SaaS Company</p>
+            <p className="text-white/50 text-sm">- Marketing Director, SaaS Company</p>
           </div>
         </div>
 
@@ -64,9 +64,9 @@ export default function Login() {
             Sign In
           </h2>
           <p className="text-[rgb(119,119,125)] mb-8">
-            Don't have an account?{" "}
-            <Link to="/register" className="text-[#ff4f01] font-medium hover:underline">
-              Start free trial
+            Need access to your project workspace?{" "}
+            <Link to="/contact" className="text-[#ff4f01] font-medium hover:underline">
+              Contact us
             </Link>
           </p>
 

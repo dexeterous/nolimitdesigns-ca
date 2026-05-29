@@ -9,8 +9,6 @@ import { SeoManager } from './components/SeoManager';
 import { GoogleAnalytics } from './components/GoogleAnalytics';
 import { AuthProvider } from './contexts/AuthContext';
 import Index from './pages/Index';
-import GraphicDesignServices from './pages/GraphicDesignServices';
-import VideoDesignServices from './pages/VideoDesignServices';
 import Pricing from './pages/Pricing';
 import Blog from './pages/Blog';
 import BlogPost from './pages/BlogPost';
@@ -64,9 +62,6 @@ const App = () => (
             <Route path="/sitemap" element={<Sitemap />} />
             <Route path="/privacy-policy" element={<LegalPage />} />
             <Route path="/terms-of-service" element={<LegalPage />} />
-            {/* Legacy Pages */}
-            <Route path="/graphic-design-services" element={<GraphicDesignServices />} />
-            <Route path="/video-design-services" element={<VideoDesignServices />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/blog-posts" element={<Blog />} />
             <Route path="/blog-posts/:slug" element={<BlogPost />} />

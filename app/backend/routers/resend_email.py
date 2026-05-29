@@ -15,6 +15,7 @@ class ContactEmailRequest(BaseModel):
     phone: str = ""
     company: str = ""
     industry: str = ""
+    selectedPackage: str = ""
     budget: str = ""
     message: str
     services: str = ""
@@ -36,6 +37,7 @@ async def send_contact_form_email(data: ContactEmailRequest):
             phone=data.phone,
             company=data.company,
             industry=data.industry,
+            selected_package=data.selectedPackage,
             budget=data.budget,
             message=data.message,
             services=data.services,

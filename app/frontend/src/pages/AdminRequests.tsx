@@ -18,7 +18,7 @@ interface AdminRequest {
   updated_at: string;
 }
 
-const designers = ["Unassigned", "Sarah M.", "Alex K.", "Maria L.", "James R."];
+const developers = ["Unassigned", "Sarah M.", "Alex K.", "Maria L.", "James R."];
 const statuses = ["Queue", "In Progress", "Internal Review", "Client Review", "Completed"];
 
 const statusColors: Record<string, string> = {
@@ -41,7 +41,7 @@ export default function AdminRequests() {
   const { isAdmin, loading: authLoading } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All Statuses");
-  const [designerFilter, setDesignerFilter] = useState("All Designers");
+  const [developerFilter, setDeveloperFilter] = useState("All Developers");
   const [requests, setRequests] = useState<AdminRequest[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -104,27 +104,27 @@ export default function AdminRequests() {
     }
   };
 
-  const handleDesignerChange = async (id: number, newDesigner: string) => {
+  const handleDeveloperChange = async (id: number, newDeveloper: string) => {
     try {
       await client.apiCall.invoke({
         url: `/api/v1/admin/requests/${id}`,
         method: "PUT",
-        data: { designer_name: newDesigner },
+        data: { designer_name: newDeveloper },
       });
       setRequests((prev) =>
-        prev.map((r) => (r.id === id ? { ...r, designer_name: newDesigner } : r))
+        prev.map((r) => (r.id === id ? { ...r, designer_name: newDeveloper } : r))
       );
-      toast.success("Designer assigned");
+      toast.success("Developer assigned");
 
-      // Trigger email notification for designer assignment
-      if (newDesigner !== "Unassigned") {
+      // Trigger email notification for developer assignment
+      if (newDeveloper !== "Unassigned") {
         try {
           await client.apiCall.invoke({
             url: "/api/v1/notifications/notify-designer-assigned",
             method: "POST",
             data: {
               request_id: id,
-              designer_name: newDesigner,
+              designer_name: newDeveloper,
             },
           });
         } catch {
@@ -132,8 +132,8 @@ export default function AdminRequests() {
         }
       }
     } catch (err) {
-      console.error("Failed to assign designer:", err);
-      toast.error("Failed to assign designer");
+      console.error("Failed to assign developer:", err);
+      toast.error("Failed to assign developer");
     }
   };
 
@@ -142,8 +142,8 @@ export default function AdminRequests() {
       req.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (req.brand_name || "").toLowerCase().includes(searchQuery.toLowerCase());
     const matchesStatus = statusFilter === "All Statuses" || req.status === statusFilter;
-    const matchesDesigner = designerFilter === "All Designers" || (req.designer_name || "Unassigned") === designerFilter;
-    return matchesSearch && matchesStatus && matchesDesigner;
+    const matchesDeveloper = developerFilter === "All Developers" || (req.designer_name || "Unassigned") === developerFilter;
+    return matchesSearch && matchesStatus && matchesDeveloper;
   });
 
   const formatDate = (dateStr: string) => {
@@ -155,7 +155,7 @@ export default function AdminRequests() {
     <DashboardLayout type="admin">
       <div className="mb-6">
         <h1 className="text-2xl font-bold font-bricolage text-[#101010]">All Requests</h1>
-        <p className="text-sm text-[rgb(119,119,125)]">Manage and assign all client design requests.</p>
+        <p className="text-sm text-[rgb(119,119,125)]">Manage and assign all client project requests.</p>
       </div>
 
       {/* Toolbar */}
@@ -182,12 +182,12 @@ export default function AdminRequests() {
             ))}
           </select>
           <select
-            value={designerFilter}
-            onChange={(e) => setDesignerFilter(e.target.value)}
+            value={developerFilter}
+            onChange={(e) => setDeveloperFilter(e.target.value)}
             className="px-3 py-2 rounded-lg border border-[#e5e5e5] bg-[#f9f9f9] text-sm text-[#101010] focus:outline-none focus:border-[#ff4f01] cursor-pointer"
           >
-            <option value="All Designers">All Designers</option>
-            {designers.map((d) => (
+            <option value="All Developers">All Developers</option>
+            {developers.map((d) => (
               <option key={d} value={d}>{d}</option>
             ))}
           </select>
@@ -214,7 +214,7 @@ export default function AdminRequests() {
                   <th className="text-left text-xs font-medium text-[rgb(119,119,125)] uppercase tracking-wider px-5 py-3">Brand</th>
                   <th className="text-left text-xs font-medium text-[rgb(119,119,125)] uppercase tracking-wider px-5 py-3">Category</th>
                   <th className="text-left text-xs font-medium text-[rgb(119,119,125)] uppercase tracking-wider px-5 py-3">Priority</th>
-                  <th className="text-left text-xs font-medium text-[rgb(119,119,125)] uppercase tracking-wider px-5 py-3">Designer</th>
+                  <th className="text-left text-xs font-medium text-[rgb(119,119,125)] uppercase tracking-wider px-5 py-3">Developer</th>
                   <th className="text-left text-xs font-medium text-[rgb(119,119,125)] uppercase tracking-wider px-5 py-3">Status</th>
                   <th className="text-left text-xs font-medium text-[rgb(119,119,125)] uppercase tracking-wider px-5 py-3">Created</th>
                 </tr>
@@ -236,10 +236,10 @@ export default function AdminRequests() {
                     <td className="px-5 py-3.5">
                       <select
                         value={req.designer_name || "Unassigned"}
-                        onChange={(e) => handleDesignerChange(req.id, e.target.value)}
+                        onChange={(e) => handleDeveloperChange(req.id, e.target.value)}
                         className="text-sm border border-[#e5e5e5] rounded-lg px-2 py-1 bg-white focus:outline-none focus:border-[#ff4f01] cursor-pointer"
                       >
-                        {designers.map((d) => (
+                        {developers.map((d) => (
                           <option key={d} value={d}>{d}</option>
                         ))}
                       </select>

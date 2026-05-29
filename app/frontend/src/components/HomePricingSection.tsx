@@ -1,80 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-
-const packages = [
-  {
-    id: "starter",
-    label: "Starter",
-    icon: "ri-computer-line",
-    eyebrow: "Starter Package",
-    title: "Starter Website",
-    description:
-      "A polished, fast website for businesses that need to look credible online and start collecting leads.",
-    investment: "$1,600",
-    details: [
-      ["Pages", "5-6 Custom"],
-      ["Timeline", "3-4 Weeks"],
-      ["Best For", "New Businesses"],
-    ],
-    features: ["Mobile responsive", "Contact forms", "Basic on-page SEO", "Launch support"],
-    cta: "Get Started",
-  },
-  {
-    id: "professional",
-    label: "Professional",
-    icon: "ri-layout-4-line",
-    eyebrow: "Most Popular",
-    title: "Professional Website",
-    description:
-      "A conversion-focused website with stronger content structure, local SEO, and pages built around your services.",
-    investment: "$1,800 - $5,000",
-    details: [
-      ["Pages", "7-15+ Custom"],
-      ["SEO", "Full Local SEO"],
-      ["Best For", "Growing Teams"],
-    ],
-    features: ["Service pages", "Local search setup", "Analytics ready", "Conversion strategy"],
-    cta: "Get Started",
-  },
-  {
-    id: "ecommerce",
-    label: "E-Commerce",
-    icon: "ri-shopping-cart-line",
-    eyebrow: "Online Store",
-    title: "E-Commerce Store",
-    description:
-      "A complete online store with product structure, cart flows, secure payment setup, and inventory foundations.",
-    investment: "$4,500 - $7,000",
-    details: [
-      ["Store", "Full Setup"],
-      ["Payments", "Secure Processing"],
-      ["Best For", "Online Sales"],
-    ],
-    features: ["Product catalog", "Cart and checkout", "Payment setup", "Inventory basics"],
-    cta: "Get a Quote",
-  },
-  {
-    id: "seo",
-    label: "SEO Services",
-    icon: "ri-line-chart-line",
-    eyebrow: "Monthly Service",
-    title: "SEO Services",
-    description:
-      "Ongoing local SEO for Edmonton businesses that want stronger rankings, better content, and monthly reporting.",
-    investment: "$1,500+/mo",
-    details: [
-      ["Contract", "Month-to-Month"],
-      ["Reporting", "Monthly Reports"],
-      ["Best For", "Ranking Growth"],
-    ],
-    features: ["Keyword research", "On-page optimization", "Competitor analysis", "Backlink building"],
-    cta: "Learn More",
-  },
-];
+import { getPackageContactPath, pricingPackages } from "@/data/pricingPackages";
 
 export function HomePricingSection() {
-  const [activeId, setActiveId] = useState(packages[1].id);
-  const activePackage = packages.find((pkg) => pkg.id === activeId) ?? packages[0];
+  const [activeId, setActiveId] = useState(pricingPackages[1].id);
+  const activePackage = pricingPackages.find((pkg) => pkg.id === activeId) ?? pricingPackages[0];
 
   return (
     <section id="pricing" className="lg:py-24 py-16 bg-white">
@@ -91,7 +21,7 @@ export function HomePricingSection() {
               Use these as starting points. Every project includes ownership, mobile optimization, professional support, and a launch plan tailored to your business.
             </p>
             <div className="flex flex-wrap justify-center gap-2">
-              {packages.map((pkg) => (
+              {pricingPackages.map((pkg) => (
                 <button
                   key={pkg.id}
                   type="button"
@@ -144,7 +74,7 @@ export function HomePricingSection() {
                   ))}
                 </div>
                 <div className="flex flex-col gap-4">
-                  <Link to="/contact" className="btn btn-primary !mb-0">
+                  <Link to={getPackageContactPath(activePackage.id)} className="btn btn-primary !mb-0">
                     {activePackage.cta} <i className="ri-arrow-right-line ml-1" />
                   </Link>
                   <div>

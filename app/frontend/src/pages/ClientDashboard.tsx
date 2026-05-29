@@ -108,7 +108,7 @@ export default function ClientDashboard() {
         ) : requests.length === 0 ? (
           <div className="p-10 text-center">
             <i className="ri-file-list-3-line text-4xl text-[rgb(119,119,125)] mb-3 inline-block" />
-            <p className="text-sm text-[rgb(119,119,125)] mb-4">No design requests yet.</p>
+            <p className="text-sm text-[rgb(119,119,125)] mb-4">No project requests yet.</p>
             <Link to="/client/submit-request" className="btn btn-primary !mb-0 !py-2 !px-5 text-sm">
               <i className="ri-add-line mr-1" /> Submit Your First Request
             </Link>
@@ -121,7 +121,7 @@ export default function ClientDashboard() {
                   <th className="text-left text-xs font-medium text-[rgb(119,119,125)] uppercase tracking-wider px-5 py-3">Request</th>
                   <th className="text-left text-xs font-medium text-[rgb(119,119,125)] uppercase tracking-wider px-5 py-3">Brand</th>
                   <th className="text-left text-xs font-medium text-[rgb(119,119,125)] uppercase tracking-wider px-5 py-3">Status</th>
-                  <th className="text-left text-xs font-medium text-[rgb(119,119,125)] uppercase tracking-wider px-5 py-3">Designer</th>
+                  <th className="text-left text-xs font-medium text-[rgb(119,119,125)] uppercase tracking-wider px-5 py-3">Developer</th>
                   <th className="text-left text-xs font-medium text-[rgb(119,119,125)] uppercase tracking-wider px-5 py-3">Updated</th>
                 </tr>
               </thead>

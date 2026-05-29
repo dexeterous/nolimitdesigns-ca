@@ -142,9 +142,9 @@ function getSeoData(pathname: string): SeoData {
 
   if (pathname === "/portfolio") {
     return {
-      title: "Web Design Portfolio by Industry | Nolimit Designs Edmonton",
+      title: "Website Portfolio & Case Studies | Nolimit Designs Edmonton",
       description:
-        "Browse industry-specific website portfolio pages for healthcare, real estate, restaurant, legal, construction, retail, and more Edmonton businesses.",
+        "View Nolimit Designs website case studies for immigration, education, language training, business technology, and fashion e-commerce projects.",
       canonical,
       schema: baseSchema,
     };

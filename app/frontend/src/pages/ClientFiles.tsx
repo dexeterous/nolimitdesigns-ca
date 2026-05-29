@@ -118,7 +118,7 @@ export default function ClientFiles() {
     { label: "Final Deliverables", value: "final" },
     { label: "Source Files", value: "source" },
     { label: "Images", value: "image" },
-    { label: "Videos", value: "video" },
+    { label: "Media", value: "video" },
     { label: "Documents", value: "document" },
   ];
 

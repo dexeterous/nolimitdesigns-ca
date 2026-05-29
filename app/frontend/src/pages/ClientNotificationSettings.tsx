@@ -36,8 +36,8 @@ const notificationTypes = [
   },
   {
     key: "email_assignments" as const,
-    label: "Designer Assignments",
-    description: "Get notified when a designer is assigned to your request",
+    label: "Developer Assignments",
+    description: "Get notified when a developer is assigned to your request",
     icon: "ri-user-star-line",
     iconColor: "#ff4f01",
   },
@@ -159,7 +159,7 @@ export default function ClientNotificationSettings() {
       <div className="mb-6">
         <h1 className="text-2xl font-bold font-bricolage text-[#101010]">Notification Settings</h1>
         <p className="text-sm text-[rgb(119,119,125)]">
-          Configure how and when you receive email notifications about your design requests.
+          Configure how and when you receive email notifications about your project requests.
         </p>
       </div>
 

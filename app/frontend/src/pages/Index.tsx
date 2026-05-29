@@ -42,7 +42,7 @@ export default function Index() {
                 <Link to="/contact" className="btn btn-primary">
                   Get a Free Quote
                 </Link>
-                <Link to="/portfolio/healthcare" className="btn btn-dark">
+                <Link to="/portfolio" className="btn btn-dark">
                   View Our Work
                 </Link>
               </div>
@@ -165,7 +165,7 @@ export default function Index() {
           </div>
 
           <div className="text-center mt-12">
-            <Link to="/portfolio/healthcare" className="btn btn-primary">
+            <Link to="/portfolio" className="btn btn-primary">
               View Industry Portfolios
             </Link>
           </div>
@@ -262,7 +262,7 @@ export default function Index() {
           </div>
 
           <div className="text-center mt-10">
-            <Link to="/portfolio/healthcare" className="btn btn-outline">
+            <Link to="/portfolio" className="btn btn-outline">
               View All Portfolio
             </Link>
           </div>

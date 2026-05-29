@@ -1,11 +1,11 @@
-# Nolimit360 Design Management Platform - Enhancement Plan
+# Nolimit Designs Web Project Portal - Enhancement Plan
 
 ## Design Guidelines
 - **Primary**: #ff4f01 (Orange), **Dark**: #0a0a0a, #101010
 - **Background**: #f5f5f5 (dashboard), #fff6ec (marketing)
 - **Border**: #e5e5e5, **Text Secondary**: rgb(119,119,125)
 - **Font**: Bricolage Grotesque (headings), system sans-serif (body)
-- **Style**: Clean, modern SaaS dashboard matching Kimp360
+- **Style**: Clean, modern web project dashboard for client collaboration
 
 ## Files to Create/Modify
 

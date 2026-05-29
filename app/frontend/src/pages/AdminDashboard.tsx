@@ -240,9 +240,9 @@ export default function AdminDashboard() {
           </div>
 
           <div className="grid lg:grid-cols-2 gap-6 mb-6">
-            {/* Designer Workload */}
+            {/* Developer Workload */}
             <div className="bg-white rounded-xl border border-[#e5e5e5] p-5">
-              <h2 className="text-lg font-semibold font-bricolage text-[#101010] mb-4">Designer Workload</h2>
+              <h2 className="text-lg font-semibold font-bricolage text-[#101010] mb-4">Developer Workload</h2>
               {designerWorkload.length === 0 ? (
                 <p className="text-sm text-[rgb(119,119,125)] text-center py-8">No active assignments yet.</p>
               ) : (
@@ -295,7 +295,7 @@ export default function AdminDashboard() {
                   </div>
                   <div>
                     <p className="text-sm font-medium text-[#101010]">Create New Request</p>
-                    <p className="text-xs text-[rgb(119,119,125)]">Submit a design request on behalf of a client</p>
+                    <p className="text-xs text-[rgb(119,119,125)]">Submit a project request on behalf of a client</p>
                   </div>
                 </Link>
               </div>
@@ -321,7 +321,7 @@ export default function AdminDashboard() {
                     <tr className="border-b border-[#e5e5e5] bg-[#fafafa]">
                       <th className="text-left text-xs font-medium text-[rgb(119,119,125)] uppercase tracking-wider px-5 py-3">Request</th>
                       <th className="text-left text-xs font-medium text-[rgb(119,119,125)] uppercase tracking-wider px-5 py-3">Category</th>
-                      <th className="text-left text-xs font-medium text-[rgb(119,119,125)] uppercase tracking-wider px-5 py-3">Designer</th>
+                      <th className="text-left text-xs font-medium text-[rgb(119,119,125)] uppercase tracking-wider px-5 py-3">Developer</th>
                       <th className="text-left text-xs font-medium text-[rgb(119,119,125)] uppercase tracking-wider px-5 py-3">Status</th>
                       <th className="text-left text-xs font-medium text-[rgb(119,119,125)] uppercase tracking-wider px-5 py-3">Time</th>
                     </tr>

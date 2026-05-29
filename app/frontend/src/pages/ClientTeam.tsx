@@ -240,7 +240,7 @@ export default function ClientTeam() {
           <i className="ri-team-line text-4xl text-[rgb(119,119,125)] mb-3 inline-block" />
           <h3 className="text-lg font-semibold text-[#101010] mb-2">No team members yet</h3>
           <p className="text-sm text-[rgb(119,119,125)] mb-4">
-            Invite your team to collaborate on design requests.
+            Invite your team to collaborate on website project requests.
           </p>
           <button
             onClick={() => setShowInvite(true)}

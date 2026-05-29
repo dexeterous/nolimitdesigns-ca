@@ -259,7 +259,7 @@ export default function ClientRequests() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
           <h1 className="text-2xl font-bold font-bricolage text-[#101010]">Requests</h1>
-          <p className="text-sm text-[rgb(119,119,125)]">Manage and track all your design requests.</p>
+          <p className="text-sm text-[rgb(119,119,125)]">Manage and track all your project requests.</p>
         </div>
         <Link to="/client/submit-request" className="btn btn-primary !mb-0 !py-2.5 !px-5 text-sm">
           <i className="ri-add-line mr-1" /> New Request
@@ -338,7 +338,7 @@ export default function ClientRequests() {
                       <th className="text-left text-xs font-medium text-[rgb(119,119,125)] uppercase tracking-wider px-5 py-3">Category</th>
                       <th className="text-left text-xs font-medium text-[rgb(119,119,125)] uppercase tracking-wider px-5 py-3">Priority</th>
                       <th className="text-left text-xs font-medium text-[rgb(119,119,125)] uppercase tracking-wider px-5 py-3">Status</th>
-                      <th className="text-left text-xs font-medium text-[rgb(119,119,125)] uppercase tracking-wider px-5 py-3">Designer</th>
+                      <th className="text-left text-xs font-medium text-[rgb(119,119,125)] uppercase tracking-wider px-5 py-3">Developer</th>
                       <th className="text-left text-xs font-medium text-[rgb(119,119,125)] uppercase tracking-wider px-5 py-3">Revisions</th>
                       <th className="text-left text-xs font-medium text-[rgb(119,119,125)] uppercase tracking-wider px-5 py-3">Updated</th>
                       <th className="text-left text-xs font-medium text-[rgb(119,119,125)] uppercase tracking-wider px-5 py-3">Actions</th>

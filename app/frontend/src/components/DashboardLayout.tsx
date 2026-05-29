@@ -217,7 +217,7 @@ export function DashboardLayout({ children, type }: DashboardLayoutProps) {
             <span className="text-xs font-medium text-[#ff4f01] bg-[#ff4f01]/10 px-2 py-0.5 rounded-full">
               {type === "client" ? "Client" : "Admin"}
             </span>
-            <span className="text-xs text-white/40">Nolimit360</span>
+            <span className="text-xs text-white/40">Web Project Portal</span>
           </div>
         </div>
 
@@ -258,8 +258,8 @@ export function DashboardLayout({ children, type }: DashboardLayoutProps) {
                   <i className="ri-brush-line text-[#a78bfa] text-xs" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-[10px] text-white/40">Designer</p>
-                  <p className="text-xs text-white/80 font-medium truncate">Dedicated Designer</p>
+                  <p className="text-[10px] text-white/40">Project Team</p>
+                  <p className="text-xs text-white/80 font-medium truncate">Dedicated Developer</p>
                 </div>
                 <div className="w-1.5 h-1.5 rounded-full bg-[#22c55e]" />
               </div>

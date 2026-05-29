@@ -559,13 +559,13 @@ export default function ClientRequestDetail() {
           <div className="bg-white rounded-xl border border-[#e5e5e5] p-5">
             <h3 className="text-sm font-semibold text-[#101010] mb-3">Your Team</h3>
             <div className="space-y-3">
-              {/* Designer */}
+              {/* Developer */}
               <div className="flex items-center gap-3 p-3 rounded-lg bg-[#f9f9f9]">
                 <div className="w-9 h-9 rounded-full bg-[#7c3aed]/20 flex items-center justify-center">
                   <i className="ri-brush-line text-[#7c3aed] text-sm" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-xs text-[rgb(119,119,125)]">Designer</p>
+                  <p className="text-xs text-[rgb(119,119,125)]">Developer</p>
                   <p className="text-sm font-medium text-[#101010]">{request.designer_name || "Pending Assignment"}</p>
                 </div>
                 {request.designer_name && (
