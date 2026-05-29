@@ -172,8 +172,8 @@ const projects: PortfolioProject[] = [
 
 function SectionLabel({ children }: { children: ReactNode }) {
   return (
-    <p className="mb-4 flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.22em] text-slate-500">
-      <i className="ri-arrow-right-up-line text-teal-600" />
+    <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#bebebe] px-5 py-2 text-sm font-medium text-[#101010]">
+      <i className="ri-arrow-right-up-line text-[#ff4f01]" />
       {children}
     </p>
   );
@@ -181,9 +181,9 @@ function SectionLabel({ children }: { children: ReactNode }) {
 
 function PlaceholderScreen({ project, compact = false }: { project: PortfolioProject; compact?: boolean }) {
   return (
-    <div className={`border border-dashed border-slate-300 bg-white p-3 ${compact ? "min-h-[260px]" : ""}`}>
-      <div className="overflow-hidden bg-[#f8f5ef] shadow-sm">
-        <div className="flex items-center justify-between px-4 py-3" style={{ backgroundColor: project.dark }}>
+    <div className={`rounded-2xl border border-[#bebebe] bg-white/70 p-3 ${compact ? "min-h-[260px]" : ""}`}>
+      <div className="overflow-hidden rounded-xl bg-[#fff6ec] shadow-sm">
+        <div className="flex items-center justify-between px-4 py-3 bg-[#101010]">
           <div className="flex items-center gap-2">
             <span className="h-6 w-6 rounded-full bg-white" />
             <span className="h-2 w-28 rounded-full bg-white/70" />
@@ -196,23 +196,23 @@ function PlaceholderScreen({ project, compact = false }: { project: PortfolioPro
         </div>
         <div className="grid min-h-[245px] gap-5 p-7 md:grid-cols-[1fr_170px]">
           <div>
-            <span className="mb-4 inline-flex rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-white" style={{ backgroundColor: project.accent }}>
+            <span className="mb-4 inline-flex rounded-full bg-[#ff4f01]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#ff4f01]">
               {project.eyebrow}
             </span>
-            <div className="mb-4 h-8 w-4/5 rounded-full" style={{ backgroundColor: project.dark }} />
-            <div className="mb-2 h-3 w-full rounded-full bg-slate-200" />
-            <div className="mb-8 h-3 w-2/3 rounded-full bg-slate-200" />
+            <div className="mb-4 h-8 w-4/5 rounded-full bg-[#101010]" />
+            <div className="mb-2 h-3 w-full rounded-full bg-[#bebebe]/45" />
+            <div className="mb-8 h-3 w-2/3 rounded-full bg-[#bebebe]/45" />
             <div className="grid gap-3 sm:grid-cols-3">
               {[1, 2, 3].map((item) => (
                 <div key={item} className="min-h-20 rounded-lg bg-white p-3 shadow-sm">
-                  <span className="mb-3 block h-6 w-6 rounded-full" style={{ backgroundColor: `${project.accent}22` }} />
-                  <span className="mb-2 block h-2 w-20 rounded-full bg-slate-300" />
-                  <span className="block h-2 w-14 rounded-full bg-slate-200" />
+                  <span className="mb-3 block h-6 w-6 rounded-full bg-[#ff4f01]/15" />
+                  <span className="mb-2 block h-2 w-20 rounded-full bg-[#bebebe]/70" />
+                  <span className="block h-2 w-14 rounded-full bg-[#bebebe]/40" />
                 </div>
               ))}
             </div>
           </div>
-          <div className="hidden rounded-2xl md:block" style={{ background: `linear-gradient(145deg, ${project.accent}33, #ffffff)` }} />
+          <div className="hidden rounded-2xl bg-gradient-to-br from-[#ff4f01]/15 to-white md:block" />
         </div>
       </div>
     </div>
@@ -221,35 +221,35 @@ function PlaceholderScreen({ project, compact = false }: { project: PortfolioPro
 
 function ProjectCaseStudy({ project, index }: { project: PortfolioProject; index: number }) {
   return (
-    <article className={index === 0 ? "pt-20" : "border-t border-dashed border-slate-300 pt-20"}>
+    <article className={index === 0 ? "pt-20" : "border-t border-[#bebebe] pt-20"}>
       <div className="mb-12 grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-end">
         <div>
           <SectionLabel>{project.eyebrow}</SectionLabel>
-          <h2 className="font-bricolage text-4xl font-black uppercase leading-none text-slate-950 md:text-5xl">
+          <h2 className="font-bricolage text-4xl font-semibold leading-tight text-[#101010] md:text-5xl">
             {project.title}
           </h2>
-          <p className="mt-5 max-w-2xl leading-7 text-slate-500">{project.summary}</p>
+          <p className="mt-5 max-w-2xl text-lg leading-8 text-[rgb(119,119,125)]">{project.summary}</p>
         </div>
-        <div className="grid grid-cols-3 border border-dashed border-slate-300 bg-white/60 text-sm">
+        <div className="grid grid-cols-3 overflow-hidden rounded-2xl border border-[#bebebe] bg-white/60 text-sm shadow-sm">
           {[
             ["Location", project.location],
             ["Pagespeed", project.performance],
             ["Timeline", project.timeline],
           ].map(([label, value]) => (
-            <div key={label} className="border-r border-dashed border-slate-300 p-5 last:border-r-0">
-              <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">{label}</p>
-              <p className="font-bold text-slate-950">{value}</p>
+            <div key={label} className="border-r border-[#bebebe] p-5 last:border-r-0">
+              <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.2em] text-[rgb(119,119,125)]">{label}</p>
+              <p className="font-bold text-[#101010]">{value}</p>
             </div>
           ))}
         </div>
       </div>
 
-      <div className="grid border border-dashed border-slate-400 bg-white lg:grid-cols-[1fr_310px]">
+      <div className="grid overflow-hidden rounded-2xl border border-[#bebebe] bg-white/70 shadow-sm lg:grid-cols-[1fr_310px]">
         <PlaceholderScreen project={project} />
-        <div className="flex flex-col justify-center border-t border-dashed border-slate-400 p-8 lg:border-l lg:border-t-0">
-          <h3 className="font-bricolage text-3xl font-black uppercase leading-none text-slate-950">{project.title}</h3>
-          <p className="mt-4 leading-7 text-slate-500">{project.summary}</p>
-          <a href={project.url} target="_blank" rel="noopener noreferrer" className="btn btn-dark mt-6 w-max !rounded-full !px-6 !py-3 !text-xs uppercase tracking-wide">
+        <div className="flex flex-col justify-center border-t border-[#bebebe] p-8 lg:border-l lg:border-t-0">
+          <h3 className="font-bricolage text-3xl font-semibold leading-tight text-[#101010]">{project.title}</h3>
+          <p className="mt-4 leading-7 text-[rgb(119,119,125)]">{project.summary}</p>
+          <a href={project.url} target="_blank" rel="noopener noreferrer" className="btn btn-dark mt-6 w-max !px-6 !py-3 !text-sm">
             Visit Live Website <i className="ri-arrow-right-line ml-1" />
           </a>
         </div>
@@ -258,19 +258,19 @@ function ProjectCaseStudy({ project, index }: { project: PortfolioProject; index
       <div className="mt-14 grid gap-8 lg:grid-cols-[300px_1fr]">
         <div>
           <SectionLabel>Project Overview</SectionLabel>
-          <h3 className="font-bricolage text-2xl font-black uppercase leading-tight text-slate-950">
+          <h3 className="font-bricolage text-2xl font-semibold leading-tight text-[#101010]">
             The Challenge & Solution
           </h3>
         </div>
-        <p className="border-l border-dashed border-slate-300 pl-8 leading-8 text-slate-500">{project.challenge}</p>
+        <p className="border-l border-[#bebebe] pl-8 leading-8 text-[rgb(119,119,125)]">{project.challenge}</p>
       </div>
 
       <div className="mt-14">
         <SectionLabel>Key Deliverables</SectionLabel>
         <div className="grid gap-3">
           {project.deliverables.map((item) => (
-            <div key={item} className="flex gap-4 border-l border-dashed border-slate-300 pl-3 text-sm text-slate-600">
-              <span className="mt-1 flex h-5 w-5 shrink-0 items-center justify-center border border-dashed border-teal-500 text-[10px] text-teal-700">
+            <div key={item} className="flex gap-4 border-l border-[#bebebe] pl-3 text-sm text-[rgb(119,119,125)]">
+              <span className="mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-[#ff4f01]/40 bg-[#ff4f01]/10 text-[10px] text-[#ff4f01]">
                 <i className="ri-check-line" />
               </span>
               <span>{item}</span>
@@ -287,7 +287,7 @@ function ProjectCaseStudy({ project, index }: { project: PortfolioProject; index
             {project.showcase.map((item) => (
               <div key={item}>
                 <PlaceholderScreen project={project} />
-                <p className="mt-3 text-[11px] font-black uppercase tracking-wide text-slate-950">{item}</p>
+                <p className="mt-3 text-sm font-semibold text-[#101010]">{item}</p>
               </div>
             ))}
           </div>
@@ -296,33 +296,33 @@ function ProjectCaseStudy({ project, index }: { project: PortfolioProject; index
 
       <div className="mt-16">
         <SectionLabel>Key Features</SectionLabel>
-        <div className="grid border border-dashed border-slate-300 bg-white md:grid-cols-3">
+        <div className="grid overflow-hidden rounded-2xl border border-[#bebebe] bg-white/70 shadow-sm md:grid-cols-3">
           {project.features.map((feature) => (
-            <div key={feature.title} className="border-b border-dashed border-slate-300 p-8 md:border-b-0 md:border-r md:last:border-r-0">
-              <span className="mb-6 flex h-12 w-12 items-center justify-center border border-dashed border-teal-500 text-xl text-teal-700">
+            <div key={feature.title} className="border-b border-[#bebebe] p-8 transition-all hover:bg-white md:border-b-0 md:border-r md:last:border-r-0">
+              <span className="mb-6 flex h-12 w-12 items-center justify-center rounded-lg bg-[#ff4f01]/10 text-xl text-[#ff4f01]">
                 <i className={feature.icon} />
               </span>
-              <h4 className="font-bricolage text-base font-black uppercase text-slate-950">{feature.title}</h4>
-              <p className="mt-3 text-sm leading-6 text-slate-500">{feature.desc}</p>
+              <h4 className="font-bricolage text-lg font-semibold text-[#101010]">{feature.title}</h4>
+              <p className="mt-3 text-sm leading-6 text-[rgb(119,119,125)]">{feature.desc}</p>
             </div>
           ))}
         </div>
       </div>
 
-      <div className="mt-14 grid border border-dashed border-slate-300 bg-white md:grid-cols-2">
-        <div className="border-b border-dashed border-slate-300 p-8 md:border-b-0 md:border-r">
-          <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.22em] text-slate-400">Technology Stack</p>
+      <div className="mt-14 grid overflow-hidden rounded-2xl border border-[#bebebe] bg-white/70 shadow-sm md:grid-cols-2">
+        <div className="border-b border-[#bebebe] p-8 md:border-b-0 md:border-r">
+          <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.22em] text-[rgb(119,119,125)]">Technology Stack</p>
           <div className="flex flex-wrap gap-2">
             {project.stack.map((item) => (
-              <span key={item} className="border border-teal-300 bg-teal-50 px-3 py-1 text-xs font-medium text-slate-800">{item}</span>
+              <span key={item} className="rounded-full border border-[#ff4f01]/25 bg-[#ff4f01]/10 px-3 py-1 text-xs font-medium text-[#101010]">{item}</span>
             ))}
           </div>
         </div>
         <div className="p-8">
-          <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.22em] text-slate-400">Services Provided</p>
+          <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.22em] text-[rgb(119,119,125)]">Services Provided</p>
           <div className="flex flex-wrap gap-2">
             {project.services.map((item) => (
-              <span key={item} className="border border-teal-300 bg-teal-50 px-3 py-1 text-xs font-medium text-slate-800">{item}</span>
+              <span key={item} className="rounded-full border border-[#bebebe] bg-[#fff6ec] px-3 py-1 text-xs font-medium text-[#101010]">{item}</span>
             ))}
           </div>
         </div>
@@ -331,11 +331,11 @@ function ProjectCaseStudy({ project, index }: { project: PortfolioProject; index
       <div className="mt-14 grid gap-8 lg:grid-cols-[300px_1fr]">
         <div>
           <SectionLabel>Development</SectionLabel>
-          <h3 className="font-bricolage text-2xl font-black uppercase leading-tight text-slate-950">
+          <h3 className="font-bricolage text-2xl font-semibold leading-tight text-[#101010]">
             How It Was Built
           </h3>
         </div>
-        <p className="border-l border-dashed border-slate-300 pl-8 leading-8 text-slate-500">{project.built}</p>
+        <p className="border-l border-[#bebebe] pl-8 leading-8 text-[rgb(119,119,125)]">{project.built}</p>
       </div>
     </article>
   );
@@ -343,26 +343,26 @@ function ProjectCaseStudy({ project, index }: { project: PortfolioProject; index
 
 export default function PortfolioOverview() {
   return (
-    <div className="min-h-screen bg-[#f8f5ef] text-slate-950">
+    <div className="min-h-screen bg-[#fff6ec] text-[#101010]">
       <SiteHeader />
-      <section className="border-b border-dashed border-slate-300 pt-[150px] pb-16">
+      <section className="border-b border-[#bebebe] pt-[150px] pb-16">
         <div className="container-custom">
           <SectionLabel>Featured Client Work</SectionLabel>
           <div className="grid gap-8 lg:grid-cols-[1fr_320px] lg:items-end">
             <div>
-              <h1 className="font-bricolage text-5xl font-black uppercase leading-none text-slate-950 md:text-7xl">
+              <h1 className="font-bricolage text-5xl font-semibold leading-tight text-[#101010] md:text-7xl">
                 Portfolio
               </h1>
-              <p className="mt-5 max-w-2xl leading-7 text-slate-500">
+              <p className="mt-5 max-w-2xl text-lg leading-8 text-[rgb(119,119,125)]">
                 Real websites, real project structure. These case studies show how we shape custom websites around service clarity, conversion paths, trust, and long-term growth.
               </p>
             </div>
-            <div className="w-max rounded-full border border-dashed border-slate-300 bg-white px-5 py-3 shadow-sm">
+            <div className="w-max rounded-full border border-[#bebebe] bg-white/70 px-5 py-3 shadow-sm">
               <div className="flex items-center gap-3 text-sm">
                 <i className="ri-google-fill text-[#4285f4]" />
                 <span className="font-bold">5.0</span>
                 <span className="text-[#ffb703]">★★★★★</span>
-                <span className="text-slate-400">Client work</span>
+                <span className="text-[rgb(119,119,125)]">Client work</span>
               </div>
             </div>
           </div>
@@ -375,14 +375,14 @@ export default function PortfolioOverview() {
         ))}
       </main>
 
-      <section className="border-y border-dashed border-slate-300 bg-white py-20">
+      <section className="border-y border-[#bebebe] bg-white/60 py-20">
         <div className="container-custom grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
           <div>
             <SectionLabel>Next Project</SectionLabel>
-            <h2 className="font-bricolage text-4xl font-black uppercase leading-tight text-slate-950 md:text-5xl">
+            <h2 className="font-bricolage text-4xl font-semibold leading-tight text-[#101010] md:text-5xl">
               Want your website presented like this?
             </h2>
-            <p className="mt-4 max-w-2xl leading-7 text-slate-500">
+            <p className="mt-4 max-w-2xl text-lg leading-8 text-[rgb(119,119,125)]">
               Send your project goals and we will map the page structure, conversion flow, and launch plan.
             </p>
           </div>
