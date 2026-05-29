@@ -1,0 +1,11 @@
+{
+  "installCommand": "cd app/frontend && pnpm install --frozen-lockfile",
+  "buildCommand": "cd app/frontend && pnpm run build",
+  "outputDirectory": "app/frontend/dist",
+  "rewrites": [
+    {
+      "source": "/((?!api/.*|sitemap.xml|robots.txt|googled0bc1acca73197cc.html|demos/.*|assets/.*|images/.*|.*\\..*).*)",
+      "destination": "/index.html"
+    }
+  ]
+}
