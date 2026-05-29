@@ -20,6 +20,11 @@ type PortfolioProject = {
   built: string;
   accent: string;
   dark: string;
+  images?: {
+    overview: string;
+    mobile: string;
+    showcase: string[];
+  };
 };
 
 const projects: PortfolioProject[] = [
@@ -51,6 +56,14 @@ const projects: PortfolioProject[] = [
       "The build organizes immigration content into two primary decision paths, then supports each path with checklists, comparison content, social proof, and contact prompts. The result is a direct lead-generation website that stays simple while still handling a serious, high-trust service.",
     accent: "#0f766e",
     dark: "#0f172a",
+    images: {
+      overview: "/images/portfolio/pinnacle/project-overview.png",
+      mobile: "/images/portfolio/pinnacle/mobile-view.png",
+      showcase: [
+        "/images/portfolio/pinnacle/pathway-landing-page.png",
+        "/images/portfolio/pinnacle/eligibility-cta-flow.png",
+      ],
+    },
   },
   {
     eyebrow: "Online Education",
@@ -219,6 +232,21 @@ function PlaceholderScreen({ project, compact = false }: { project: PortfolioPro
   );
 }
 
+function ProjectImageScreen({ src, alt, compact = false }: { src: string; alt: string; compact?: boolean }) {
+  return (
+    <div className={`rounded-2xl border border-[#bebebe] bg-white/70 p-3 ${compact ? "min-h-[260px]" : ""}`}>
+      <div className={`overflow-hidden rounded-xl bg-[#fff6ec] shadow-sm ${compact ? "max-h-[560px]" : "max-h-[420px]"}`}>
+        <img
+          src={src}
+          alt={alt}
+          className={`w-full object-top ${compact ? "h-full max-h-[540px] object-contain" : "h-full min-h-[280px] object-cover"}`}
+          loading="lazy"
+        />
+      </div>
+    </div>
+  );
+}
+
 function ProjectCaseStudy({ project, index }: { project: PortfolioProject; index: number }) {
   return (
     <article className={index === 0 ? "pt-20" : "border-t border-[#bebebe] pt-20"}>
@@ -245,7 +273,11 @@ function ProjectCaseStudy({ project, index }: { project: PortfolioProject; index
       </div>
 
       <div className="grid overflow-hidden rounded-2xl border border-[#bebebe] bg-white/70 shadow-sm lg:grid-cols-[1fr_310px]">
-        <PlaceholderScreen project={project} />
+        {project.images?.overview ? (
+          <ProjectImageScreen src={project.images.overview} alt={`${project.title} project overview screenshot`} />
+        ) : (
+          <PlaceholderScreen project={project} />
+        )}
         <div className="flex flex-col justify-center border-t border-[#bebebe] p-8 lg:border-l lg:border-t-0">
           <h3 className="font-bricolage text-3xl font-semibold leading-tight text-[#101010]">{project.title}</h3>
           <p className="mt-4 leading-7 text-[rgb(119,119,125)]">{project.summary}</p>
@@ -282,11 +314,19 @@ function ProjectCaseStudy({ project, index }: { project: PortfolioProject; index
       <div className="mt-16">
         <SectionLabel>Visual Showcase</SectionLabel>
         <div className="grid gap-8 lg:grid-cols-[260px_1fr]">
-          <PlaceholderScreen project={project} compact />
+          {project.images?.mobile ? (
+            <ProjectImageScreen src={project.images.mobile} alt={`${project.title} mobile website screenshot`} compact />
+          ) : (
+            <PlaceholderScreen project={project} compact />
+          )}
           <div className="grid gap-8">
-            {project.showcase.slice(0, 2).map((item) => (
+            {project.showcase.slice(0, 2).map((item, imageIndex) => (
               <div key={item}>
-                <PlaceholderScreen project={project} />
+                {project.images?.showcase[imageIndex] ? (
+                  <ProjectImageScreen src={project.images.showcase[imageIndex]} alt={`${project.title} ${item} screenshot`} />
+                ) : (
+                  <PlaceholderScreen project={project} />
+                )}
                 <p className="mt-3 text-sm font-semibold text-[#101010]">{item}</p>
               </div>
             ))}
