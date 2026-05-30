@@ -192,10 +192,21 @@ function SectionLabel({ children }: { children: ReactNode }) {
   );
 }
 
-function PlaceholderScreen({ project, compact = false }: { project: PortfolioProject; compact?: boolean }) {
+function PlaceholderScreen({
+  project,
+  compact = false,
+  showcase = false,
+}: {
+  project: PortfolioProject;
+  compact?: boolean;
+  showcase?: boolean;
+}) {
+  const outerClass = showcase ? "h-full min-h-0" : compact ? "h-full min-h-[620px] lg:min-h-0" : "";
+  const frameClass = showcase || compact ? "h-full" : "";
+
   return (
-    <div className={`rounded-2xl border border-[#bebebe] bg-white/70 p-3 ${compact ? "min-h-[260px]" : ""}`}>
-      <div className="overflow-hidden rounded-xl bg-[#fff6ec] shadow-sm">
+    <div className={`rounded-2xl border border-[#bebebe] bg-white/70 p-3 ${outerClass}`}>
+      <div className={`overflow-hidden rounded-xl bg-[#fff6ec] shadow-sm ${frameClass}`}>
         <div className="flex items-center justify-between px-4 py-3 bg-[#101010]">
           <div className="flex items-center gap-2">
             <span className="h-6 w-6 rounded-full bg-white" />
@@ -207,7 +218,7 @@ function PlaceholderScreen({ project, compact = false }: { project: PortfolioPro
             <span className="h-2 w-10 rounded-full bg-white/45" />
           </div>
         </div>
-        <div className="grid min-h-[245px] gap-5 p-7 md:grid-cols-[1fr_170px]">
+        <div className={`grid gap-5 p-7 md:grid-cols-[1fr_170px] ${showcase || compact ? "h-[calc(100%-48px)]" : "min-h-[245px]"}`}>
           <div>
             <span className="mb-4 inline-flex rounded-full bg-[#ff4f01]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#ff4f01]">
               {project.eyebrow}
@@ -232,14 +243,41 @@ function PlaceholderScreen({ project, compact = false }: { project: PortfolioPro
   );
 }
 
-function ProjectImageScreen({ src, alt, compact = false }: { src: string; alt: string; compact?: boolean }) {
+function ProjectImageScreen({
+  src,
+  alt,
+  variant = "default",
+}: {
+  src: string;
+  alt: string;
+  variant?: "default" | "mobile" | "showcase";
+}) {
+  const outerClass =
+    variant === "mobile"
+      ? "h-full min-h-[620px] lg:min-h-0"
+      : variant === "showcase"
+        ? "h-full min-h-0"
+        : "";
+  const frameClass =
+    variant === "mobile"
+      ? "h-full max-h-none"
+      : variant === "showcase"
+        ? "h-full max-h-none"
+        : "max-h-[620px]";
+  const imageClass =
+    variant === "mobile"
+      ? "h-full"
+      : variant === "showcase"
+        ? "h-full"
+        : "h-[600px]";
+
   return (
-    <div className={`rounded-2xl border border-[#bebebe] bg-white/70 p-3 ${compact ? "min-h-[260px]" : ""}`}>
-      <div className={`flex items-start justify-center overflow-hidden rounded-xl bg-[#fff6ec] shadow-sm ${compact ? "max-h-[640px]" : "max-h-[620px]"}`}>
+    <div className={`rounded-2xl border border-[#bebebe] bg-white/70 p-3 ${outerClass}`}>
+      <div className={`flex items-start justify-center overflow-hidden rounded-xl bg-[#fff6ec] shadow-sm ${frameClass}`}>
         <img
           src={src}
           alt={alt}
-          className={`w-full object-contain object-top ${compact ? "h-[620px]" : "h-[600px]"}`}
+          className={`w-full object-contain object-top ${imageClass}`}
           loading="lazy"
         />
       </div>
@@ -313,21 +351,21 @@ function ProjectCaseStudy({ project, index }: { project: PortfolioProject; index
 
       <div className="mt-16">
         <SectionLabel>Visual Showcase</SectionLabel>
-        <div className="grid gap-8 lg:grid-cols-[260px_1fr]">
+        <div className="grid gap-8 lg:h-[646px] lg:grid-cols-[260px_1fr] lg:items-stretch">
           {project.images?.mobile ? (
-            <ProjectImageScreen src={project.images.mobile} alt={`${project.title} mobile website screenshot`} compact />
+            <ProjectImageScreen src={project.images.mobile} alt={`${project.title} mobile website screenshot`} variant="mobile" />
           ) : (
             <PlaceholderScreen project={project} compact />
           )}
-          <div className="grid gap-8">
+          <div className="grid gap-4 lg:min-h-0 lg:grid-rows-2">
             {project.showcase.slice(0, 2).map((item, imageIndex) => (
-              <div key={item}>
+              <div key={item} className="grid min-h-0 grid-rows-[1fr_auto] gap-2">
                 {project.images?.showcase[imageIndex] ? (
-                  <ProjectImageScreen src={project.images.showcase[imageIndex]} alt={`${project.title} ${item} screenshot`} />
+                  <ProjectImageScreen src={project.images.showcase[imageIndex]} alt={`${project.title} ${item} screenshot`} variant="showcase" />
                 ) : (
-                  <PlaceholderScreen project={project} />
+                  <PlaceholderScreen project={project} showcase />
                 )}
-                <p className="mt-3 text-sm font-semibold text-[#101010]">{item}</p>
+                <p className="text-sm font-semibold text-[#101010]">{item}</p>
               </div>
             ))}
           </div>
