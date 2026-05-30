@@ -93,6 +93,14 @@ const projects: PortfolioProject[] = [
       "The page system centers the course catalog, then reinforces it with student outcomes, learning benefits, testimonials, and repeated registration CTAs. The main challenge was making a content-heavy education platform feel navigable and family-friendly.",
     accent: "#1d4ed8",
     dark: "#111827",
+    images: {
+      overview: "/images/portfolio/yaseer/hero-image.png",
+      mobile: "/images/portfolio/yaseer/mobile-view.png",
+      showcase: [
+        "/images/portfolio/yaseer/course-catalog.png",
+        "/images/portfolio/yaseer/registration-journey.png",
+      ],
+    },
   },
   {
     eyebrow: "Language Training",
@@ -122,6 +130,14 @@ const projects: PortfolioProject[] = [
       "The build keeps the user journey compact: proof, package comparison, feature support, FAQ, and action. This works well for a coaching offer where visitors need to understand the promise quickly and take the next step without friction.",
     accent: "#dc2626",
     dark: "#101010",
+    images: {
+      overview: "/images/portfolio/learn-french-fast/hero-image.png",
+      mobile: "/images/portfolio/learn-french-fast/mobile-view.png",
+      showcase: [
+        "/images/portfolio/learn-french-fast/packages-section.png",
+        "/images/portfolio/learn-french-fast/faq-enrollment.png",
+      ],
+    },
   },
   {
     eyebrow: "Business Technology",
@@ -151,6 +167,14 @@ const projects: PortfolioProject[] = [
       "The build focuses on presenting a technical business without making the experience feel dense. Sections are paced for scanning, with simple conversion paths and a layout that can expand as the company adds more service detail.",
     accent: "#7c3aed",
     dark: "#171717",
+    images: {
+      overview: "/images/portfolio/triplexon/hero-image.png",
+      mobile: "/images/portfolio/triplexon/mobile-view.png",
+      showcase: [
+        "/images/portfolio/triplexon/service-positioning.png",
+        "/images/portfolio/triplexon/inquiry-cta.png",
+      ],
+    },
   },
   {
     eyebrow: "Fashion E-Commerce",
@@ -180,6 +204,14 @@ const projects: PortfolioProject[] = [
       "The build prioritizes product visibility, simple navigation, and a polished retail feel. The storefront is structured so new collections, product updates, and promotional content can be managed without redesigning the site.",
     accent: "#be185d",
     dark: "#18181b",
+    images: {
+      overview: "/images/portfolio/razan-fashion/hero-image.png",
+      mobile: "/images/portfolio/razan-fashion/mobile-view.png",
+      showcase: [
+        "/images/portfolio/razan-fashion/collection-browsing.png",
+        "/images/portfolio/razan-fashion/product-discovery.png",
+      ],
+    },
   },
 ];
 
