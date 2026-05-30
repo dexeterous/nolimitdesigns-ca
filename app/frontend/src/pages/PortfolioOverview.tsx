@@ -266,10 +266,10 @@ function ProjectImageScreen({
         : "max-h-[620px]";
   const imageClass =
     variant === "mobile"
-      ? "h-full"
+      ? "h-full object-cover"
       : variant === "showcase"
-        ? "h-full"
-        : "h-[600px]";
+        ? "h-full object-cover"
+        : "h-[600px] object-contain";
 
   return (
     <div className={`rounded-2xl border border-[#bebebe] bg-white/70 p-3 ${outerClass}`}>
@@ -277,7 +277,7 @@ function ProjectImageScreen({
         <img
           src={src}
           alt={alt}
-          className={`w-full object-contain object-top ${imageClass}`}
+          className={`w-full object-top ${imageClass}`}
           loading="lazy"
         />
       </div>
