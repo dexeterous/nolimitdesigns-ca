@@ -269,7 +269,7 @@ function ProjectImageScreen({
       ? "h-full object-cover"
       : variant === "showcase"
         ? "h-full object-cover"
-        : "h-[600px] object-contain";
+        : "h-[600px] object-cover";
 
   return (
     <div className={`rounded-2xl border border-[#bebebe] bg-white/70 p-3 ${outerClass}`}>
@@ -351,7 +351,7 @@ function ProjectCaseStudy({ project, index }: { project: PortfolioProject; index
 
       <div className="mt-16">
         <SectionLabel>Visual Showcase</SectionLabel>
-        <div className="grid gap-8 lg:h-[760px] lg:grid-cols-[320px_1fr] lg:items-stretch xl:h-[820px]">
+        <div className="grid gap-8 lg:h-[760px] lg:grid-cols-[380px_minmax(0,1fr)] lg:items-stretch xl:h-[820px] xl:grid-cols-[400px_minmax(0,1fr)]">
           {project.images?.mobile ? (
             <ProjectImageScreen src={project.images.mobile} alt={`${project.title} mobile website screenshot`} variant="mobile" />
           ) : (
