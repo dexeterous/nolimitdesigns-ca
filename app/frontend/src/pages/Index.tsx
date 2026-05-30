@@ -232,21 +232,41 @@ export default function Index() {
 
           <div className="grid lg:grid-cols-3 gap-6">
             {[
-              { name: "Healthcare Clinic", slug: "healthcare", desc: "Patient portal with online booking", color: "from-blue-500 to-cyan-400" },
-              { name: "Real Estate Agency", slug: "real-estate", desc: "MLS-integrated property search", color: "from-emerald-500 to-teal-400" },
-              { name: "Restaurant & Bar", slug: "restaurant", desc: "Online ordering & reservations", color: "from-orange-500 to-red-400" },
+              {
+                name: "Atlanse Solutions",
+                desc: "IT consulting, infrastructure, cybersecurity, and analytics website",
+                image: "/images/portfolio/atlanse-solutions/hero-image.png",
+                category: "IT Consulting",
+              },
+              {
+                name: "Pinnacle Immigration",
+                desc: "Canada PR and study pathway website with eligibility lead flow",
+                image: "/images/portfolio/pinnacle/hero-image.png",
+                category: "Immigration",
+              },
+              {
+                name: "Learn French Fast",
+                desc: "Language training website with package-led conversion paths",
+                image: "/images/portfolio/learn-french-fast/hero-image.png",
+                category: "Education",
+              },
             ].map((project, i) => (
               <Link
                 key={i}
-                to={`/portfolio/${project.slug}`}
+                to="/portfolio"
                 className="group rounded-2xl overflow-hidden border border-[#bebebe] hover:border-[#ff4f01] transition-all duration-500 bg-white/50 hover:shadow-xl"
               >
-                <div className={`h-48 bg-gradient-to-br ${project.color} flex items-center justify-center relative overflow-hidden`}>
-                  <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-all" />
-                  <div className="bg-white/20 backdrop-blur-sm rounded-xl p-6 text-white text-center">
-                    <i className="ri-computer-line text-4xl mb-2 block" />
-                    <p className="font-medium">Live Demo Available</p>
-                  </div>
+                <div className="h-56 bg-[#fff6ec] relative overflow-hidden">
+                  <img
+                    src={project.image}
+                    alt={`${project.name} website screenshot`}
+                    className="h-full w-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#101010]/35 via-transparent to-transparent opacity-70" />
+                  <span className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-[#101010] shadow-sm">
+                    {project.category}
+                  </span>
                 </div>
                 <div className="p-6">
                   <h4 className="text-xl font-medium font-bricolage mb-2 group-hover:text-[#ff4f01] transition-colors">
