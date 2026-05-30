@@ -6,6 +6,15 @@ const outputRoot = path.resolve("public/images/portfolio");
 
 const projects = [
   {
+    slug: "atlanse-solutions",
+    url: "https://atlansesolutions.com/",
+    waitForText: /Power your business|Atlanse Solutions/i,
+    candidates: [
+      ["solutions-overview.png", /solutions/i],
+      ["consulting-cta.png", /contact|consult/i],
+    ],
+  },
+  {
     slug: "yaseer",
     url: "https://yaseerinstitute.com/",
     candidates: [
@@ -32,6 +41,7 @@ const projects = [
   {
     slug: "razan-fashion",
     url: "https://razanfashion.com/",
+    waitForText: /Hijabs for Religious Occasions|Shop Razan|Razan Fashion was founded/i,
     candidates: [
       ["collection-browsing.png", /shop|collection|category|store/i],
       ["product-discovery.png", /product|dress|fashion|cart/i],
@@ -89,9 +99,89 @@ async function waitForReady(page) {
   }).catch(() => {});
 }
 
-async function capture(page, url, filePath, scrollRatio = 0) {
+async function waitForProjectContent(page, project) {
+  if (!project.waitForText) return;
+
+  await page.waitForFunction(
+    (source) => {
+      const matcher = new RegExp(source, "i");
+      return matcher.test(document.body?.innerText || "");
+    },
+    project.waitForText.source,
+    { timeout: 15000 },
+  ).catch(() => {});
+  await page.keyboard.press("Escape").catch(() => {});
+  await page.evaluate(() => {
+    const selectors = [
+      ".bannerContent__closeButton",
+      ".mc-closeModal",
+      ".mailmunch-close",
+      ".klaviyo-close-form",
+      "[aria-label='Close']",
+      "[aria-label='close']",
+      "[class*='close']",
+      "[id*='close']",
+    ];
+    for (const selector of selectors) {
+      for (const element of document.querySelectorAll(selector)) {
+        const rect = element.getBoundingClientRect();
+        if (rect.width > 0 && rect.height > 0) {
+          element.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true, view: window }));
+        }
+      }
+    }
+  }).catch(() => {});
+  await page.locator("button, a, [role='button']").filter({ hasText: "×" }).first().click({ timeout: 1500 }).catch(() => {});
+  if (project.slug === "razan-fashion") {
+    await page.evaluate(() => {
+      const removeElement = (element) => {
+        let target = element;
+        while (target.parentElement && target.parentElement !== document.body) {
+          const rect = target.getBoundingClientRect();
+          if (rect.width > window.innerWidth * 0.25 && rect.height > window.innerHeight * 0.15) break;
+          target = target.parentElement;
+        }
+        target.remove();
+      };
+
+      for (const element of Array.from(document.querySelectorAll("body *"))) {
+        const text = element.textContent || "";
+        const className = String(element.className || "");
+        if (
+          text.includes("Get exclusive updates and offers") ||
+          text.includes("mailchimp") ||
+          className.includes("bannerContent") ||
+          className.toLowerCase().includes("mailchimp")
+        ) {
+          removeElement(element);
+        }
+      }
+
+      for (const element of Array.from(document.querySelectorAll("body *"))) {
+        const style = window.getComputedStyle(element);
+        const rect = element.getBoundingClientRect();
+        const zIndex = Number.parseInt(style.zIndex, 10);
+        if (
+          (style.position === "fixed" || style.position === "absolute") &&
+          Number.isFinite(zIndex) &&
+          zIndex > 100 &&
+          rect.width > window.innerWidth * 0.3 &&
+          rect.height > window.innerHeight * 0.2
+        ) {
+          element.remove();
+        }
+      }
+      document.body.style.overflow = "auto";
+      document.documentElement.style.overflow = "auto";
+    }).catch(() => {});
+  }
+  await page.waitForTimeout(1800);
+}
+
+async function capture(page, project, url, filePath, scrollRatio = 0) {
   await page.goto(url, { waitUntil: "domcontentloaded", timeout: 22000 });
   await waitForReady(page);
+  await waitForProjectContent(page, project);
   if (scrollRatio > 0) {
     await page.evaluate((ratio) => {
       const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
@@ -123,7 +213,7 @@ async function main() {
 
     const desktopPage = await desktop.newPage();
     desktopPage.setDefaultTimeout(12000);
-    await capture(desktopPage, project.url, path.join(dir, "hero-image.png"));
+    await capture(desktopPage, project, project.url, path.join(dir, "hero-image.png"));
 
     const links = await collectLinks(desktopPage, project.url);
     const used = new Set([project.url]);
@@ -133,13 +223,13 @@ async function main() {
       const url = matched?.href || project.url;
       used.add(url);
       const scrollRatio = matched ? 0 : fileName.includes("faq") || fileName.includes("cta") || fileName.includes("discovery") ? 0.58 : 0.32;
-      await capture(desktopPage, url, path.join(dir, fileName), scrollRatio);
+      await capture(desktopPage, project, url, path.join(dir, fileName), scrollRatio);
     }
     await desktopPage.close();
 
     const mobilePage = await mobile.newPage();
     mobilePage.setDefaultTimeout(12000);
-    await capture(mobilePage, project.url, path.join(dir, "mobile-view.png"));
+    await capture(mobilePage, project, project.url, path.join(dir, "mobile-view.png"));
     await mobilePage.close();
 
     console.log(`${project.slug}: captured`);

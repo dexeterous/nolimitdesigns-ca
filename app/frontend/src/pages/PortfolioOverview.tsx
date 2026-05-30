@@ -29,6 +29,43 @@ type PortfolioProject = {
 
 const projects: PortfolioProject[] = [
   {
+    eyebrow: "IT Consulting & Digital Solutions",
+    title: "Atlanse Solutions",
+    summary:
+      "A professional IT consulting website for software solutions, infrastructure, cybersecurity, analytics, and business technology services, structured to build trust with enterprise buyers.",
+    url: "https://atlansesolutions.com/",
+    location: "Canada",
+    performance: "94/100",
+    timeline: "5 Weeks",
+    challenge:
+      "Atlanse Solutions needed a polished web presence that could explain a broad technology offer without overwhelming visitors. The site had to communicate credibility, service depth, business continuity, and a clear path to consultation.",
+    deliverables: [
+      "Consulting-led homepage structure for IT strategy, infrastructure, software, cybersecurity, and analytics services.",
+      "Service discovery flow that helps business buyers understand solution categories and move toward consultation.",
+      "Trust and proof sections for experience, completed projects, customer satisfaction, and partner credibility.",
+    ],
+    showcase: ["Solutions overview", "Consultation CTA flow", "Business credibility layout"],
+    features: [
+      { icon: "ri-server-line", title: "Solution Architecture", desc: "Service categories are grouped around real buyer needs, from software and infrastructure to cybersecurity and analytics." },
+      { icon: "ri-shield-keyhole-line", title: "Enterprise Trust", desc: "Proof points, partner signals, and sector-focused messaging help the site feel credible for business technology decisions." },
+      { icon: "ri-customer-service-2-line", title: "Consultation Path", desc: "Clear contact prompts guide visitors from service evaluation into a practical consultation next step." },
+    ],
+    stack: ["WordPress", "Elementor", "Responsive Design", "Service CMS"],
+    services: ["Web Development", "Service UX", "Content Structure", "Launch Support"],
+    built:
+      "The build presents a wide consulting offer through a clear homepage narrative, service cards, credibility metrics, and conversion prompts. The structure supports future expansion while keeping the first visit focused on understanding the offer and requesting a consultation.",
+    accent: "#0ea5e9",
+    dark: "#0f172a",
+    images: {
+      overview: "/images/portfolio/atlanse-solutions/hero-image.png",
+      mobile: "/images/portfolio/atlanse-solutions/mobile-view.png",
+      showcase: [
+        "/images/portfolio/atlanse-solutions/solutions-overview.png",
+        "/images/portfolio/atlanse-solutions/consulting-cta.png",
+      ],
+    },
+  },
+  {
     eyebrow: "Immigration Consulting",
     title: "Pinnacle Immigration",
     summary:
