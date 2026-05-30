@@ -254,7 +254,7 @@ function ProjectImageScreen({
 }) {
   const outerClass =
     variant === "mobile"
-      ? "h-full min-h-[620px] lg:min-h-0"
+      ? "h-full min-h-[720px] lg:min-h-0"
       : variant === "showcase"
         ? "h-full min-h-0"
         : "";
@@ -351,7 +351,7 @@ function ProjectCaseStudy({ project, index }: { project: PortfolioProject; index
 
       <div className="mt-16">
         <SectionLabel>Visual Showcase</SectionLabel>
-        <div className="grid gap-8 lg:h-[646px] lg:grid-cols-[260px_1fr] lg:items-stretch">
+        <div className="grid gap-8 lg:h-[760px] lg:grid-cols-[320px_1fr] lg:items-stretch xl:h-[820px]">
           {project.images?.mobile ? (
             <ProjectImageScreen src={project.images.mobile} alt={`${project.title} mobile website screenshot`} variant="mobile" />
           ) : (
